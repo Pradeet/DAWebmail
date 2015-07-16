@@ -6,14 +6,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,16 +138,20 @@ public class FragmentOne extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(),
                             "Logged in!", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = true;
+                    getActivity().invalidateOptionsMenu();
+                    swipeContainer.setRefreshing(false);
+                    progdialog.dismiss();
                     new async_refreshInbox().execute("");
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(),
                             "Login Unsuccessful", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = false;
                 }
-                // dismissDialog(progress_bar_login);
+
                 getActivity().invalidateOptionsMenu();
                 swipeContainer.setRefreshing(false);
                 progdialog.dismiss();
+
             }
         };
 
@@ -269,10 +270,6 @@ public class FragmentOne extends Fragment {
                 invis_msg.setVisibility(View.VISIBLE);
                 invis_msg.bringToFront();
             }
-        }
-
-        protected void onProgressUpdate(String... progress) {
-            progdialog.setProgress(Integer.parseInt(progress[0]));
         }
 
         @Override

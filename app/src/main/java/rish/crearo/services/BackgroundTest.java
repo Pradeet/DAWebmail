@@ -11,11 +11,17 @@ import java.util.Date;
 
 import rish.crearo.R;
 import rish.crearo.dawebmail.LoginActivity;
+import rish.crearo.dawebmail.commands.LoginListener;
+import rish.crearo.dawebmail.commands.LoginManager;
 
 /**
  * Created by rish on 16/7/15.
  */
 public class BackgroundTest extends Service {
+
+
+    LoginManager loginManager;
+    LoginListener loginListener;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -32,6 +38,19 @@ public class BackgroundTest extends Service {
         super.onStart(intent, startId);
         System.out.println("Time = " + new Date().getSeconds());
 
+        loginListener = new LoginListener() {
+            @Override
+            public void onPreLogin() {
+
+            }
+
+            @Override
+            public void onPostLogin(String loginSuccess) {
+
+            }
+        };
+
+        
     }
 
     @Override

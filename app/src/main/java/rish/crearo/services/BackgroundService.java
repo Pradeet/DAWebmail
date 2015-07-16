@@ -1,13 +1,5 @@
 package rish.crearo.services;
 
-import java.util.Collections;
-import java.util.Random;
-
-import rish.crearo.R;
-import rish.crearo.dawebmail.EmailMessage;
-import rish.crearo.dawebmail.ScrappingMachine;
-import rish.crearo.utils.Constants;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,6 +12,14 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.Collections;
+import java.util.Random;
+
+import rish.crearo.R;
+import rish.crearo.dawebmail.EmailMessage;
+import rish.crearo.dawebmail.ScrappingMachine;
+import rish.crearo.utils.Constants;
 
 public class BackgroundService extends Service {
     private static final String TAG = "MyService";
