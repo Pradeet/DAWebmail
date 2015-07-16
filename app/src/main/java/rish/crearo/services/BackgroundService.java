@@ -7,6 +7,7 @@ import rish.crearo.R;
 import rish.crearo.dawebmail.EmailMessage;
 import rish.crearo.dawebmail.ScrappingMachine;
 import rish.crearo.utils.Constants;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

@@ -8,14 +8,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <application tools:replace="android:icon"
+    <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@drawable/final_main"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/MyTheme">
+        android:theme="@style/MyTheme"
+        tools:replace="android:icon">
 
         <meta-data
             android:name="DATABASE"
@@ -30,7 +32,13 @@
         <service
             android:name="rish.crearo.services.BackgroundService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
+
+        <service
+            android:name="rish.crearo.services.BackgroundTest"
+            android:enabled="true"
+            android:exported="true"
+            />
 
         <receiver
             android:name="rish.crearo.services.NetworkChangeBroadcastReceiver"
@@ -42,6 +50,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".services.BackgroundReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="BackgroundReceiver"
+            />
+        
         <activity
             android:name=".dawebmail.AboutFrag"
             android:label="@string/title_activity_about_frag"

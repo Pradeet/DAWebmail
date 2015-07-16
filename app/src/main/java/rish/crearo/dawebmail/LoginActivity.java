@@ -19,6 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import rish.crearo.R;
+import rish.crearo.dawebmail.commands.LoginListener;
+import rish.crearo.dawebmail.commands.LoginManager;
+import rish.crearo.services.BackgroundRunner;
 import rish.crearo.utils.ColorScheme;
 import rish.crearo.utils.Constants;
 
@@ -29,10 +32,11 @@ public class LoginActivity extends Activity {
     private String username = "", pwd = "";
     ProgressDialog prgDialog;
     public final int progress_bar_login = 0;
-
     public TextView logintitle;
-
     ColorScheme colorScheme;
+
+    LoginListener loginListener;
+    LoginManager loginManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +74,45 @@ public class LoginActivity extends Activity {
         colorScheme.changeColorScheme();
         colorScheme.printColorScheme();
 
+        loginListener = new LoginListener() {
+            @Override
+            public void onPreLogin() {
+                showDialog(progress_bar_login);
+            }
+
+            @Override
+            public void onPostLogin(String loginSuccess) {
+                System.out.println("printing what it got - " + loginSuccess);
+                if (loginSuccess.equals("login successful")) {
+                    Toast.makeText(getApplicationContext(), "Logged in!",
+                            Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginActivity.this, Main_Nav.class);
+                    intent.putExtra(Constants.bundle_username, username);
+                    intent.putExtra(Constants.bundle_pwd, pwd);
+
+                    startActivity(intent);
+                    finish();
+                    usernametf.setText("");
+                    pwdtf.setText("");
+                    SharedPreferences settings = getSharedPreferences(
+                            Constants.USER_PREFERENCES, MODE_PRIVATE);
+                    SharedPreferences.Editor prefEditor = settings.edit();
+
+                    prefEditor.putString(Constants.bundle_username, username);
+                    prefEditor.putString(Constants.bundle_pwd, pwd);
+                    prefEditor.commit();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Login Unsuccessful!",
+                            Toast.LENGTH_SHORT).show();
+                    pwdtf.setText("");
+                }
+                dismissDialog(progress_bar_login);
+            }
+        };
+
         String saved_uname = settings.getString(Constants.bundle_username,
                 "none");
         String saved_pwd = settings.getString(Constants.bundle_pwd, "none");
-
-        // so here Ive decided, if youve logged in once already, the app
-        // will take you directly to your inbox. Once there, you can choose to
-        // login
 
         // logging in after signing out.
         if (saved_uname.equals("noneagain")) {
@@ -88,19 +124,12 @@ public class LoginActivity extends Activity {
                     pwd = pwdtf.getText().toString();
                     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(loginbtn.getWindowToken(), 0);
-                    String txt_forAkshar = "ACCESS DENIED : "
-                            + "Akshar!\nYeah. Now the app works well. And its cool. Meh. You still dont have access.";
-                    if (username.trim().equals("201301442")) {
-                        Toast.makeText(getApplicationContext(),
-                                "" + txt_forAkshar, Toast.LENGTH_LONG).show();
-                    } else {
-                        new asyncLogin_LoginActivity(username, pwd).execute("");
-                    }
+                    loginManager = new LoginManager(getApplicationContext(), loginListener, username, pwd);
+                    loginManager.execute();
+//                    new BackgroundRunner().setHourlyRunner(getApplicationContext());
                 }
             });
-        }
-
-        else if (!saved_uname.equals("none")) {
+        } else if (!saved_uname.equals("none")) {
             System.out.println("signing in again.");
             System.out.println(username);
             username = saved_uname;
@@ -130,74 +159,11 @@ public class LoginActivity extends Activity {
                     pwd = pwdtf.getText().toString();
                     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(loginbtn.getWindowToken(), 0);
-                    String txt_forAkshar = "ACCESS DENIED : "
-                            + "Akshar Alert!\n This application cannot be used by you."
-                            + "";
-                    if (username.trim().equals("201301442")) {
-                        Toast.makeText(getApplicationContext(),
-                                "" + txt_forAkshar, Toast.LENGTH_LONG).show();
-                    } else {
-                        new asyncLogin_LoginActivity(username, pwd).execute("");
-                    }
+                    loginManager = new LoginManager(getApplicationContext(), loginListener, username, pwd);
+                    loginManager.execute();
+//                    new BackgroundRunner().setHourlyRunner(getApplicationContext());
                 }
             });
-        }
-    }
-
-    public class asyncLogin_LoginActivity extends
-            AsyncTask<String, Void, String> {
-        String checkifloggedin = "";
-        String uname, pwd;
-
-        public asyncLogin_LoginActivity(String uname, String pwd) {
-            this.uname = uname;
-            this.pwd = pwd;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            ScrappingMachine scrapper = new ScrappingMachine(username, pwd,
-                    getApplicationContext());
-            checkifloggedin = scrapper.logIn(this.uname, this.pwd);
-            return "Executed";
-        }
-
-        @Override
-        protected void onPreExecute() {
-            showDialog(progress_bar_login);
-
-        }
-
-        protected void onProgressUpdate(String... progress) {
-        }
-
-        @Override
-        public void onPostExecute(String result) {
-            System.out.println("printing what it got - " + checkifloggedin);
-            if (checkifloggedin.equals("login successful")) {
-                Toast.makeText(getApplicationContext(), "Logged in!",
-                        Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, Main_Nav.class);
-                intent.putExtra(Constants.bundle_username, username);
-                intent.putExtra(Constants.bundle_pwd, pwd);
-
-                startActivity(intent);
-                finish();
-                usernametf.setText("");
-                pwdtf.setText("");
-                SharedPreferences settings = getSharedPreferences(
-                        Constants.USER_PREFERENCES, MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = settings.edit();
-
-                prefEditor.putString(Constants.bundle_username, username);
-                prefEditor.putString(Constants.bundle_pwd, pwd);
-                prefEditor.commit();
-            } else {
-                Toast.makeText(getApplicationContext(), "Login Unsuccessful!",
-                        Toast.LENGTH_SHORT).show();
-                pwdtf.setText("");
-            }
-            dismissDialog(progress_bar_login);
         }
     }
 

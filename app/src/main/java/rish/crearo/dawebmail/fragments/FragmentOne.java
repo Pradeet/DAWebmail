@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -26,16 +25,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.baoyz.swipemenulistview.SwipeMenuListView.OnMenuItemClickListener;
-import com.baoyz.swipemenulistview.SwipeMenuListView.OnSwipeListener;
 import com.orm.SugarRecord;
 
 import java.util.ArrayList;
@@ -45,6 +38,8 @@ import rish.crearo.R;
 import rish.crearo.dawebmail.EmailMessage;
 import rish.crearo.dawebmail.ScrappingMachine;
 import rish.crearo.dawebmail.ViewEmail;
+import rish.crearo.dawebmail.commands.LoginListener;
+import rish.crearo.dawebmail.commands.LoginManager;
 import rish.crearo.tools.AlarmManagerService;
 import rish.crearo.tools.RandomStrings;
 import rish.crearo.utils.ColorScheme;
@@ -72,9 +67,7 @@ public class FragmentOne extends Fragment {
     public ArrayList<EmailMessage> emails_tobedeleted_pub;
 
     public static ArrayList<hash_email_checked> allemails_main_ischecked;
-    public static final int progress_bar_type = 2;
-    public static final int progress_bar_login = 0;
-    Boolean firstrun = true;
+    boolean firstrun = true;
     private SwipeRefreshLayout swipeContainer;
     AsyncTask<String, Void, String> mAsyncLogin;
     TextView webmail_tv, pull_tv, invis_msg;
@@ -83,6 +76,9 @@ public class FragmentOne extends Fragment {
     public Button floatingDelete;
     int totalSelected_emails = 0;
     Animation anim_slideout;
+
+    LoginListener loginListener;
+    LoginManager loginManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,13 +120,39 @@ public class FragmentOne extends Fragment {
         mListView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-        // properties of mListView.
         onAppOpened();
-        listCreatorMethods();
 
         if (((int) SugarRecord.count(EmailMessage.class, null, null) == 0)) {
             new async_refreshInbox().execute("");
         }
+
+        loginListener = new LoginListener() {
+            @Override
+            public void onPreLogin() {
+                progdialog = ProgressDialog.show(getActivity(), "", "Logging in.",
+                        true);
+                progdialog.setCancelable(false);
+            }
+
+            @Override
+            public void onPostLogin(String loginSuccess) {
+
+                if (loginSuccess.equals("login successful")) {
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            "Logged in!", Toast.LENGTH_SHORT).show();
+                    Constants.isLoggedin = true;
+                    new async_refreshInbox().execute("");
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            "Login Unsuccessful", Toast.LENGTH_SHORT).show();
+                    Constants.isLoggedin = false;
+                }
+                // dismissDialog(progress_bar_login);
+                getActivity().invalidateOptionsMenu();
+                swipeContainer.setRefreshing(false);
+                progdialog.dismiss();
+            }
+        };
 
         swipeContainer.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -140,17 +162,18 @@ public class FragmentOne extends Fragment {
                 // once the network request has completed successfully.
                 if ((int) SugarRecord.count(EmailMessage.class, null, null) != 0)
                     firstrun = false;
-                if (!Constants.isLoggedin) // login first
-                    new async_Login().execute("");
-                else {
+                if (!Constants.isLoggedin) {
+                    loginManager = new LoginManager(getActivity(), loginListener, username, pwd);
+                    loginManager.execute();
+                } else {
                     // refresh
                     new async_refreshInbox().execute("");
                     System.out
                             .println("-----------------refreshing------------------");
                 }
-                // }
             }
         });
+
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark,
                 android.R.color.holo_blue_light, android.R.color.darker_gray,
@@ -206,93 +229,10 @@ public class FragmentOne extends Fragment {
 
         Boolean app_tutorial = prefs.getBoolean("app_tutorial", false);
         if (app_tutorial) {
-            System.out.println("Running app tut");
             ColorScheme colorscheme = new ColorScheme(getActivity());
             colorscheme.classicColorPreset();
             colorscheme.changeColorScheme();
         }
-    }
-
-    public void listCreatorMethods() {
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-            @Override
-            public void create(SwipeMenu menu) {
-                // create "open" item
-                SwipeMenuItem openItem = new SwipeMenuItem(getActivity()
-                        .getApplicationContext());
-                openItem.setBackground(new ColorDrawable(Color.rgb(0x99, 0xCC,
-                        0x00)));
-                openItem.setWidth(dp2px(90));
-                openItem.setTitle("Reply");
-                openItem.setTitleSize(18);
-                openItem.setTitleColor(Color.WHITE);
-                menu.addMenuItem(openItem);
-
-                SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity()
-                        .getApplicationContext());
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xFF,
-                        0x44, 0x44)));
-                deleteItem.setWidth(dp2px(90));
-                deleteItem.setIcon(R.drawable.ic_action_delete);
-                menu.addMenuItem(deleteItem);
-            }
-        };
-        // set creator
-        mListView.setMenuCreator(creator);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-        // step 2. listener item click event
-        mListView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu,
-                                           int index) {
-                EmailMessage item = allemails_main.get(position);
-                switch (index) {
-                    case 0:
-                        System.out.println("Clicked open");
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "Feature in the next version!", Toast.LENGTH_SHORT)
-                                .show();
-                        break;
-                    case 1:
-                        System.out.println("Clicked open to delete");
-                        // temporarily remove the item from the listview - leave a
-                        // note!
-
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "Deleting.. The actual delete may take a minute.",
-                                Toast.LENGTH_LONG).show();
-                        try {
-                            anim_slideout = AnimationUtils.loadAnimation(
-                                    getActivity(), android.R.anim.slide_out_right);
-                            mListView.getChildAt(allemails_main.indexOf(item))
-                                    .startAnimation(anim_slideout);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        allemails_main.remove(item);
-                        mAdapter.notifyDataSetChanged();
-                        new async_delete(item).execute("");
-                        break;
-                }
-                return false;
-            }
-        });
-
-        // set SwipeListener
-        mListView.setOnSwipeListener(new OnSwipeListener() {
-            @Override
-            public void onSwipeStart(int position) {
-                // swipe start
-                swipeContainer.setEnabled(false);
-            }
-
-            @Override
-            public void onSwipeEnd(int position) {
-                // swipe end
-                swipeContainer.setEnabled(true);
-            }
-        });
     }
 
     public void onAppOpened() {
@@ -359,20 +299,6 @@ public class FragmentOne extends Fragment {
 
             ScrappingMachine.clear_AllEmailsAL();
 
-            // since the messages being displayed are all those in the database,
-            // I have to clear the initial content and replace it with new
-            // content.
-            // NOTE: this is just to display currently. Later this too shall be
-            // changed.
-            // messages_inbox.clear();
-            // for (EmailMessage email : allemails_main) {
-            // messages_inbox.add(email.getFromName() + " sent "
-            // + email.getSubject());
-            // }
-            // for (String msg : messages_inbox) {
-            // System.out.println("Message - " + msg);
-            // }
-
             for (int i = 0; i < allemails_main.size(); i++)
                 allemails_main_ischecked.add(new hash_email_checked(i, false));
 
@@ -389,78 +315,22 @@ public class FragmentOne extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(),
                         ScrappingMachine.totalnew + " new webmails!",
                         Toast.LENGTH_SHORT).show();
-            // dismissDialog(progress_bar_type);
+
             progdialog.dismiss();
             swipeContainer.setRefreshing(false);
 
             if (firstrun == true) {
                 AlarmManagerService.setBackgrndService(getActivity());
             }
-
-            // new async_refreshbackground().execute("");
         }
     }
 
-    public class async_Login extends AsyncTask<String, Void, String> {
-        String checkifloggedin = "";
-
-        @Override
-        protected String doInBackground(String... params) {
-            ScrappingMachine scrapper = new ScrappingMachine(username, pwd,
-                    getActivity());
-            SharedPreferences prefs = getActivity().getSharedPreferences(
-                    Constants.USER_PREFERENCES, getActivity().MODE_PRIVATE);
-
-            checkifloggedin = scrapper.logIn(
-                    prefs.getString("Username", "none"),
-                    prefs.getString("Password", "none"));
-
-            return "Executed";
-        }
-
-        @Override
-        protected void onPreExecute() {
-            // showDialog(progress_bar_login);
-            // Logging in.\n
-            progdialog = ProgressDialog.show(getActivity(), "", "Logging in.",
-                    true);
-            progdialog.setCancelable(false);
-        }
-
-        protected void onProgressUpdate(String... progress) {
-            progdialog.setProgress(Integer.parseInt(progress[0]));
-        }
-
-        @Override
-        public void onPostExecute(String result) {
-            System.out.println("hahah " + pwd);
-
-            if (checkifloggedin.equals("login successful")) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "Logged in!", Toast.LENGTH_SHORT).show();
-                Constants.isLoggedin = true;
-            } else {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "Login Unsuccessful", Toast.LENGTH_SHORT).show();
-                Constants.isLoggedin = false;
-            }
-            // dismissDialog(progress_bar_login);
-            getActivity().invalidateOptionsMenu();
-            swipeContainer.setRefreshing(false);
-            progdialog.dismiss();
-            new async_refreshInbox().execute("");
-        }
-    }
 
     public class async_delete extends AsyncTask<String, Void, String> {
         ArrayList<EmailMessage> emails_tobedeleted = new ArrayList<EmailMessage>();
 
         public async_delete(ArrayList<EmailMessage> emails_tobedeleted) {
             this.emails_tobedeleted = emails_tobedeleted;
-        }
-
-        public async_delete(EmailMessage email_tobedeleted) {
-            this.emails_tobedeleted.add(email_tobedeleted);
         }
 
         @Override
@@ -530,12 +400,10 @@ public class FragmentOne extends Fragment {
             EmailMessage item = getItem(position);
 
             if (totalSelected_emails == 0) {
-                System.out.println("Invis");
                 floatingDelete.setVisibility(View.INVISIBLE);
             } else if (totalSelected_emails == 1) {
 
             } else {
-                System.out.println("Visi");
                 floatingDelete.bringToFront();
                 floatingDelete.setVisibility(View.VISIBLE);
             }
@@ -705,24 +573,6 @@ public class FragmentOne extends Fragment {
         }
     }
 
-    private int dp2px(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                getResources().getDisplayMetrics());
-    }
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager
-                .getActiveNetworkInfo();
-        return activeNetworkInfo != null
-                && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
-    static public void resetNotifyListView() {
-        mAdapter.notifyDataSetChanged();
-    }
-
     private class hash_email_checked {
         Boolean ischecked;
         int position;
@@ -749,5 +599,4 @@ public class FragmentOne extends Fragment {
             this.position = position;
         }
     }
-
 }

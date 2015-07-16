@@ -1,7 +1,5 @@
 package rish.crearo.dawebmail;
 
-import rish.crearo.R;
-import rish.crearo.utils.Constants;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -11,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -27,6 +24,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import rish.crearo.R;
+import rish.crearo.dawebmail.commands.LoginListener;
+import rish.crearo.dawebmail.commands.LoginManager;
+import rish.crearo.utils.Constants;
 
 public class ViewEmail extends Fragment {
 
@@ -44,6 +46,8 @@ public class ViewEmail extends Fragment {
     }
 
     ProgressDialog progdialog;
+    LoginManager loginManager;
+    LoginListener loginListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,6 +109,31 @@ public class ViewEmail extends Fragment {
 
         progdialog = new ProgressDialog(getActivity());
 
+        loginListener = new LoginListener() {
+            @Override
+            public void onPreLogin() {
+                progdialog = ProgressDialog.show(getActivity(), "", "Logging in.", true);
+                progdialog.setCancelable(false);
+            }
+
+            @Override
+            public void onPostLogin(String loginSuccess) {
+
+                if (loginSuccess.equals("login successful")) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
+                    progdialog.dismiss();
+                    Constants.isLoggedin = true;
+                    new async_ViewEmail().execute("");
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
+                    Constants.isLoggedin = false;
+                    progdialog.dismiss();
+                }
+
+                getActivity().invalidateOptionsMenu();
+            }
+        };
+
         if (currentemail.content.equals("isempty")) {
             // load content only if logged in.
             tvcontent.setText("\n\nConnect to the Internet to download content.");
@@ -114,7 +143,8 @@ public class ViewEmail extends Fragment {
             tvsubject.setText("" + currentemail.subject);
 
             if (ScrappingMachine.homepage_link.equals("")) {
-                new async_Login().execute("");
+                loginManager = new LoginManager(getActivity(), loginListener, username, pwd);
+                loginManager.execute();
             } else {
                 new async_ViewEmail().execute("");
             }
@@ -197,19 +227,12 @@ public class ViewEmail extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            // showDialog(progress_bar_login);
-            // Fetching Content.\n
             progdialog = ProgressDialog.show(getActivity(), "", "Fetching Content.", true);
             progdialog.setCancelable(false);
         }
 
-        protected void onProgressUpdate(String... progress) {
-        }
-
         @Override
         public void onPostExecute(String result) {
-            // Toast.makeText(getActivity().getApplicationContext(), "Fetched",
-            // Toast.LENGTH_SHORT).show();
 
             tvsender.setText(currentemail.fromaddress);
             tvcontent.setText(currentemail.content);
@@ -218,51 +241,7 @@ public class ViewEmail extends Fragment {
             tvdatebottom.setText(currentemail.dateentire);
             showEmailAttachments();
 
-            // dismissDialog(progress_bar_login);
             progdialog.dismiss();
-        }
-    }
-
-    public class async_Login extends AsyncTask<String, Void, String> {
-        String checkifloggedin = "";
-
-        @Override
-        protected String doInBackground(String... params) {
-            ScrappingMachine scrapper = new ScrappingMachine(username, pwd, getActivity());
-
-            SharedPreferences prefs = getActivity().getSharedPreferences(Constants.USER_PREFERENCES, getActivity().MODE_PRIVATE);
-
-            checkifloggedin = scrapper.logIn(
-                    prefs.getString("Username", "none"),
-                    prefs.getString("Password", "none"));
-            return "Executed";
-        }
-
-        @Override
-        protected void onPreExecute() {
-            // showDialog(progress_bar_login);
-            // Logging in.\n
-            progdialog = ProgressDialog.show(getActivity(), "", "Logging in.", true);
-            progdialog.setCancelable(false);
-        }
-
-        protected void onProgressUpdate(String... progress) {
-        }
-
-        @Override
-        public void onPostExecute(String result) {
-            if (checkifloggedin.equals("login successful")) {
-                Toast.makeText(getActivity().getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
-                progdialog.dismiss();
-                Constants.isLoggedin = true;
-                new async_ViewEmail().execute("");
-            } else {
-                Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
-                Constants.isLoggedin = false;
-            }
-            // dismissDialog(progress_bar_login);
-            progdialog.dismiss();
-            getActivity().invalidateOptionsMenu();
         }
     }
 
@@ -382,7 +361,5 @@ public class ViewEmail extends Fragment {
             attll2.setBackgroundColor(Color.parseColor("#E7E7E7"));
             attll3.setBackgroundColor(Color.parseColor("#E7E7E7"));
         }
-
     }
-
 }

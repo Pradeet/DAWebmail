@@ -7,6 +7,7 @@ import org.jsoup.Jsoup;
 
 import rish.crearo.services.SavedStatistics;
 import rish.crearo.utils.Constants;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.format.Time;
@@ -81,7 +82,7 @@ public class ScrappingMachine {
             System.out.println("Error while logging in - " + e.getMessage());
         }
         System.out.println("Login Unsuccessful");
-        // BackgroundService.isLoggedin = false;
+
         return "login unsuccessful";
     }
 
@@ -261,12 +262,6 @@ public class ScrappingMachine {
     }
 
     public String convertLink(String link) {
-        // System.out.println("Link - " + link);
-        // int s1 = link.indexOf(";");
-        // int s2 = link.indexOf("?");
-        // StringBuffer sb = new StringBuffer(link);
-        // sb.delete(s1, s2);
-        // link = sb.toString();
         link = link.replaceAll("&#039;", "'");
         link = link.replaceAll("amp;", "");
         return link;
