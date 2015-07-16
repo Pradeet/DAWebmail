@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DAWebmail</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="navigation_drawer_items_array">
+        <item>User</item>
+        <item>Inbox</item>
+        <item>SMARTbox</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="title_activity_view_email">ViewEmail</string>
+    <string name="title_activity_compose_email">ComposeEmail</string>
+    <string name="title_activity_theme_fragment">ThemeFragment</string>
+    <string name="title_activity_about_frag">AboutFrag</string>
+    <string name="title_activity_me">Me</string>
+    <string name="Date">Date</string>
+
+</resources>

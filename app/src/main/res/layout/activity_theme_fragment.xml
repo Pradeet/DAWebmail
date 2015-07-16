@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0"
+    tools:context="rish.crearo.dawebmail.ThemeFragment" >
+
+    <Button
+        android:id="@+id/theme_savebtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_shape"
+        android:text="Save Theme"
+        android:textColor="#000022" />
+
+    <ListView
+        android:id="@+id/theme_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/theme_savebtn"
+        android:layout_margin="5dp"
+        android:background="#F0F0F0"
+        android:divider="#E7E7E7"
+        android:dividerHeight="1dp" >
+    </ListView>
+
+</RelativeLayout>

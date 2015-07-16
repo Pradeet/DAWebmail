@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/splash5_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#3E80B4"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/splash5_txt_dia0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="10dp"
+            android:text="THAT&apos;S ALL FOLKS!"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+
+            <TextView
+                android:id="@+id/splash5_txt_dia1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="The code will be put up on GitHub soon, do write to me if you&apos;d like to see it.\n\nPlus, would really appreciate suggestions :)"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/splash5_ll"
+        android:background="#80000000" >
+
+        <ImageView
+            android:id="@+id/splash5_btnnext"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:padding="2dp"
+            android:src="@drawable/splash_cross" />
+
+        <ImageView
+            android:id="@+id/splash5_btnback"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:padding="2dp"
+            android:src="@drawable/splash_backarrow" />
+
+        <TextView
+            android:id="@+id/splash5_txt_dia3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="Cheers!"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</RelativeLayout>

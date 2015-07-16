@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/splash3_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#3E80B4"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/splash3_div0"
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#3E80B4"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/splash3_div1"
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="#ffb400"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/splash3_txt_dia0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Search thru webmails!"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_action_search" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/splash3_div2"
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/splash3_txt_dia3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="....WITH THE NEW AND CoOL SEARCH BAR ON TOP B)"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/splash3_txt_dia4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="\nIt searches by -\n\nName\nSubject\nDate\nContent\n"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/splash3_ll"
+        android:background="#80000000" >
+
+        <ImageView
+            android:id="@+id/splash3_btnnext"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:padding="2dp"
+            android:src="@drawable/splash_frontarrow" />
+
+        <ImageView
+            android:id="@+id/splash3_btnback"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:padding="2dp"
+            android:src="@drawable/splash_backarrow" />
+    </RelativeLayout>
+
+</RelativeLayout>

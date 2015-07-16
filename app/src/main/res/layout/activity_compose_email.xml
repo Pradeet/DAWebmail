@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ACACAC"
+    tools:context="rish.crearo.dawebmail.ComposeEmail" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:id="@+id/compose_scrollview"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/compose_toaddresstf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#757575"
+                android:ems="10"
+                android:hint="TO"
+                android:padding="10dp"
+                android:textSize="15dp" >
+
+                <requestFocus />
+            </EditText>
+
+            <EditText
+                android:id="@+id/compose_subjecttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#757575"
+                android:ems="10"
+                android:hint="SUBJECT"
+                android:padding="10dp"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/compose_contenttf"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="#757575"
+                android:ems="10"
+                android:hint="CONTENT"
+                android:inputType="textMultiLine"
+                android:padding="5dp"
+                
+                android:textSize="20dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="rish.crearo.dawebmail.AboutFrag" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EEEEEE" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/aboutbutton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_shape"
+                android:gravity="left"
+                android:padding="2dp"
+                android:text="Button"
+                android:textColor="@color/black"
+                android:textIsSelectable="true"
+                android:color="#F0F0F0" />
+
+            <Button
+                android:id="@+id/aboutbutton4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_shape"
+                android:gravity="left"
+                android:padding="2dp"
+                android:text="Button"
+                android:textColor="@color/black"
+                android:textIsSelectable="true"
+                android:color="#F0F0F0" />
+
+            <Button
+                android:id="@+id/aboutbutton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_shape"
+                android:gravity="left"
+                android:padding="2dp"
+                android:text="Button"
+                android:textColor="@color/black"
+                android:textIsSelectable="true"
+                android:color="#F0F0F0" />
+
+            <Button
+                android:id="@+id/aboutbutton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_shape"
+                android:gravity="left"
+                android:padding="2dp"
+                android:text="Button"
+                android:textColor="@color/black"
+                android:textIsSelectable="true"
+                android:color="#F0F0F0" />
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/final_main" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

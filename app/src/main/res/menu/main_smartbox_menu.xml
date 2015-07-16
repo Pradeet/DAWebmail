@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Search, should appear as action button -->
+    <item
+        android:id="@+id/action_composemail"
+        android:icon="@drawable/comp_new"
+        android:showAsAction="ifRoom"
+        android:title="Compose"/>
+    <!-- Settings, should always be in the overflow -->
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="1"
+        android:showAsAction="never"
+        android:title="@string/action_settings"/>
+    <item
+        android:id="@+id/action_aboutme"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        android:title="About"/>
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="3"
+        android:showAsAction="never"
+        android:title="Log Out"/>
+
+</menu>

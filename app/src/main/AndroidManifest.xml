@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="rish.crearo"
+    android:installLocation="preferExternal">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application tools:replace="android:icon"
+        android:name="com.orm.SugarApp"
+        android:allowBackup="true"
+        android:icon="@drawable/final_main"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/MyTheme">
+
+        <meta-data
+            android:name="DATABASE"
+            android:value="emailsdatabase_sugar.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="3" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+
+        <service
+            android:name="rish.crearo.services.BackgroundService"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <receiver
+            android:name="rish.crearo.services.NetworkChangeBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="NetworkChangeBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".dawebmail.AboutFrag"
+            android:label="@string/title_activity_about_frag"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".dawebmail.ComposeEmail"
+            android:label="@string/title_activity_compose_email"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".dawebmail.LoginActivity"
+            android:label="DAWebmail"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".dawebmail.Main_Nav"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
+        </activity>
+        <activity
+            android:name=".dawebmail.Me"
+            android:label="@string/title_activity_me"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".tools.SearchActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+    </application>
+</manifest>

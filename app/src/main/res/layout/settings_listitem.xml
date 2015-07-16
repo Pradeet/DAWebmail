@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/background_dark"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="2dp"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/settings_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:paddingRight="10dp" />
+
+    <TextView
+        android:id="@+id/settings_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:layout_toRightOf="@id/settings_image"
+        android:paddingRight="10dp"
+        android:text="Settings name here."
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textColor="#ffffff" />
+
+</RelativeLayout>
