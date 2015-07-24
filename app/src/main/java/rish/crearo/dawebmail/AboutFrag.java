@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import rish.crearo.R;
 import rish.crearo.utils.ColorScheme;
+import rish.crearo.utils.Constants;
 
 public class AboutFrag extends Activity {
 
@@ -20,6 +23,7 @@ public class AboutFrag extends Activity {
     Boolean b2c = false;
     int b3c = 0;
     Boolean b4c = false;
+    TextView selfdestruct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,9 @@ public class AboutFrag extends Activity {
         b2 = (Button) findViewById(R.id.aboutbutton2);
         b3 = (Button) findViewById(R.id.aboutbutton3);
         b4 = (Button) findViewById(R.id.aboutbutton4);
+        selfdestruct = (TextView) findViewById(R.id.about_selfdestruct);
+
+        selfdestruct.setText("App self destructs on: " + Constants.SELFDESTRUCT);
 
         b1.setTextColor(Color.parseColor("#555555"));
         b2.setTextColor(Color.parseColor("#555555"));

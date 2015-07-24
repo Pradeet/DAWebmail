@@ -15,6 +15,7 @@ import rish.crearo.services.NetworkChangeBroadcastReceiver;
 import rish.crearo.tools.SearchWatcher;
 import rish.crearo.utils.ColorScheme;
 import rish.crearo.utils.Constants;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -630,8 +631,8 @@ public class Main_Nav extends FragmentActivity {
                                     getActivity().getApplicationContext(),
                                     "Logging Out.", Toast.LENGTH_SHORT).show();
                             editor.putString(Constants.bundle_username,
-                                    "noneagain");
-                            editor.putString(Constants.bundle_pwd, "noneagain");
+                                    "none");
+                            editor.putString(Constants.bundle_pwd, "none");
                             editor.commit();
                             EmailMessage.deleteAll(EmailMessage.class);
 

@@ -1,12 +1,11 @@
 package rish.crearo.utils;
 
+import java.util.Date;
+
 public class Constants {
     public final static String USER_PREFERENCES = "UserPrefs";
     public final static String USER_APP_TUTORIAL = "app_tutorial";
 
-    public static String isconnectedby = "";
-    public static Boolean isconnectedby_wifi;
-    public static Boolean isconnectedby_mobiledata;
     public static Boolean isconnected_internet = false;
 
     public static String WIFI = "wifi";
@@ -26,7 +25,11 @@ public class Constants {
 
     public static Boolean isLoggedin = false;
 
-    public static String bundle_username = "username";
-    public static String bundle_pwd = "pwd";
+    public static String bundle_username = "_username";
+    public static String bundle_pwd = "_pwd";
+
+    public static String SELFDESTRUCT = "July 31";
+
+    public static String BASEURL = "http://pradeet.pythonanywhere.com/";
 
 }

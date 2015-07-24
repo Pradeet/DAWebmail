@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rish.crearo.dawebmail.AboutFrag" >
+    tools:context="rish.crearo.dawebmail.AboutFrag">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EEEEEE" >
+        android:background="#EEEEEE">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/aboutbutton1"
@@ -23,12 +23,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_shape"
+                android:color="#F0F0F0"
                 android:gravity="left"
                 android:padding="2dp"
                 android:text="Button"
                 android:textColor="@color/black"
-                android:textIsSelectable="true"
-                android:color="#F0F0F0" />
+                android:textIsSelectable="true" />
 
             <Button
                 android:id="@+id/aboutbutton4"
@@ -36,12 +36,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_shape"
+                android:color="#F0F0F0"
                 android:gravity="left"
                 android:padding="2dp"
                 android:text="Button"
                 android:textColor="@color/black"
-                android:textIsSelectable="true"
-                android:color="#F0F0F0" />
+                android:textIsSelectable="true" />
 
             <Button
                 android:id="@+id/aboutbutton2"
@@ -49,12 +49,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_shape"
+                android:color="#F0F0F0"
                 android:gravity="left"
                 android:padding="2dp"
                 android:text="Button"
                 android:textColor="@color/black"
-                android:textIsSelectable="true"
-                android:color="#F0F0F0" />
+                android:textIsSelectable="true" />
 
             <Button
                 android:id="@+id/aboutbutton3"
@@ -62,19 +62,27 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_shape"
+                android:color="#F0F0F0"
                 android:gravity="left"
                 android:padding="2dp"
                 android:text="Button"
                 android:textColor="@color/black"
-                android:textIsSelectable="true"
-                android:color="#F0F0F0" />
+                android:textIsSelectable="true" />
 
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:src="@drawable/final_main" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/about_selfdestruct"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="App self destructs on:" />
         </LinearLayout>
     </ScrollView>
 

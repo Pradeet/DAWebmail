@@ -22,8 +22,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.github.satyan:sugar:1.3'
-    compile files('libs/jsoup-1.8.1.jar')
-    compile files('libs/jaunt1.0.0.1.jar')
+    compile 'com.github.satyan:sugar:1.3' // database
+    compile files('libs/jsoup-1.8.1.jar') // jsoup
+    compile files('libs/jaunt1.0.0.1.jar') // jaunt
     compile 'me.drakeet.materialdialog:library:1.2.2'
+    compile 'com.mcxiaoke.volley:library:1.0.17' // android volley
 }

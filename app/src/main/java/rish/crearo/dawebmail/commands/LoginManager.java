@@ -18,7 +18,6 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
         this.pwd = pwd;
     }
 
-
     @Override
     protected void onPreExecute() {
         super.onPreExecute();

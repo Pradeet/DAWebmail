@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import rish.crearo.R;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
-import rish.crearo.services.BackgroundRunner;
 import rish.crearo.utils.ColorScheme;
 import rish.crearo.utils.Constants;
 
@@ -94,8 +92,7 @@ public class LoginActivity extends Activity {
                     finish();
                     usernametf.setText("");
                     pwdtf.setText("");
-                    SharedPreferences settings = getSharedPreferences(
-                            Constants.USER_PREFERENCES, MODE_PRIVATE);
+                    SharedPreferences settings = getSharedPreferences(Constants.USER_PREFERENCES, MODE_PRIVATE);
                     SharedPreferences.Editor prefEditor = settings.edit();
 
                     prefEditor.putString(Constants.bundle_username, username);
@@ -114,23 +111,9 @@ public class LoginActivity extends Activity {
                 "none");
         String saved_pwd = settings.getString(Constants.bundle_pwd, "none");
 
-        // logging in after signing out.
-        if (saved_uname.equals("noneagain")) {
-            usernametf.requestFocus();
-            loginbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View arg0) {
-                    username = usernametf.getText().toString().trim();
-                    pwd = pwdtf.getText().toString();
-                    InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.hideSoftInputFromWindow(loginbtn.getWindowToken(), 0);
-                    loginManager = new LoginManager(getApplicationContext(), loginListener, username, pwd);
-                    loginManager.execute();
-//                    new BackgroundRunner().setHourlyRunner(getApplicationContext());
-                }
-            });
-        } else if (!saved_uname.equals("none")) {
-            System.out.println("signing in again.");
+        // already logged in
+        if (!saved_uname.equals("none")) {
+            System.out.println("Signing In.");
             System.out.println(username);
             username = saved_uname;
             pwd = saved_pwd;
@@ -150,7 +133,7 @@ public class LoginActivity extends Activity {
             colorScheme.initialColorSchemeSetter();
             colorScheme.changeColorScheme();
 
-            System.out.println("signing in for the first time.");
+            System.out.println("Signing in for the first time.");
             System.out.println(username + pwd);
             loginbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,8 +155,6 @@ public class LoginActivity extends Activity {
         switch (id) {
             case progress_bar_login:
                 prgDialog = new ProgressDialog(this);
-                // Logging in.\n
-                // keep calm and use webmail
                 prgDialog.setMessage("Logging in.");
                 prgDialog.setCancelable(false);
                 prgDialog.show();
