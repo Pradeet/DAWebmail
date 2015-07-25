@@ -1,22 +1,15 @@
 package rish.crearo.services;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
 import java.util.Date;
 
-import rish.crearo.R;
-import rish.crearo.dawebmail.LoginActivity;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
+import rish.crearo.tools.Printer;
 
-/**
- * Created by rish on 16/7/15.
- */
 public class BackgroundTest extends Service {
 
 
@@ -36,7 +29,7 @@ public class BackgroundTest extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        System.out.println("Time = " + new Date().getSeconds());
+        Printer.println("Time = " + new Date().getSeconds());
 
         loginListener = new LoginListener() {
             @Override

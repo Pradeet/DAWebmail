@@ -6,6 +6,7 @@ import rish.crearo.R;
 import rish.crearo.colorpicker.ColorPickerDialog;
 import rish.crearo.colorpicker.ColorPickerDialog.OnColorSelectedListener;
 import rish.crearo.dawebmail.fragments.FragmentOne;
+import rish.crearo.tools.Printer;
 import rish.crearo.utils.ColorScheme;
 import android.app.Fragment;
 import android.graphics.Color;
@@ -74,7 +75,7 @@ public class ThemeFragment extends Fragment {
             savethembtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    System.out.println("clicked");
+                    Printer.println("clicked");
                     ColorScheme scheme = new ColorScheme(getActivity());
                     scheme.saveUserColor();
                     Toast.makeText(getActivity().getApplicationContext(),
@@ -95,7 +96,7 @@ public class ThemeFragment extends Fragment {
                     switch (position) {
                         case 0:
                             coloring.simpleColorPreset();
-                            System.out.println("Setting simple");
+                            Printer.println("Setting simple");
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
@@ -104,7 +105,7 @@ public class ThemeFragment extends Fragment {
                             break;
                         case 1:
                             coloring.classicColorPreset();
-                            System.out.println("Setting classic");
+                            Printer.println("Setting classic");
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
@@ -113,7 +114,7 @@ public class ThemeFragment extends Fragment {
                             break;
                         case 2:
                             coloring.groovyColorPreset();
-                            System.out.println("Setting groovy");
+                            Printer.println("Setting groovy");
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
@@ -122,7 +123,7 @@ public class ThemeFragment extends Fragment {
                             break;
                         case 3:
                             coloring.userColorPreset();
-                            System.out.println("Setting user");
+                            Printer.println("Setting user");
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
@@ -272,11 +273,11 @@ public class ThemeFragment extends Fragment {
                 getActivity(), initialColor, new OnColorSelectedListener() {
             @Override
             public void onColorSelected(int color) {
-                System.out.println("Color selected " + color);
+                Printer.println("Color selected " + color);
                 String hexColor = String.format("#%02x%02x%02x",
                         Color.red(color), Color.green(color),
                         Color.blue(color));
-                System.out.println("changing - "
+                Printer.println("changing - "
                         + tochangelist.get(position) + " to "
                         + hexColor);
                 ColorScheme colorScheme = new ColorScheme(getActivity());

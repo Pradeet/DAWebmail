@@ -28,6 +28,7 @@ import android.widget.Toast;
 import rish.crearo.R;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
+import rish.crearo.tools.Printer;
 import rish.crearo.utils.Constants;
 
 public class ViewEmail extends Fragment {
@@ -86,7 +87,7 @@ public class ViewEmail extends Fragment {
                 DialogFragment newFrag = new MyAlertDialogFragment_download(1);
                 newFrag.show(getFragmentManager(), "att1");
 
-                System.out.println("File Downloading.");
+                Printer.println("File Downloading.");
             }
         });
         attll2.setOnClickListener(new View.OnClickListener() {
@@ -149,8 +150,8 @@ public class ViewEmail extends Fragment {
                 new async_ViewEmail().execute("");
             }
         } else {
-            System.out.println("fromname - " + currentemail.fromname);
-            System.out.println("fromadd - " + currentemail.fromaddress);
+            Printer.println("fromname - " + currentemail.fromname);
+            Printer.println("fromadd - " + currentemail.fromaddress);
 
             if (currentemail.fromname.contains("...") && (!currentemail.fromaddress.equals("isempty")))
                 tvsender.setText(currentemail.fromaddress);
@@ -195,21 +196,21 @@ public class ViewEmail extends Fragment {
             // + indexoflink;
             // if (stopindex == -1)
             // stopindex = content.substring(indexoflink).length() - 1;
-            // System.out.println("\n\n+" + indexoflink + " " + stopindex);
+            // Printer.println("\n\n+" + indexoflink + " " + stopindex);
             // String httpLink = "<br>Click on this <a href=\""
             // + content.substring(indexoflink, stopindex)
             // + "\"> link </a><br>";
-            // System.out.println("httplink - " + httpLink);
+            // Printer.println("httplink - " + httpLink);
             //
             // content = content.substring(0, indexoflink)
             // + httpLink
             // + content
             // .substring(stopindex + 1, content.length() - 1);
             //
-            // // System.out.println("Content - " + content);
+            // // Printer.println("Content - " + content);
             // // indexoflink = content.substring(content.indexOf("</a>"))
             // // .indexOf("http");
-            // // System.out.println("Now content - " + content);
+            // // Printer.println("Now content - " + content);
             // tvcontent.setText(Html.fromHtml(content));
             // }
         }
@@ -247,18 +248,18 @@ public class ViewEmail extends Fragment {
 
     public void downloadAttachment(String link, int attnumber) {
 
-        System.out.println("link = " + link);
+        Printer.println("link = " + link);
 
         if (!(link.equals("isempty") || link.equals("notempty"))) {
             link = link.substring(0, link.indexOf("&auth"));
-            System.out.println(link);
+            Printer.println(link);
             String webpage = link;
 
             String authString = username + ":" + pwd;
-            System.out.println("auth string: " + authString);
+            Printer.println("auth string: " + authString);
             String authStringEnc = Base64.encodeToString(authString.getBytes(), Base64.DEFAULT);
 
-            System.out.println("Base64 encoded auth string: " + authStringEnc);
+            Printer.println("Base64 encoded auth string: " + authStringEnc);
             DownloadManager downloadManager = (DownloadManager) getActivity().getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(webpage));
             request.addRequestHeader("Authorization", "Basic " + authStringEnc);

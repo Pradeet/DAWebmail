@@ -27,7 +27,7 @@ public class AlarmManagerService {
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
                 + (1000 * 5), 1000 * checkInterval, intent);
 
-        System.out.println("called service with checkInterval = "
+        Printer.println("called service with checkInterval = "
                 + checkInterval);
     }
 }

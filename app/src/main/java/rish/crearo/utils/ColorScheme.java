@@ -3,6 +3,8 @@ package rish.crearo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import rish.crearo.tools.Printer;
+
 public class ColorScheme {
 
     static public String color_readmessage = "#F0F0F0"; // #ACACAC
@@ -57,7 +59,7 @@ public class ColorScheme {
     }
 
     public void editColorScheme(String which, String color) {
-        System.out.println("Changing color in editor - " + which + " to "
+        Printer.println("Changing color in editor - " + which + " to "
                 + color);
         editor.putString(which, color).commit();
         changeColorScheme();
@@ -85,19 +87,19 @@ public class ColorScheme {
 
     public void printColorScheme() {
 
-        System.out.println("Colors - ");
-        System.out.println(color_actionbarcolor);
-        System.out.println(color_actionbartextcolor);
-        System.out.println(color_datetextcolor);
-        System.out.println(color_readmessage);
-        System.out.println(color_readtextsender);
-        System.out.println(color_readtextsubject);
-        System.out.println(color_unreadmessage);
-        System.out.println(color_unreadtextsender);
-        System.out.println(color_unreadtextsubject);
+        Printer.println("Colors - ");
+        Printer.println(color_actionbarcolor);
+        Printer.println(color_actionbartextcolor);
+        Printer.println(color_datetextcolor);
+        Printer.println(color_readmessage);
+        Printer.println(color_readtextsender);
+        Printer.println(color_readtextsubject);
+        Printer.println(color_unreadmessage);
+        Printer.println(color_unreadtextsender);
+        Printer.println(color_unreadtextsubject);
 
-        System.out.println("Saved colors - ");
-        System.out.println(prefs.getString("color_actionbarcolor", "Default"));
+        Printer.println("Saved colors - ");
+        Printer.println(prefs.getString("color_actionbarcolor", "Default"));
 
     }
 

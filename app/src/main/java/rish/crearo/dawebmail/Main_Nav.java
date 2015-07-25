@@ -12,6 +12,7 @@ import rish.crearo.dawebmail.fragments.FragmentThree;
 import rish.crearo.dawebmail.fragments.FragmentTwo;
 import rish.crearo.dialogs.SplashDialog1;
 import rish.crearo.services.NetworkChangeBroadcastReceiver;
+import rish.crearo.tools.Printer;
 import rish.crearo.tools.SearchWatcher;
 import rish.crearo.utils.ColorScheme;
 import rish.crearo.utils.Constants;
@@ -178,18 +179,19 @@ public class Main_Nav extends FragmentActivity {
             Date todaysDate = Calendar.getInstance().getTime();
             String todaysDate_string = dateFormat.format(todaysDate);
 
-            System.out.println("today - " + todaysDate_string);
-            System.out.println("dead - " + expiryDate);
+            Printer.println("today - " + todaysDate_string);
+            Printer.println("dead - " + expiryDate);
 
             todaysDate = dateFormat.parse(todaysDate_string);
             if (todaysDate.after(expiryDate)) {
-                System.out.println("after");
-                SplashDialog1.cdd = new SplashDialog1(Main_Nav.this, 7);
-                SplashDialog1.cdd.setCancelable(false);
-                SplashDialog1.cdd.show();
+                Printer.println("after");
+                int EXPIRY = 99;
+                SplashDialog1 splashDialog1 = new SplashDialog1(Main_Nav.this, EXPIRY);
+                splashDialog1.setCancelable(false);
+                splashDialog1.show();
             }
         } catch (Exception e) {
-            System.out.println("e!");
+            Printer.println("e!");
             e.printStackTrace();
         }
     }
@@ -204,7 +206,7 @@ public class Main_Nav extends FragmentActivity {
             mDrawerLayout.closeDrawer(mDrawerList);
         } else {
             if (getFragmentManager().getBackStackEntryCount() > 0) {
-                System.out.println("Popping backstack");
+                Printer.println("Popping backstack");
                 getFragmentManager().popBackStack();
             } else {
                 mDrawerList.setItemChecked(1, true);
@@ -389,10 +391,9 @@ public class Main_Nav extends FragmentActivity {
         switch (item.getItemId()) {
 
             case R.id.action_composemail:
-                // new Statistics();
-                SplashDialog1.cdd = new SplashDialog1(Main_Nav.this, 1);
-                SplashDialog1.cdd.setCancelable(false);
-                SplashDialog1.cdd.show();
+                SplashDialog1 splashDialog1 = new SplashDialog1(Main_Nav.this, 0);
+                splashDialog1.setCancelable(false);
+                splashDialog1.show();
 
                 invalidateOptionsMenu();
                 return true;

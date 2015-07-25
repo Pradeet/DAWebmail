@@ -6,17 +6,17 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/splash1_ll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#3E80B4"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/splash1_txt_dia0"
+            android:id="@+id/splash_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -28,18 +28,7 @@
             android:textSize="15dp" />
 
         <TextView
-            android:id="@+id/splash1_txt_dia1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="(psst, We&apos;re still in BETA) "
-            android:textColor="@android:color/white"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/splash1_txt_dia2"
+            android:id="@+id/splash_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -50,17 +39,6 @@
             android:textSize="18dp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/splash1_txt_dia4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:text="Do go thru the next few pages!\n"
-            android:textColor="@android:color/white"
-            android:textSize="18dp"
-            android:textStyle="bold" />
     </LinearLayout>
 
     <RelativeLayout
@@ -68,24 +46,32 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/splash1_ll"
         android:background="#80000000"
-        android:paddingBottom="10dp" >
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/splash_btnback"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:padding="2dp"
+            android:src="@drawable/splash_backarrow" />
 
         <TextView
-            android:id="@+id/splash1_txt_dia3"
+            android:id="@+id/splash_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
-            android:layout_toLeftOf="@+id/splash1_btnnext"
             android:gravity="center"
             android:text="(I leave you choiceless :P)"
             android:textColor="@android:color/white"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
         <ImageView
-            android:id="@+id/splash1_btnnext"
+            android:id="@+id/splash_btnnext"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"

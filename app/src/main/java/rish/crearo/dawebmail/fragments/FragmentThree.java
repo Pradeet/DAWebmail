@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import rish.crearo.R;
 import rish.crearo.dawebmail.ThemeFragment;
+import rish.crearo.tools.Printer;
 import rish.crearo.utils.Constants;
 
 public class FragmentThree extends Fragment {
@@ -108,18 +109,18 @@ public class FragmentThree extends Fragment {
                         Constants.USER_PREFERENCES, getActivity().MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
 
-                System.out.println("wifi " + switch_mobile);
+                Printer.println("wifi " + switch_mobile);
                 if (!switch_mobile.isChecked()) {
                     editor.putBoolean("toggle_mobiledata", false).commit();
                     Constants.calledbydata = "no";
-                    System.out.println("mobile put to false");
+                    Printer.println("mobile put to false");
 
                 } else {
                     editor.putBoolean("toggle_mobiledata", true).commit();
                     Constants.calledby = "Mobile";
                     Constants.calledbydata = "yes";
-                    System.out.println("mobile put to true");
-                    System.out.println("Check interval - "
+                    Printer.println("mobile put to true");
+                    Printer.println("Check interval - "
                             + Constants.checkInterval_mobiledata);
                 }
             }
@@ -134,17 +135,17 @@ public class FragmentThree extends Fragment {
                         Constants.USER_PREFERENCES, getActivity().MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
 
-                System.out.println("wifi " + switch_wifi);
+                Printer.println("wifi " + switch_wifi);
                 if (!switch_wifi.isChecked()) {
                     editor.putBoolean("toggle_wifi", false).commit();
                     Constants.calledbywifi = "no";
-                    System.out.println("wifi put to false");
+                    Printer.println("wifi put to false");
                 } else {
                     editor.putBoolean("toggle_wifi", true).commit();
                     Constants.calledby = "wifi";
-                    System.out.println("wifi put to true");
+                    Printer.println("wifi put to true");
                     Constants.calledbywifi = "yes";
-                    System.out.println("Check interval - "
+                    Printer.println("Check interval - "
                             + Constants.checkInterval_wifi);
                 }
             }

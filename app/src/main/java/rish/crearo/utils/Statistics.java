@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import rish.crearo.dawebmail.EmailMessage;
+import rish.crearo.tools.Printer;
 
 public class Statistics {
 
@@ -48,8 +49,8 @@ public class Statistics {
         Collections.sort(map_, new CustomComparator_number());
 
         // for some reason sysadmin emails arent being detected :/
-        System.out.println("--------STATISTICS--------");
-        System.out.println("Total " + totalEmails + " ");
+        Printer.println("--------STATISTICS--------");
+        Printer.println("Total " + totalEmails + " ");
         int t = 0;
         for (hashSender_Number map_one : map_) {
             System.out.println(map_one.getSender() + " " + map_one.getNumber());

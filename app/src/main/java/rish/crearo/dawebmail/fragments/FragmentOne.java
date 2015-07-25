@@ -22,10 +22,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.orm.SugarRecord;
 
 import java.util.ArrayList;
@@ -38,6 +38,7 @@ import rish.crearo.dawebmail.ViewEmail;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
 import rish.crearo.tools.AlarmManagerService;
+import rish.crearo.tools.Printer;
 import rish.crearo.tools.RandomStrings;
 import rish.crearo.utils.ColorScheme;
 import rish.crearo.utils.Constants;
@@ -45,6 +46,24 @@ import rish.crearo.utils.Constants;
 public class FragmentOne extends Fragment {
 
     String username, pwd;
+
+    ProgressDialog progdialog;
+    public static ArrayList<EmailMessage> allemails_main;
+    public ArrayList<EmailMessage> emails_tobedeleted_pub;
+
+    public static ArrayList<hash_email_checked> allemails_main_ischecked;
+    boolean firstrun = true;
+    private SwipeRefreshLayout swipeContainer;
+    AsyncTask<String, Void, String> mAsyncLogin;
+    TextView webmail_tv, pull_tv, invis_msg;
+    public static AppAdapter mAdapter;
+    private ListView mListView;
+    public Button floatingDelete;
+    int totalSelected_emails = 0;
+    Animation anim_slideout;
+
+    LoginListener loginListener;
+    LoginManager loginManager;
 
     public FragmentOne() {
 
@@ -58,24 +77,6 @@ public class FragmentOne extends Fragment {
             mAdapter.notifyDataSetChanged();
         setHasOptionsMenu(true);
     }
-
-    ProgressDialog progdialog;
-    public static ArrayList<EmailMessage> allemails_main;
-    public ArrayList<EmailMessage> emails_tobedeleted_pub;
-
-    public static ArrayList<hash_email_checked> allemails_main_ischecked;
-    boolean firstrun = true;
-    private SwipeRefreshLayout swipeContainer;
-    AsyncTask<String, Void, String> mAsyncLogin;
-    TextView webmail_tv, pull_tv, invis_msg;
-    public static AppAdapter mAdapter;
-    private SwipeMenuListView mListView;
-    public Button floatingDelete;
-    int totalSelected_emails = 0;
-    Animation anim_slideout;
-
-    LoginListener loginListener;
-    LoginManager loginManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,7 +112,7 @@ public class FragmentOne extends Fragment {
         allemails_main_ischecked = new ArrayList<>();
         emails_tobedeleted_pub = new ArrayList<>();
 
-        mListView = (SwipeMenuListView) rootView.findViewById(R.id.listView);
+        mListView = (ListView) rootView.findViewById(R.id.listView);
         mListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         mAdapter = new AppAdapter();
         mListView.setAdapter(mAdapter);
@@ -169,8 +170,7 @@ public class FragmentOne extends Fragment {
                 } else {
                     // refresh
                     new async_refreshInbox().execute("");
-                    System.out
-                            .println("-----------------refreshing------------------");
+                    Printer.println("-----------------refreshing------------------");
                 }
             }
         });
@@ -197,7 +197,7 @@ public class FragmentOne extends Fragment {
                                 "Deleting.. The actual delete may take a minute",
                                 Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        System.out.println("Error in toast");
+                        Printer.println("Error in toast");
                         e.printStackTrace();
                     }
 
@@ -239,8 +239,7 @@ public class FragmentOne extends Fragment {
     public void onAppOpened() {
         getActivity().getActionBar().setTitle("Inbox");
         // fetch all emails in the database and display them
-        allemails_main = (ArrayList<EmailMessage>) SugarRecord
-                .listAll(EmailMessage.class);
+        allemails_main = (ArrayList<EmailMessage>) SugarRecord.listAll(EmailMessage.class);
         Collections.reverse(allemails_main);
 
         for (int i = 0; i < allemails_main.size(); i++)
@@ -252,8 +251,7 @@ public class FragmentOne extends Fragment {
     public class async_refreshInbox extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            ScrappingMachine scrapper = new ScrappingMachine(username, pwd,
-                    getActivity());
+            ScrappingMachine scrapper = new ScrappingMachine(username, pwd, getActivity());
             scrapper.scrapeAllMessagesfromInbox(firstrun);
             return "Executed";
         }
@@ -324,7 +322,7 @@ public class FragmentOne extends Fragment {
 
 
     public class async_delete extends AsyncTask<String, Void, String> {
-        ArrayList<EmailMessage> emails_tobedeleted = new ArrayList<EmailMessage>();
+        ArrayList<EmailMessage> emails_tobedeleted = new ArrayList<>();
 
         public async_delete(ArrayList<EmailMessage> emails_tobedeleted) {
             this.emails_tobedeleted = emails_tobedeleted;
@@ -332,32 +330,32 @@ public class FragmentOne extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            System.out.println("Starting delete");
+            Printer.println("Starting delete");
             super.onPreExecute();
         }
 
         @Override
         protected String doInBackground(String... params) {
 
-            System.out.println("Allemailsmain size "
+            Printer.println("Allemailsmain size "
                     + FragmentOne.allemails_main.size());
             try {
                 new ScrappingMachine(username, pwd, getActivity())
                         .getValues_forDelete(emails_tobedeleted);
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                Printer.println(e.getMessage());
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            System.out.println("Stopping delete");
+            Printer.println("Stopping delete");
             try {
                 Toast.makeText(getActivity(), "Deleted Successfully",
                         Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                System.out.println("error in deleting");
+                Printer.println("error in deleting");
                 e.printStackTrace();
             }
 
@@ -411,7 +409,7 @@ public class FragmentOne extends Fragment {
             // .parseColor(ColorScheme.color_unreadtextsubject));
 
             if (item.readunread.equals("Unread Message")) {
-                System.out.println("has att - " + item.attlink1);
+                Printer.println("has att - " + item.attlink1);
                 if (item.attlink1.equals("isempty"))
                     holder.iv_icon
                             .setBackgroundResource(R.drawable.final_unread);
@@ -459,7 +457,7 @@ public class FragmentOne extends Fragment {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View arg0) {
-                    System.out.println("Long click");
+                    Printer.println("Long click");
                     allemails_main_ischecked.get(position).setIschecked(true);
                     mAdapter.notifyDataSetChanged();
                     Vibrator vibe = (Vibrator) getActivity().getSystemService(
@@ -488,7 +486,7 @@ public class FragmentOne extends Fragment {
                 @Override
                 public void onClick(View arg0) {
 
-                    System.out.println("Clicked ! " + position);
+                    Printer.println("Clicked ! " + position);
 
                     if (allemails_main_ischecked.get(position).getIschecked()) {
                         allemails_main_ischecked.get(position).setIschecked(
@@ -523,7 +521,7 @@ public class FragmentOne extends Fragment {
                         }
                         emails_tobedeleted_pub.add(allemails_main.get(position));
                     }
-                    System.out.println(allemails_main_ischecked.get(position).ischecked
+                    Printer.println(allemails_main_ischecked.get(position).ischecked
                             + ", totalselected =  " + totalSelected_emails);
 
                     mAdapter.notifyDataSetChanged();

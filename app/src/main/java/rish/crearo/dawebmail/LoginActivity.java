@@ -20,6 +20,7 @@ import android.widget.Toast;
 import rish.crearo.R;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
+import rish.crearo.tools.Printer;
 import rish.crearo.utils.ColorScheme;
 import rish.crearo.utils.Constants;
 
@@ -80,7 +81,7 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onPostLogin(String loginSuccess) {
-                System.out.println("printing what it got - " + loginSuccess);
+                Printer.println("printing what it got - " + loginSuccess);
                 if (loginSuccess.equals("login successful")) {
                     Toast.makeText(getApplicationContext(), "Logged in!",
                             Toast.LENGTH_SHORT).show();
@@ -113,8 +114,8 @@ public class LoginActivity extends Activity {
 
         // already logged in
         if (!saved_uname.equals("none")) {
-            System.out.println("Signing In.");
-            System.out.println(username);
+            Printer.println("Signing In.");
+            Printer.println(username);
             username = saved_uname;
             pwd = saved_pwd;
             Intent intent = new Intent(LoginActivity.this, Main_Nav.class);
@@ -124,8 +125,8 @@ public class LoginActivity extends Activity {
             startActivity(intent);
 
             this.finish();
-            System.out.println(saved_pwd);
-            System.out.println(saved_uname);
+            Printer.println(saved_pwd);
+            Printer.println(saved_uname);
         }
 
         // logging in for the first time.
@@ -133,8 +134,8 @@ public class LoginActivity extends Activity {
             colorScheme.initialColorSchemeSetter();
             colorScheme.changeColorScheme();
 
-            System.out.println("Signing in for the first time.");
-            System.out.println(username + pwd);
+            Printer.println("Signing in for the first time.");
+            Printer.println(username + pwd);
             loginbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View arg0) {

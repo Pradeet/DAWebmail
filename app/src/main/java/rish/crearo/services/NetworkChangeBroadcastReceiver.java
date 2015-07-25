@@ -6,6 +6,7 @@ import java.util.Random;
 import rish.crearo.R;
 import rish.crearo.dawebmail.EmailMessage;
 import rish.crearo.dawebmail.ScrappingMachine;
+import rish.crearo.tools.Printer;
 import rish.crearo.utils.Constants;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -44,15 +45,15 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 && ((wifi_enabled && isConnectedByWifi()) || (mobiledata_enabled && isConnectedByMobileData()))) {
             Constants.isconnected_internet = true;
             new async_refreshInbox().execute("");
-            System.out.println("Checking for mail once");
+            Printer.println("Checking for mail once");
         } else if (Constants.isconnected_internet == true
                 && (isConnectedByWifi() == false && isConnectedByMobileData() == false)) {
             Constants.isconnected_internet = false;
-            System.out.println("No need to check for mail");
+            Printer.println("No need to check for mail");
 
         } else if ((Constants.isconnected_internet == true && ((wifi_enabled && isConnectedByWifi()) || (mobiledata_enabled && isConnectedByMobileData())))) {
             new async_refreshInbox().execute("");
-            System.out.println("ON GOING PROCESS. BOTH TRUE. DOING NOTHING.");
+            Printer.println("ON GOING PROCESS. BOTH TRUE. DOING NOTHING.");
         }
     }
 
@@ -62,7 +63,7 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
             ScrappingMachine scraper = new ScrappingMachine(username, pwd,
                     context);
             if (!(scraper.checkifLoggedInLong())) {
-                System.out.println("Not logged in.");
+                Printer.println("Not logged in.");
                 SharedPreferences prefs = context.getSharedPreferences(
                         Constants.USER_PREFERENCES, context.MODE_PRIVATE);
 
@@ -89,7 +90,7 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
             m.save();// now all e-mails are in the database
 
         if (ScrappingMachine.totalnew == 0) {
-            System.out.println("0 new emails");
+            Printer.println("0 new emails");
         } else if (ScrappingMachine.totalnew == 1) {
             showNotification("One New Webmail!", ScrappingMachine.allemails
                     .get(0).getFromName(), ScrappingMachine.allemails.get(0)
@@ -107,7 +108,7 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 .getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
             // Constants.connectedby = Constants.WIFI;
-            System.out.println("is connected by wifi");
+            Printer.println("is connected by wifi");
             return true;
         } else {
             return false;
@@ -119,7 +120,7 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 .getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
             // Constants.connectedby = Constants.MOBILE_DATA;
-            System.out.println("is connected by mobile data");
+            Printer.println("is connected by mobile data");
             return true;
         } else {
             return false;

@@ -24,7 +24,7 @@ public class SearchWatcher implements TextWatcher {
     @Override
     public void afterTextChanged(Editable editable) {
         Main_Nav.mSearchQuery = Main_Nav.mSearchEt.getText().toString();
-        System.out.println(Main_Nav.mSearchQuery);
+        Printer.println(Main_Nav.mSearchQuery);
         // Do search task here
 
         if (Main_Nav.mSearchQuery.length() >= 2) {

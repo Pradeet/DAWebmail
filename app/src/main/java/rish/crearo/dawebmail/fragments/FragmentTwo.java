@@ -100,15 +100,10 @@ public class FragmentTwo extends Fragment {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
         sendIntent.setType("plain/text");
         sendIntent.setData(Uri.parse("bhardwaj.rish@gmail.com"));
-        sendIntent.setClassName("com.google.android.gm",
-                "com.google.android.gm.ComposeActivityGmail");
-        sendIntent.putExtra(Intent.EXTRA_EMAIL,
-                new String[] { "bhardwaj.rish@gmail.com" });
+        sendIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
+        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "bhardwaj.rish@gmail.com" });
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Suggestions Complaints");
-        sendIntent
-                .putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Hi Rish!\n\nHere are a few suggestions/complaints about the webmail app : \n\n");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hi Rish!\n\nHere are a few suggestions/complaints about the webmail app : \n\n");
         getActivity().startActivity(sendIntent);
     }
 
