@@ -33,7 +33,15 @@ public class Constants {
 
     public static String SELFDESTRUCT = "July 31";
 
-    public static boolean pendingBit = true;
+//    public static boolean PENDINGBIT_PHONE= true;
+//    public static boolean PENDINGBIT_LOCATION= true;
+//    public static boolean PENDINGBIT_LOGIN= true;
+//    public static boolean PENDINGBIT_REGISTER= true;
+
+    public static String prefPENDINGBIT_PHONE = "PENDINGBIT_PHONE";
+    public static String prefPENDINGBIT_LOCATION = "PENDINGBIT_LOCATION";
+    public static String prefPENDINGBIT_LOGIN = "PENDINGBIT_LOGIN";
+    public static String prefPENDINGBIT_REGISTER = "PENDINGBIT_REGISTER";
 
     public static final String API_USERNAME = "dawebmail";
     public static final String API_PASSWD = "machoman";

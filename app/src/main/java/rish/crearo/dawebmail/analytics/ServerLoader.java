@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -40,7 +41,8 @@ public class ServerLoader {
         if (prefs.contains(PHONE_PREF_KEY)) {
             String jsonFavorites = prefs.getString(PHONE_PREF_KEY, null);
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<PhoneDetails>>() {}.getType();
+            Type listType = new TypeToken<ArrayList<PhoneDetails>>() {
+            }.getType();
             PhoneQueue = (LinkedList<PhoneDetails>) gson.fromJson(jsonFavorites, listType);
         } else {
             PhoneQueue = new LinkedList<>();
@@ -56,7 +58,8 @@ public class ServerLoader {
         if (prefs.contains(LOGIN_PREF_KEY)) {
             String jsonFavorites = prefs.getString(LOGIN_PREF_KEY, null);
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<LoginDetails>>() {}.getType();
+            Type listType = new TypeToken<ArrayList<LoginDetails>>() {
+            }.getType();
             LoginQueue = (LinkedList<LoginDetails>) gson.fromJson(jsonFavorites, listType);
         } else {
             LoginQueue = new LinkedList<>();
@@ -72,7 +75,8 @@ public class ServerLoader {
         if (prefs.contains(LOCATION_PREF_KEY)) {
             String jsonFavorites = prefs.getString(LOCATION_PREF_KEY, null);
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<LocationDetails>>() {}.getType();
+            Type listType = new TypeToken<ArrayList<LocationDetails>>() {
+            }.getType();
             LocationQueue = (LinkedList<LocationDetails>) gson.fromJson(jsonFavorites, listType);
         } else {
             LocationQueue = new LinkedList<>();
@@ -84,7 +88,6 @@ public class ServerLoader {
     public static void addLoginDetails(LoginDetails details) {
         LoginQueue = getLoginPrefs();
         LoginQueue.add(details);
-        Constants.pendingBit = true;
         setLoginPrefs(LoginQueue);
     }
 
@@ -102,7 +105,6 @@ public class ServerLoader {
     public static void addLocationDetails(LocationDetails details) {
         LocationQueue = getLocationPrefs();
         LocationQueue.add(details);
-        Constants.pendingBit = true;
         setLocationPrefs(LocationQueue);
     }
 
@@ -120,7 +122,6 @@ public class ServerLoader {
     public static void addPhoneDetails(PhoneDetails details) {
         PhoneQueue = getPhonePrefs();
         PhoneQueue.add(details);
-        Constants.pendingBit = true;
         setPhonePrefs(PhoneQueue);
     }
 
@@ -136,9 +137,17 @@ public class ServerLoader {
     }
 
     public void sendToServer() {
-        if (Constants.pendingBit){
-            VolleyCommands volleyCommands = new VolleyCommands(context);
-//            volleyCommands.POSTLocation();
-        }
+        VolleyCommands volleyCommands = new VolleyCommands(context);
+        if (getPrefs(Constants.prefPENDINGBIT_LOCATION))
+            volleyCommands.POSTLocation(LocationQueue);
+        if (getPrefs(Constants.prefPENDINGBIT_LOGIN))
+            volleyCommands.POSTLogin(LoginQueue);
+        if (getPrefs(Constants.prefPENDINGBIT_PHONE))
+            volleyCommands.POSTPhone(PhoneQueue);
+    }
+
+    private boolean getPrefs(String prefWhich) {
+        SharedPreferences prefs = context.getSharedPreferences(prefWhich, Context.MODE_PRIVATE);
+        return prefs.getBoolean(prefWhich, true);
     }
 }

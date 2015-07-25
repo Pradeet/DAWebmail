@@ -17,9 +17,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import rish.crearo.R;
+import rish.crearo.dawebmail.analytics.LocationDetails;
 import rish.crearo.dawebmail.analytics.LoginDetails;
 import rish.crearo.dawebmail.analytics.PhoneDetails;
+import rish.crearo.dawebmail.analytics.VolleyCommands;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
 import rish.crearo.tools.Printer;
@@ -39,10 +49,14 @@ public class LoginActivity extends Activity {
     LoginListener loginListener;
     LoginManager loginManager;
 
+    Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        activity = this;
 
         int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
 
@@ -81,7 +95,8 @@ public class LoginActivity extends Activity {
                 if (loginSuccess.equals("login successful")) {
                     Toast.makeText(getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
 
-                    sendLoginDetails("Manual");
+                    sendPhoneDetails();
+                    sendRegisterDetails();
                     Intent intent = new Intent(LoginActivity.this, Main_Nav.class);
                     intent.putExtra(Constants.bundle_username, username);
                     intent.putExtra(Constants.bundle_pwd, pwd);
@@ -138,7 +153,6 @@ public class LoginActivity extends Activity {
                     pwd = pwdtf.getText().toString();
                     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(loginbtn.getWindowToken(), 0);
-                    sendPhoneDetails();
                     loginManager = new LoginManager(getApplicationContext(), loginListener, username, pwd);
                     loginManager.execute();
 //                    new BackgroundRunner().setHourlyRunner(getApplicationContext());
@@ -148,13 +162,20 @@ public class LoginActivity extends Activity {
     }
 
     private void sendPhoneDetails() {
-        PhoneDetails details = new PhoneDetails(this, this);
-        details.addPhoneDetails(details);
+
+        if (getPrefs(Constants.prefPENDINGBIT_PHONE)) {
+            PhoneDetails phoneDetails = new PhoneDetails(activity, getApplicationContext());
+            //details.addPhoneDetails(details);
+            VolleyCommands volleyCommands = new VolleyCommands(getApplicationContext());
+            volleyCommands.POSTPhone(phoneDetails);
+        }
     }
 
-    private void sendLoginDetails(String loginType) {
-        LoginDetails details = new LoginDetails(this, loginType);
-        details.addLoginDetails(details);
+    private void sendRegisterDetails() {
+        if (getPrefs(Constants.prefPENDINGBIT_REGISTER)) {
+            VolleyCommands volleyCommands = new VolleyCommands(getApplicationContext());
+            volleyCommands.POSTStudent();
+        }
     }
 
     @Override
@@ -169,5 +190,10 @@ public class LoginActivity extends Activity {
             default:
                 return null;
         }
+    }
+
+    private boolean getPrefs(String prefWhich) {
+        SharedPreferences prefs = getSharedPreferences(prefWhich, Context.MODE_PRIVATE);
+        return prefs.getBoolean(prefWhich, true);
     }
 }

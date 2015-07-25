@@ -78,10 +78,10 @@ public class FragmentOne extends Fragment {
         if (mAdapter != null)
             mAdapter.notifyDataSetChanged();
         setHasOptionsMenu(true);
-        if (Constants.pendingBit) {
-            ServerLoader sender = new ServerLoader(getActivity());
-            sender.sendToServer();
-        }
+//        if (Constants.pendingBit) {
+//            ServerLoader sender = new ServerLoader(getActivity());
+//            sender.sendToServer();
+//        }
     }
 
     @Override
