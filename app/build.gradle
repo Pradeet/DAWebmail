@@ -31,7 +31,5 @@ dependencies {
     compile 'me.drakeet.materialdialog:library:1.2.2'
     compile 'com.mcxiaoke.volley:library:1.0.17'
     // android volley
-    compile files('libs/AES.jar')
-    compile files('libs/commons-codec-1.9.jar')
     compile files('libs/gson-1.1.jar')
 }

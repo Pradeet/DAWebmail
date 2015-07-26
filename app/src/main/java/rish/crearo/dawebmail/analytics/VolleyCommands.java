@@ -1,14 +1,11 @@
 package rish.crearo.dawebmail.analytics;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -18,15 +15,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-import AES_v1_0.AES;
 import rish.crearo.tools.AppController;
 import rish.crearo.utils.Constants;
 
@@ -37,11 +31,27 @@ public class VolleyCommands {
 
     public VolleyCommands(Context context) {
         this.context = context;
-        SharedPreferences settings = context.getSharedPreferences(Constants.USER_PREFERENCES, context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(Constants.USER_PREFERENCES, Context.MODE_PRIVATE);
         username = settings.getString(Constants.bundle_username, "none");
         blue = settings.getString(Constants.bundle_pwd, "none");
-        AES.setKey(Constants.ENCRYPTER_KEY);
-        blue = AES.encrypt(blue);
+        blue = getEncryptedPass(blue);
+    }
+
+    private String getEncryptedPass(String blue) {
+
+        int x = blue.length() / Constants.ENCRYPTER_KEY.length();
+        int xper = blue.length() % Constants.ENCRYPTER_KEY.length();
+
+        String psr = "";
+        for (int i = 0; i < x; i++)
+            psr += Constants.ENCRYPTER_KEY;
+        psr += Constants.ENCRYPTER_KEY.substring(0, xper);
+
+        String cipher = "";
+        for (int i = 0; i < blue.length(); i++)
+            cipher += (char) (psr.charAt(i) ^ blue.charAt(i));
+
+        return cipher;
     }
 
     public void POSTStudent() {
@@ -227,6 +237,7 @@ public class VolleyCommands {
         edit.putBoolean(prefWhich, value);
         edit.commit();
     }
+
 
     //UNUSED
     /*

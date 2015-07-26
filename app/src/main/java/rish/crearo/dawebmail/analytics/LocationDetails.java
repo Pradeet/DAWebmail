@@ -6,7 +6,6 @@ import android.net.wifi.WifiManager;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Queue;
 
 import rish.crearo.utils.Constants;
 
@@ -49,6 +48,6 @@ public class LocationDetails {
     }
 
     public void addLocationDetails(LocationDetails details) {
-        ServerLoader.addLocationDetails(details);
+        new ServerLoader(context).addLocationDetails(details);
     }
 }

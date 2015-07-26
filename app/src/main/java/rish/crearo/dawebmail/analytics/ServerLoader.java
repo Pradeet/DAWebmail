@@ -20,21 +20,20 @@ public class ServerLoader {
     private final static String LOCATION_PREF_KEY = "LOCATION";
     private final static String PHONE_PREF_KEY = "PHONE";
 
-    private static Queue<LocationDetails> LocationQueue;
-    private static Queue<LoginDetails> LoginQueue;
-    private static Queue<PhoneDetails> PhoneQueue;
+    private Queue<LocationDetails> LocationQueue;
+    private Queue<LoginDetails> LoginQueue;
+    private Queue<PhoneDetails> PhoneQueue;
 
-    private static Context context;
+    private Context context;
 
     public ServerLoader(Context context) {
-        ServerLoader.context = context;
+        this.context = context;
         LocationQueue = getLocationPrefs();
         LoginQueue = getLoginPrefs();
         PhoneQueue = getPhonePrefs();
-        sendToServer();
     }
 
-    private static Queue<PhoneDetails> getPhonePrefs() {
+    private Queue<PhoneDetails> getPhonePrefs() {
         SharedPreferences prefs = context.getSharedPreferences(PHONE_PREF_KEY, Context.MODE_PRIVATE);
         Queue<PhoneDetails> PhoneQueue;
 
@@ -51,7 +50,7 @@ public class ServerLoader {
         return PhoneQueue;
     }
 
-    private static Queue<LoginDetails> getLoginPrefs() {
+    private Queue<LoginDetails> getLoginPrefs() {
         SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREF_KEY, Context.MODE_PRIVATE);
         Queue<LoginDetails> LoginQueue;
 
@@ -68,7 +67,7 @@ public class ServerLoader {
         return LoginQueue;
     }
 
-    private static Queue<LocationDetails> getLocationPrefs() {
+    private Queue<LocationDetails> getLocationPrefs() {
         SharedPreferences prefs = context.getSharedPreferences(LOCATION_PREF_KEY, Context.MODE_PRIVATE);
         Queue<LocationDetails> LocationQueue;
 
@@ -85,13 +84,13 @@ public class ServerLoader {
         return LocationQueue;
     }
 
-    public static void addLoginDetails(LoginDetails details) {
+    public void addLoginDetails(LoginDetails details) {
         LoginQueue = getLoginPrefs();
         LoginQueue.add(details);
         setLoginPrefs(LoginQueue);
     }
 
-    private static void setLoginPrefs(Queue<LoginDetails> loginQueue) {
+    private void setLoginPrefs(Queue<LoginDetails> loginQueue) {
         SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREF_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
 
@@ -102,13 +101,13 @@ public class ServerLoader {
         edit.commit();
     }
 
-    public static void addLocationDetails(LocationDetails details) {
+    public void addLocationDetails(LocationDetails details) {
         LocationQueue = getLocationPrefs();
         LocationQueue.add(details);
         setLocationPrefs(LocationQueue);
     }
 
-    private static void setLocationPrefs(Queue<LocationDetails> locationQueue) {
+    private void setLocationPrefs(Queue<LocationDetails> locationQueue) {
         SharedPreferences prefs = context.getSharedPreferences(LOCATION_PREF_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
 
@@ -119,13 +118,13 @@ public class ServerLoader {
         edit.commit();
     }
 
-    public static void addPhoneDetails(PhoneDetails details) {
+    public void addPhoneDetails(PhoneDetails details) {
         PhoneQueue = getPhonePrefs();
         PhoneQueue.add(details);
         setPhonePrefs(PhoneQueue);
     }
 
-    private static void setPhonePrefs(Queue<PhoneDetails> phoneQueue) {
+    private void setPhonePrefs(Queue<PhoneDetails> phoneQueue) {
         SharedPreferences prefs = context.getSharedPreferences(PHONE_PREF_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
 

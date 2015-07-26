@@ -14,6 +14,7 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
     String checkifloggedin = "NULL";
 
     public LoginManager(Context context, LoginListener loginListener, String username, String pwd) {
+        this.context = context;
         this.loginListener = loginListener;
         this.username = username;
         this.pwd = pwd;

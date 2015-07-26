@@ -48,6 +48,6 @@ public class LoginDetails {
     }
 
     public void addLoginDetails(LoginDetails details) {
-        ServerLoader.addLoginDetails(details);
+        new ServerLoader(context).addLoginDetails(details);
     }
 }

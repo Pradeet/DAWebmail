@@ -95,8 +95,6 @@ public class LoginActivity extends Activity {
                 if (loginSuccess.equals("login successful")) {
                     Toast.makeText(getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
 
-                    sendPhoneDetails();
-                    sendRegisterDetails();
                     Intent intent = new Intent(LoginActivity.this, Main_Nav.class);
                     intent.putExtra(Constants.bundle_username, username);
                     intent.putExtra(Constants.bundle_pwd, pwd);
@@ -111,6 +109,9 @@ public class LoginActivity extends Activity {
                     prefEditor.putString(Constants.bundle_username, username);
                     prefEditor.putString(Constants.bundle_pwd, pwd);
                     prefEditor.commit();
+
+                    sendPhoneDetails();
+                    sendRegisterDetails();
                 } else {
                     Toast.makeText(getApplicationContext(), "Login Unsuccessful!", Toast.LENGTH_SHORT).show();
                     pwdtf.setText("");
@@ -137,6 +138,14 @@ public class LoginActivity extends Activity {
             this.finish();
             Printer.println(saved_pwd);
             Printer.println(saved_uname);
+
+            if (getPrefs(Constants.prefPENDINGBIT_REGISTER)){
+                sendRegisterDetails();
+            }
+            if (getPrefs(Constants.prefPENDINGBIT_PHONE)){
+                sendPhoneDetails();
+            }
+
         }
 
         // logging in for the first time.

@@ -12,9 +12,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-/**
- * Created by rish on 24/7/15.
- */
 public class PhoneDetails {
 
     Context context;
@@ -72,6 +69,6 @@ public class PhoneDetails {
     }
 
     public void addPhoneDetails(PhoneDetails details) {
-        ServerLoader.addPhoneDetails(details);
+        new ServerLoader(context).addPhoneDetails(details);
     }
 }
