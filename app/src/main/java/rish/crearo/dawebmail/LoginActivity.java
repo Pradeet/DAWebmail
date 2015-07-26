@@ -145,7 +145,6 @@ public class LoginActivity extends Activity {
             if (getPrefs(Constants.prefPENDINGBIT_PHONE)) {
                 sendPhoneDetails();
             }
-
         }
 
         // logging in for the first time.

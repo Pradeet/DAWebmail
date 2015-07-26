@@ -11,7 +11,7 @@ import java.util.Date;
 
 import rish.crearo.utils.Constants;
 
-public class LoginDetails implements Serializable{
+public class LoginDetails implements Serializable {
 
     Context context;
 
@@ -23,7 +23,7 @@ public class LoginDetails implements Serializable{
     public String Login_TimeTaken;
     public String Login_Success;
 
-    public LoginDetails(){
+    public LoginDetails() {
         Login_studentID = "";
         Login_Connection = "";
         Login_TimeStamp = "";

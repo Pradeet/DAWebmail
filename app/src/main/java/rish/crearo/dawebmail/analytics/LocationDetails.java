@@ -11,7 +11,7 @@ import java.util.Date;
 
 import rish.crearo.utils.Constants;
 
-public class LocationDetails implements Serializable{
+public class LocationDetails implements Serializable {
 
     public Context context;
 
@@ -21,7 +21,7 @@ public class LocationDetails implements Serializable{
     public String Location_IPAddress;
     public String Location_Subnet;
 
-    public LocationDetails(){
+    public LocationDetails() {
         context = null;
         Location_Subnet = "";
         Location_IPAddress = "";
@@ -39,7 +39,7 @@ public class LocationDetails implements Serializable{
         Location_IPAddress = getIPAddress(context);
         Location_Subnet = "EMPTY";
     }
-    
+
     private String getWifiName(Context context) {
         WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiMgr.getConnectionInfo();

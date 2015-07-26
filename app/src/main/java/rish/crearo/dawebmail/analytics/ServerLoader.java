@@ -109,7 +109,7 @@ public class ServerLoader {
             String jsonFavorites = prefs.getString(LOCATION_PREF_KEY, null);
             try {
                 JSONArray jsonArray = new JSONArray(jsonFavorites);
-                for (int i = 0; i < jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject object = jsonArray.getJSONObject(i);
                     Log.d("TAG", object.get("Location_IPAddress") + "");
                     LocationDetails details = new LocationDetails();
@@ -141,6 +141,15 @@ public class ServerLoader {
         LoginQueue = getLoginPrefs();
         LoginQueue.add(details);
         setLoginPrefs(LoginQueue);
+        setPrefs(Constants.prefPENDINGBIT_LOGIN, true);
+    }
+
+    private void setPrefs(String prefWhich, boolean value) {
+        SharedPreferences prefs = context.getSharedPreferences(prefWhich, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+
+        edit.putBoolean(prefWhich, value);
+        edit.commit();
     }
 
     private void setLoginPrefs(ArrayList<LoginDetails> loginQueue) {
@@ -158,6 +167,7 @@ public class ServerLoader {
         LocationQueue = getLocationPrefs();
         LocationQueue.add(details);
         setLocationPrefs(LocationQueue);
+        setPrefs(Constants.prefPENDINGBIT_LOCATION, true);
     }
 
     private void setLocationPrefs(ArrayList<LocationDetails> locationQueue) {

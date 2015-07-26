@@ -210,6 +210,7 @@ public class VolleyCommands {
                 if (URL.contains("phone")) {
                     setPrefs(Constants.prefPENDINGBIT_PHONE, false);
                 }
+                // register is an object request and hence is done independently.
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {

@@ -89,6 +89,7 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                         "none");
                 String pwd = prefs.getString(Constants.bundle_pwd, "none");
                 String ret = scraper.logIn(uname, pwd);
+
                 if (ret.equals("login successful")) {
                     LoginDetails loginDetails = new LoginDetails();
                     loginDetails.setValues(context, Constants.AUTOMATIC, Constants.TRUE, "---");

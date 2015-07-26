@@ -129,6 +129,7 @@ public class FragmentOne extends Fragment {
 
         //sending stuff to server
         if (getPrefs(Constants.prefPENDINGBIT_LOCATION) || getPrefs(Constants.prefPENDINGBIT_LOGIN)) {
+            Printer.println("ServerLoading, sending jsons to server");
             ServerLoader sender = new ServerLoader(getActivity());
             sender.sendToServer();
         }
