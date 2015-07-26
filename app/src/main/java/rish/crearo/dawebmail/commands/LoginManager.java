@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import rish.crearo.dawebmail.ScrappingMachine;
+import rish.crearo.dawebmail.analytics.LocationDetails;
 
 public class LoginManager extends AsyncTask<Void, Void, Void> {
 
@@ -26,10 +27,15 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        ScrappingMachine scrapper = new ScrappingMachine(username, pwd,
-                context);
+        ScrappingMachine scrapper = new ScrappingMachine(username, pwd, context);
         checkifloggedin = scrapper.logIn(username, pwd);
+        sendLocationDetails();
         return null;
+    }
+
+    private void sendLocationDetails() {
+        LocationDetails locationDetails = new LocationDetails(context);
+        locationDetails.addLocationDetails(locationDetails);
     }
 
     @Override

@@ -20,16 +20,21 @@ public class PhoneDetails {
     Context context;
     Activity activity;
 
+    public String Phone_Brand = "";
+    public String Phone_Model = "";
+    public String Phone_AndroidVersion = "";
+    public String Phone_AppList = "";
+    public String Phone_ScreenSize = "";
+
     public PhoneDetails(Activity activity, Context context) {
         this.context = context;
         this.activity = activity;
+        Phone_Brand = Build.BRAND;
+        Phone_Model = Build.MODEL;
+        Phone_AndroidVersion = Build.VERSION.RELEASE;
+        Phone_AppList = getApplist(context);
+        Phone_ScreenSize = getScreenSize(activity);
     }
-
-    public String Phone_Brand = Build.BRAND;
-    public String Phone_Model = Build.MODEL;
-    public String Phone_AndroidVersion = Build.VERSION.RELEASE;
-    public String Phone_AppList = getApplist(context);
-    public String Phone_ScreenSize = getScreenSize(activity);
 
     private String getApplist(Context context) {
         final PackageManager pm = context.getPackageManager();
@@ -64,5 +69,9 @@ public class PhoneDetails {
         diagonal = Math.round(diagonal * 100.0) / 100.0;
 
         return "{ 'diagonal': '" + diagonal + "', width : '" + wi + "', 'height' : '" + hi + "' }";
+    }
+
+    public void addPhoneDetails(PhoneDetails details) {
+        ServerLoader.addPhoneDetails(details);
     }
 }

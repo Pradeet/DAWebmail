@@ -3,6 +3,9 @@ package rish.crearo.utils;
 import java.util.Date;
 
 public class Constants {
+
+    public static final String BASEURL = "http://pradeet.pythonanywhere.com/";
+
     public final static String USER_PREFERENCES = "UserPrefs";
     public final static String USER_APP_TUTORIAL = "app_tutorial";
 
@@ -30,6 +33,14 @@ public class Constants {
 
     public static String SELFDESTRUCT = "July 31";
 
-    public static String BASEURL = "http://pradeet.pythonanywhere.com/";
+    public static boolean pendingBit = true;
+
+    public static final String API_USERNAME = "dawebmail";
+    public static final String API_PASSWD = "machoman";
+    public static final String API_VERSION = "v1";
+
+    public static final String ENCRYPTER_KEY = "mAcHoMaN";
+
+
 
 }

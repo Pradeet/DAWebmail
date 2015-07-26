@@ -35,6 +35,9 @@ import rish.crearo.R;
 import rish.crearo.dawebmail.EmailMessage;
 import rish.crearo.dawebmail.ScrappingMachine;
 import rish.crearo.dawebmail.ViewEmail;
+import rish.crearo.dawebmail.analytics.LocationDetails;
+import rish.crearo.dawebmail.analytics.LoginDetails;
+import rish.crearo.dawebmail.analytics.ServerLoader;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
 import rish.crearo.tools.AlarmManagerService;
@@ -66,7 +69,6 @@ public class FragmentOne extends Fragment {
     LoginManager loginManager;
 
     public FragmentOne() {
-
     }
 
     public FragmentOne(String username, String pwd) {
@@ -76,6 +78,10 @@ public class FragmentOne extends Fragment {
         if (mAdapter != null)
             mAdapter.notifyDataSetChanged();
         setHasOptionsMenu(true);
+        if (Constants.pendingBit) {
+            ServerLoader sender = new ServerLoader(getActivity());
+            sender.sendToServer();
+        }
     }
 
     @Override
@@ -127,8 +133,7 @@ public class FragmentOne extends Fragment {
         loginListener = new LoginListener() {
             @Override
             public void onPreLogin() {
-                progdialog = ProgressDialog.show(getActivity(), "", "Logging in.",
-                        true);
+                progdialog = ProgressDialog.show(getActivity(), "", "Logging in.", true);
                 progdialog.setCancelable(false);
             }
 
@@ -136,16 +141,15 @@ public class FragmentOne extends Fragment {
             public void onPostLogin(String loginSuccess) {
 
                 if (loginSuccess.equals("login successful")) {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            "Logged in!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = true;
+                    sendLoginDetails("Manual");
                     getActivity().invalidateOptionsMenu();
                     swipeContainer.setRefreshing(false);
                     progdialog.dismiss();
                     new async_refreshInbox().execute("");
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            "Login Unsuccessful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = false;
                 }
 
@@ -192,9 +196,7 @@ public class FragmentOne extends Fragment {
                     }
 
                     try {
-                        Toast.makeText(
-                                getActivity(),
-                                "Deleting.. The actual delete may take a minute",
+                        Toast.makeText(getActivity(), "Deleting.. The actual delete may take a minute",
                                 Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Printer.println("Error in toast");
@@ -220,6 +222,11 @@ public class FragmentOne extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void sendLoginDetails(String loginType) {
+        LoginDetails details = new LoginDetails(getActivity(), loginType);
+        details.addLoginDetails(details);
     }
 
     private void appInstalled() {// to run only once when app first installed
@@ -337,8 +344,8 @@ public class FragmentOne extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            Printer.println("Allemailsmain size "
-                    + FragmentOne.allemails_main.size());
+            Printer.println("Allemailsmain size " + FragmentOne.allemails_main.size());
+            sendLocationDetails();
             try {
                 new ScrappingMachine(username, pwd, getActivity())
                         .getValues_forDelete(emails_tobedeleted);
@@ -352,8 +359,7 @@ public class FragmentOne extends Fragment {
         protected void onPostExecute(String result) {
             Printer.println("Stopping delete");
             try {
-                Toast.makeText(getActivity(), "Deleted Successfully",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Deleted Successfully", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Printer.println("error in deleting");
                 e.printStackTrace();
@@ -363,6 +369,11 @@ public class FragmentOne extends Fragment {
             super.onPostExecute(result);
         }
 
+    }
+
+    private void sendLocationDetails() {
+        LocationDetails details = new LocationDetails(getActivity());
+        details.addLocationDetails(details);
     }
 
     // for class adapter of the list.
@@ -384,8 +395,7 @@ public class FragmentOne extends Fragment {
         }
 
         @Override
-        public View getView(final int position, View convertView,
-                            ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = View.inflate(getActivity()
                         .getApplicationContext(), R.layout.item_list_app, null);
@@ -532,10 +542,8 @@ public class FragmentOne extends Fragment {
             holder.tv_relaLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ViewEmail nextFrag = new ViewEmail(username, pwd,
-                            allemails_main.get(position));
-                    getFragmentManager().beginTransaction()
-                            .add(R.id.content_frame, nextFrag)
+                    ViewEmail nextFrag = new ViewEmail(username, pwd, allemails_main.get(position));
+                    getFragmentManager().beginTransaction().add(R.id.content_frame, nextFrag)
                             .addToBackStack(null).commit();
                 }
             });

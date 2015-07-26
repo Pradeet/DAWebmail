@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import rish.crearo.R;
+import rish.crearo.dawebmail.analytics.LoginDetails;
+import rish.crearo.dawebmail.analytics.PhoneDetails;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
 import rish.crearo.tools.Printer;
@@ -42,16 +44,12 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        int titleId = getResources().getIdentifier("action_bar_title", "id",
-                "android");
+        int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
 
         TextView abTitle = (TextView) findViewById(titleId);
-        abTitle.setTypeface(Typeface.createFromAsset(getAssets(),
-                "fonts/helv_children.otf"));
+        abTitle.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/helv_children.otf"));
         abTitle.setTextColor(Color.parseColor("#FFFFFF"));
-        ColorDrawable actionbarcolor = new ColorDrawable(
-                Color.parseColor("#299ABD"));
-        getActionBar().setBackgroundDrawable(actionbarcolor);
+        getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#299ABD")));
 
         usernametf = (EditText) findViewById(R.id.login_username);
         pwdtf = (EditText) findViewById(R.id.login_password);
@@ -60,11 +58,9 @@ public class LoginActivity extends Activity {
 
         usernametf.requestFocus();
 
-        SharedPreferences settings = getSharedPreferences(
-                Constants.USER_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences(Constants.USER_PREFERENCES, MODE_PRIVATE);
 
-        Typeface type = Typeface.createFromAsset(getAssets(),
-                "fonts/GeosansLight.ttf");
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
         logintitle.setTypeface(type);
         loginbtn.setTypeface(type);
 
@@ -83,8 +79,9 @@ public class LoginActivity extends Activity {
             public void onPostLogin(String loginSuccess) {
                 Printer.println("printing what it got - " + loginSuccess);
                 if (loginSuccess.equals("login successful")) {
-                    Toast.makeText(getApplicationContext(), "Logged in!",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
+
+                    sendLoginDetails("Manual");
                     Intent intent = new Intent(LoginActivity.this, Main_Nav.class);
                     intent.putExtra(Constants.bundle_username, username);
                     intent.putExtra(Constants.bundle_pwd, pwd);
@@ -100,16 +97,14 @@ public class LoginActivity extends Activity {
                     prefEditor.putString(Constants.bundle_pwd, pwd);
                     prefEditor.commit();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Login Unsuccessful!",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Login Unsuccessful!", Toast.LENGTH_SHORT).show();
                     pwdtf.setText("");
                 }
                 dismissDialog(progress_bar_login);
             }
         };
 
-        String saved_uname = settings.getString(Constants.bundle_username,
-                "none");
+        String saved_uname = settings.getString(Constants.bundle_username, "none");
         String saved_pwd = settings.getString(Constants.bundle_pwd, "none");
 
         // already logged in
@@ -143,12 +138,23 @@ public class LoginActivity extends Activity {
                     pwd = pwdtf.getText().toString();
                     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(loginbtn.getWindowToken(), 0);
+                    sendPhoneDetails();
                     loginManager = new LoginManager(getApplicationContext(), loginListener, username, pwd);
                     loginManager.execute();
 //                    new BackgroundRunner().setHourlyRunner(getApplicationContext());
                 }
             });
         }
+    }
+
+    private void sendPhoneDetails() {
+        PhoneDetails details = new PhoneDetails(this, this);
+        details.addPhoneDetails(details);
+    }
+
+    private void sendLoginDetails(String loginType) {
+        LoginDetails details = new LoginDetails(this, loginType);
+        details.addLoginDetails(details);
     }
 
     @Override

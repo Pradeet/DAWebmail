@@ -3,27 +3,19 @@ package rish.crearo.dialogs;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import rish.crearo.R;
-import rish.crearo.dawebmail.Main_Nav;
-import rish.crearo.utils.Constants;
 
 public class SplashDialog1 extends Dialog {
 
-    public Activity c;
+    public Activity activity;
 
     TextView tv_title, tv_content, tv_bottom;
     ImageView btn_back, btn_next;
@@ -31,9 +23,9 @@ public class SplashDialog1 extends Dialog {
     int TYPE = 0;
     int currentPage = 0;
 
-    public SplashDialog1(Activity a, int TYPE) {
-        super(a);
-        this.c = a;
+    public SplashDialog1(Activity activity, int TYPE) {
+        super(activity);
+        this.activity = activity;
         this.TYPE = TYPE;
     }
 
@@ -87,30 +79,19 @@ public class SplashDialog1 extends Dialog {
     }
 
     public void setFonts() {
-        ((TextView) findViewById(R.id.splash_title)).setTypeface(Typeface
-                .createFromAsset(c.getAssets(), "fonts/Comix Loud.ttf"));
-        ((TextView) findViewById(R.id.splash_content)).setTypeface(Typeface
-                .createFromAsset(c.getAssets(), "fonts/Alex_Bold.ttf"));
-        ((TextView) findViewById(R.id.splash_bottom)).setTypeface(Typeface
-                .createFromAsset(c.getAssets(), "fonts/Alex_Bold.ttf"));
+        ((TextView) findViewById(R.id.splash_title)).setTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Comix Loud.ttf"));
+        ((TextView) findViewById(R.id.splash_content)).setTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Alex_Bold.ttf"));
+        ((TextView) findViewById(R.id.splash_bottom)).setTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Alex_Bold.ttf"));
     }
 
     public void sendGmail() {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
         sendIntent.setType("plain/text");
-        sendIntent.setData(Uri
-                .parse("bhardwaj.rish@gmail.com"));
-        sendIntent
-                .setClassName("com.google.android.gm",
-                        "com.google.android.gm.ComposeActivityGmail");
-        sendIntent.putExtra(Intent.EXTRA_EMAIL,
-                new String[]{"bhardwaj.rish@gmail.com"});
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT,
-                "Suggestions Complaints");
-        sendIntent
-                .putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Hi Rish!\n\nHere are a few suggestions/complaints about the webmail app : \n\n");
-        c.startActivity(sendIntent);
+        sendIntent.setData(Uri.parse("bhardwaj.rish@gmail.com"));
+        sendIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
+        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"bhardwaj.rish@gmail.com"});
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Suggestions Complaints");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hi Rish!\n\nHere are a few suggestions/complaints about the webmail app : \n\n");
+        activity.startActivity(sendIntent);
     }
 }
