@@ -12,6 +12,8 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
     String username, pwd;
     Context context;
     String checkifloggedin = "NULL";
+    long initTime, finalTime = 0;
+
 
     public LoginManager(Context context, LoginListener loginListener, String username, String pwd) {
         this.context = context;
@@ -24,6 +26,7 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         loginListener.onPreLogin();
+        initTime = System.currentTimeMillis();
     }
 
     @Override
@@ -42,6 +45,7 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        loginListener.onPostLogin(checkifloggedin);
+        finalTime = System.currentTimeMillis();
+        loginListener.onPostLogin(checkifloggedin, "" + (finalTime - initTime));
     }
 }

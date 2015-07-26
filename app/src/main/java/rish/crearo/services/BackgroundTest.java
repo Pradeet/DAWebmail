@@ -13,42 +13,47 @@ import rish.crearo.tools.Printer;
 public class BackgroundTest extends Service {
 
 
-    LoginManager loginManager;
-    LoginListener loginListener;
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-        Printer.println("Time = " + new Date().getSeconds());
-
-        loginListener = new LoginListener() {
-            @Override
-            public void onPreLogin() {
-
-            }
-
-            @Override
-            public void onPostLogin(String loginSuccess) {
-
-            }
-        };
-
-        
-    }
+//    LoginManager loginManager;
+//    LoginListener loginListener;
+//
+//    @Override
+//    public IBinder onBind(Intent intent) {
+//        return null;
+//    }
+//
+//    @Override
+//    public void onCreate() {
+//        super.onCreate();
+//    }
+//
+//    @Override
+//    public void onStart(Intent intent, int startId) {
+//        super.onStart(intent, startId);
+//        Printer.println("Time = " + new Date().getSeconds());
+//
+//        loginListener = new LoginListener() {
+//            @Override
+//            public void onPreLogin() {
+//
+//            }
+//
+//            @Override
+//            public void onPostLogin(String loginSuccess) {
+//
+//            }
+//        };
+//
+//
+//    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
 

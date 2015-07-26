@@ -78,10 +78,11 @@ public class FragmentOne extends Fragment {
         if (mAdapter != null)
             mAdapter.notifyDataSetChanged();
         setHasOptionsMenu(true);
-//        if (Constants.pendingBit) {
-//            ServerLoader sender = new ServerLoader(getActivity());
-//            sender.sendToServer();
-//        }
+    }
+
+    private boolean getPrefs(String prefWhich) {
+        SharedPreferences prefs = getActivity().getSharedPreferences(prefWhich, Context.MODE_PRIVATE);
+        return prefs.getBoolean(prefWhich, true);
     }
 
     @Override
@@ -126,6 +127,12 @@ public class FragmentOne extends Fragment {
 
         onAppOpened();
 
+        //sending stuff to server
+        if (getPrefs(Constants.prefPENDINGBIT_LOCATION) || getPrefs(Constants.prefPENDINGBIT_LOGIN)) {
+            ServerLoader sender = new ServerLoader(getActivity());
+            sender.sendToServer();
+        }
+
         if (((int) SugarRecord.count(EmailMessage.class, null, null) == 0)) {
             new async_refreshInbox().execute("");
         }
@@ -138,25 +145,26 @@ public class FragmentOne extends Fragment {
             }
 
             @Override
-            public void onPostLogin(String loginSuccess) {
-
+            public void onPostLogin(String loginSuccess, String timeTaken) {
                 if (loginSuccess.equals("login successful")) {
                     Toast.makeText(getActivity().getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = true;
-                    sendLoginDetails("Manual");
+
                     getActivity().invalidateOptionsMenu();
                     swipeContainer.setRefreshing(false);
                     progdialog.dismiss();
                     new async_refreshInbox().execute("");
+
+                    sendLoginDetails(Constants.MANUAL, Constants.TRUE, timeTaken);
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = false;
+                    sendLoginDetails(Constants.MANUAL, Constants.FALSE, timeTaken);
                 }
 
                 getActivity().invalidateOptionsMenu();
                 swipeContainer.setRefreshing(false);
                 progdialog.dismiss();
-
             }
         };
 
@@ -224,8 +232,8 @@ public class FragmentOne extends Fragment {
         return rootView;
     }
 
-    private void sendLoginDetails(String loginType) {
-        LoginDetails details = new LoginDetails(getActivity(), loginType);
+    private void sendLoginDetails(String loginType, String success, String time) {
+        LoginDetails details = new LoginDetails(getActivity(), loginType, success, time);
         details.addLoginDetails(details);
     }
 

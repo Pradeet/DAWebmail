@@ -1,13 +1,5 @@
 package rish.crearo.services;
 
-import java.util.Collections;
-import java.util.Random;
-
-import rish.crearo.R;
-import rish.crearo.dawebmail.EmailMessage;
-import rish.crearo.dawebmail.ScrappingMachine;
-import rish.crearo.tools.Printer;
-import rish.crearo.utils.Constants;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,6 +9,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+
+import java.util.Collections;
+import java.util.Random;
+
+import rish.crearo.R;
+import rish.crearo.dawebmail.EmailMessage;
+import rish.crearo.dawebmail.ScrappingMachine;
+import rish.crearo.dawebmail.analytics.LocationDetails;
+import rish.crearo.dawebmail.analytics.LoginDetails;
+import rish.crearo.tools.ConnectionManager;
+import rish.crearo.tools.Printer;
+import rish.crearo.utils.Constants;
 
 public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
 
@@ -30,6 +34,9 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
         this.context = context;
 
         refreshInbox_BroadcastFunction();
+
+        LocationDetails locationDetails = new LocationDetails(context);
+        locationDetails.addLocationDetails(locationDetails);
     }
 
     public void refreshInbox_BroadcastFunction() {
@@ -42,17 +49,25 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 false);
 
         if (Constants.isconnected_internet == false
-                && ((wifi_enabled && isConnectedByWifi()) || (mobiledata_enabled && isConnectedByMobileData()))) {
+                && ((wifi_enabled && ConnectionManager.isConnectedByWifi(context)) || (mobiledata_enabled && ConnectionManager.isConnectedByMobileData(context)))) {
             Constants.isconnected_internet = true;
-            new async_refreshInbox().execute("");
+            try {
+                new async_refreshInbox().execute("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Printer.println("Checking for mail once");
         } else if (Constants.isconnected_internet == true
-                && (isConnectedByWifi() == false && isConnectedByMobileData() == false)) {
+                && (ConnectionManager.isConnectedByWifi(context) == false && ConnectionManager.isConnectedByMobileData(context) == false)) {
             Constants.isconnected_internet = false;
             Printer.println("No need to check for mail");
 
-        } else if ((Constants.isconnected_internet == true && ((wifi_enabled && isConnectedByWifi()) || (mobiledata_enabled && isConnectedByMobileData())))) {
-            new async_refreshInbox().execute("");
+        } else if ((Constants.isconnected_internet == true && ((wifi_enabled && ConnectionManager.isConnectedByWifi(context)) || (mobiledata_enabled && ConnectionManager.isConnectedByMobileData(context))))) {
+            try {
+                new async_refreshInbox().execute("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Printer.println("ON GOING PROCESS. BOTH TRUE. DOING NOTHING.");
         }
     }
@@ -70,10 +85,13 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 String uname = prefs.getString(Constants.bundle_username,
                         "none");
                 String pwd = prefs.getString(Constants.bundle_pwd, "none");
-                scraper.logIn(uname, pwd);
+                String ret = scraper.logIn(uname, pwd);
+                if (ret.equals("login successful")) {
+                    LoginDetails loginDetails = new LoginDetails(context, Constants.AUTOMATIC, Constants.TRUE, "---");
+                    loginDetails.addLoginDetails(loginDetails);
+                }
             }
             scraper.scrapeAllMessagesfromInbox(false);
-
             return "Executed";
         }
 
@@ -101,30 +119,6 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                     "Open Webmail to View.");
         }
         ScrappingMachine.clear_AllEmailsAL();
-    }
-
-    public Boolean isConnectedByWifi() {
-        if (((ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE))
-                .getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
-            // Constants.connectedby = Constants.WIFI;
-            Printer.println("is connected by wifi");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public Boolean isConnectedByMobileData() {
-        if (((ConnectivityManager) context.getApplicationContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE))
-                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
-            // Constants.connectedby = Constants.MOBILE_DATA;
-            Printer.println("is connected by mobile data");
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void showNotification(String msgnumber, String sendername,

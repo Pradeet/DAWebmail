@@ -141,8 +141,10 @@ public class ServerLoader {
             volleyCommands.POSTLocation(LocationQueue);
         if (getPrefs(Constants.prefPENDINGBIT_LOGIN))
             volleyCommands.POSTLogin(LoginQueue);
-        if (getPrefs(Constants.prefPENDINGBIT_PHONE))
-            volleyCommands.POSTPhone(PhoneQueue);
+//        if (getPrefs(Constants.prefPENDINGBIT_PHONE))
+//            volleyCommands.POSTPhone(PhoneQueue);
+//        if (getPrefs(Constants.prefPENDINGBIT_REGISTER))
+//            volleyCommands.POSTStudent();
     }
 
     private boolean getPrefs(String prefWhich) {

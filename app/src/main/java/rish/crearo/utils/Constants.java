@@ -49,6 +49,11 @@ public class Constants {
 
     public static final String ENCRYPTER_KEY = "mAcHoMaN";
 
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+
+    public static final String MANUAL = "manual";
+    public static final String AUTOMATIC = "automatic";
 
 
 }

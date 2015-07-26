@@ -90,7 +90,7 @@ public class LoginActivity extends Activity {
             }
 
             @Override
-            public void onPostLogin(String loginSuccess) {
+            public void onPostLogin(String loginSuccess, String timeTaken) {
                 Printer.println("printing what it got - " + loginSuccess);
                 if (loginSuccess.equals("login successful")) {
                     Toast.makeText(getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
@@ -139,10 +139,10 @@ public class LoginActivity extends Activity {
             Printer.println(saved_pwd);
             Printer.println(saved_uname);
 
-            if (getPrefs(Constants.prefPENDINGBIT_REGISTER)){
+            if (getPrefs(Constants.prefPENDINGBIT_REGISTER)) {
                 sendRegisterDetails();
             }
-            if (getPrefs(Constants.prefPENDINGBIT_PHONE)){
+            if (getPrefs(Constants.prefPENDINGBIT_PHONE)) {
                 sendPhoneDetails();
             }
 

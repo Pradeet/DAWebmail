@@ -104,7 +104,7 @@ public class VolleyCommands {
         JSONArray jsonArray = new JSONArray();
 
         pDialog.setMessage("Loading...");
-        pDialog.show();
+//        pDialog.show();
         pDialog.setCancelable(false);
 
         HashMap<String, String> params = new HashMap<String, String>();
@@ -125,7 +125,7 @@ public class VolleyCommands {
         final String URL = Constants.BASEURL + Constants.API_VERSION + "/phone";
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading...");
-        pDialog.show();
+//        pDialog.show();
         pDialog.setCancelable(false);
 
         JSONArray jsonArray = new JSONArray();
@@ -172,7 +172,7 @@ public class VolleyCommands {
         final String URL = Constants.BASEURL + Constants.API_VERSION + "/location";
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading...");
-        pDialog.show();
+//        pDialog.show();
         pDialog.setCancelable(false);
 
         JSONArray jsonArray = new JSONArray();

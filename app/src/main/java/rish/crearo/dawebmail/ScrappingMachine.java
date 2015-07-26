@@ -42,6 +42,7 @@ public class ScrappingMachine {
 
     public String logIn(String username, String pwd) {
         try {
+
             userAgent = new UserAgent();
             Printer.println("Attempting login with " + username + " " + pwd);
             userAgent.settings.checkSSLCerts = false;
@@ -73,12 +74,8 @@ public class ScrappingMachine {
             }
             Printer.println("Login Successful");
             Constants.isLoggedin = true;
-            // save logged in time
-            // BackgroundService.isLoggedin = true;
-            return "login successful";
-            // }
-            // return "login unsuccessful";
 
+            return "login successful";
         } catch (Exception e) {
             Printer.println("Error while logging in - " + e.getMessage());
         }
@@ -300,8 +297,6 @@ public class ScrappingMachine {
         } catch (Exception e) {
             Printer.println("error in checkifloggedin " + e.getMessage());
         }
-        // Printer.println("RESPONSE - " + userAgent.response.getStatus());
-        // if (userAgent.response.getStatus() != 150) {
         String title = "DA-IICT Webmail Log In";
         try {
             // im facing a problem here, in the background, it keeps finding
@@ -322,7 +317,6 @@ public class ScrappingMachine {
             Printer.println("Error in checkifloggedinlong- "
                     + e.getMessage());
         }
-        // }
         return false;
     }
 

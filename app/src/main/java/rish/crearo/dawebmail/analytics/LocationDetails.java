@@ -1,6 +1,7 @@
 package rish.crearo.dawebmail.analytics;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
@@ -24,14 +25,14 @@ public class LocationDetails {
 
     public LocationDetails(Context context) {
         this.context = context;
-        Location_studentID = Constants.bundle_username;
+        SharedPreferences settings = context.getSharedPreferences(Constants.USER_PREFERENCES, Context.MODE_PRIVATE);
+        Location_studentID = settings.getString(Constants.bundle_username, "none");
         Location_TimeStamp = DateFormat.getDateTimeInstance().format(new Date());
         Location_WifiName = getWifiName(context);
         Location_IPAddress = getIPAddress(context);
         Location_Subnet = "EMPTY";
     }
-
-
+    
     private String getWifiName(Context context) {
         WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiMgr.getConnectionInfo();

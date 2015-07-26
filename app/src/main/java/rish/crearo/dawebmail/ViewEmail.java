@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import rish.crearo.R;
+import rish.crearo.dawebmail.analytics.LoginDetails;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
 import rish.crearo.tools.Printer;
@@ -118,19 +119,22 @@ public class ViewEmail extends Fragment {
             }
 
             @Override
-            public void onPostLogin(String loginSuccess) {
+            public void onPostLogin(String loginSuccess, String timeTaken) {
 
                 if (loginSuccess.equals("login successful")) {
                     Toast.makeText(getActivity().getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
                     progdialog.dismiss();
                     Constants.isLoggedin = true;
                     new async_ViewEmail().execute("");
+                    LoginDetails loginDetails = new LoginDetails(getActivity(), Constants.MANUAL, Constants.TRUE, timeTaken);
+                    loginDetails.addLoginDetails(loginDetails);
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = false;
                     progdialog.dismiss();
+                    LoginDetails loginDetails = new LoginDetails(getActivity(), Constants.MANUAL, Constants.FALSE, timeTaken);
+                    loginDetails.addLoginDetails(loginDetails);
                 }
-
                 getActivity().invalidateOptionsMenu();
             }
         };
