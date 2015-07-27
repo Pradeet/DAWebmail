@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="rish.crearo"
-    android:installLocation="preferExternal">
+    package="rish.sigmobile"
+    android:installLocation="preferExternal"
+    android:versionCode="7"
+    android:versionName="3.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-        android:name=".tools.AppController"
+        android:name="rish.sigmobile.tools.AppController"
         android:allowBackup="true"
         android:icon="@drawable/final_main"
         android:label="@string/app_name"
@@ -31,18 +33,17 @@
             android:value="true" />
 
         <service
-            android:name="rish.crearo.services.BackgroundService"
+            android:name="rish.sigmobile.services.BackgroundService"
             android:enabled="true"
             android:exported="true" />
 
         <service
-            android:name="rish.crearo.services.BackgroundTest"
+            android:name="rish.sigmobile.services.BackgroundTest"
             android:enabled="true"
-            android:exported="true"
-            />
+            android:exported="true" />
 
         <receiver
-            android:name="rish.crearo.services.NetworkChangeBroadcastReceiver"
+            android:name="rish.sigmobile.services.NetworkChangeBroadcastReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="NetworkChangeBroadcastReceiver">
@@ -51,26 +52,26 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".services.BackgroundReceiver"
+        <receiver
+            android:name="rish.sigmobile.services.BackgroundReceiver"
             android:enabled="true"
             android:exported="true"
-            android:label="BackgroundReceiver"
-            />
-        
+            android:label="BackgroundReceiver" />
+
         <activity
-            android:name=".dawebmail.AboutFrag"
+            android:name="rish.sigmobile.dawebmail.AboutFrag"
             android:label="@string/title_activity_about_frag"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name=".dawebmail.ComposeEmail"
+            android:name="rish.sigmobile.dawebmail.ComposeEmail"
             android:label="@string/title_activity_compose_email"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name=".dawebmail.LoginActivity"
+            android:name="rish.sigmobile.dawebmail.LoginActivity"
             android:label="DAWebmail"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -80,20 +81,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".dawebmail.Main_Nav"
+            android:name="rish.sigmobile.dawebmail.Main_Nav"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
         <activity
-            android:name=".dawebmail.Me"
+            android:name="rish.sigmobile.dawebmail.Me"
             android:label="@string/title_activity_me"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name=".tools.SearchActivity"
+            android:name="rish.sigmobile.tools.SearchActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

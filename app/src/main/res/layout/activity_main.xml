@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F0F0"
-    tools:context="rish.crearo.webmail.MainActivity" >
+    tools:context="rish.sigmobile.webmail.MainActivity" >
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"

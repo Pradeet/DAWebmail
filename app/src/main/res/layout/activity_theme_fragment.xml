@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F0F0"
-    tools:context="rish.crearo.dawebmail.ThemeFragment" >
+    tools:context="rish.sigmobile.dawebmail.ThemeFragment" >
 
     <Button
         android:id="@+id/theme_savebtn"

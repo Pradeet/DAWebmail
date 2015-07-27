@@ -4,7 +4,7 @@
     
     android:layout_height="match_parent"
     android:background="#F0F0F0"
-    tools:context="rish.crearo.dawebmail.Me" >
+    tools:context="rish.sigmobile.dawebmail.Me" >
 
     <ImageView
         android:id="@+id/imageView3"
