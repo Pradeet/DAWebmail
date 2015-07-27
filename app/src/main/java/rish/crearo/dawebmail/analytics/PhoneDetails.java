@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.List;
 
-public class PhoneDetails implements Serializable{
+public class PhoneDetails implements Serializable {
 
     Context context;
     Activity activity;
@@ -24,7 +24,7 @@ public class PhoneDetails implements Serializable{
     public String Phone_AppList = "";
     public String Phone_ScreenSize = "";
 
-    public PhoneDetails(){
+    public PhoneDetails() {
         Phone_Brand = "";
         Phone_Model = "";
         Phone_AndroidVersion = "";
@@ -43,38 +43,43 @@ public class PhoneDetails implements Serializable{
     }
 
     private String getApplist(Context context) {
-        final PackageManager pm = context.getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        try {
+            final PackageManager pm = context.getPackageManager();
+            List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
-        JSONObject jsonApps = new JSONObject();
-        String stringapps = "";
-        int count = 1;
-        for (ApplicationInfo packageInfo : packages) {
-            try {
+            JSONObject jsonApps = new JSONObject();
+            String stringapps = "";
+            int count = 1;
+            for (ApplicationInfo packageInfo : packages) {
                 if ((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                     stringapps += "" + packageInfo.packageName + ",";
                     jsonApps.put("" + count++, "" + packageInfo.packageName);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+            return stringapps;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "Unable to fetch applist";
         }
-        return stringapps;
     }
 
     private String getScreenSize(Activity activity) {
-        DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        int dens = dm.densityDpi;
-        double wi = (double) width / (double) dens;
-        double hi = (double) height / (double) dens;
+        try {
+            DisplayMetrics dm = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+            int width = dm.widthPixels;
+            int height = dm.heightPixels;
+            int dens = dm.densityDpi;
+            double wi = (double) width / (double) dens;
+            double hi = (double) height / (double) dens;
 
-        double diagonal = Math.sqrt(Math.pow(wi, 2) + Math.pow(hi, 2));
-        diagonal = Math.round(diagonal * 100.0) / 100.0;
+            double diagonal = Math.sqrt(Math.pow(wi, 2) + Math.pow(hi, 2));
+            diagonal = Math.round(diagonal * 100.0) / 100.0;
 
-        return "{ 'diagonal': '" + diagonal + "', width : '" + wi + "', 'height' : '" + hi + "' }";
+            return "{ 'diagonal': '" + diagonal + "', width : '" + wi + "', 'height' : '" + hi + "' }";
+        } catch (Exception e) {
+            return "Unableto get dimensions";
+        }
     }
 
 //    public void addPhoneDetails(PhoneDetails details) {

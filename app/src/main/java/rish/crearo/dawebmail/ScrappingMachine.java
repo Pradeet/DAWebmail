@@ -1,14 +1,5 @@
 package rish.crearo.dawebmail;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import org.jsoup.Jsoup;
-
-import rish.crearo.services.SavedStatistics;
-import rish.crearo.tools.Printer;
-import rish.crearo.utils.Constants;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.format.Time;
@@ -20,6 +11,13 @@ import com.jaunt.NotFound;
 import com.jaunt.UserAgent;
 import com.jaunt.component.Form;
 import com.orm.SugarRecord;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import rish.crearo.services.SavedStatistics;
+import rish.crearo.tools.Printer;
+import rish.crearo.utils.Constants;
 
 public class ScrappingMachine {
     public static UserAgent userAgent = new UserAgent();
@@ -364,25 +362,14 @@ public class ScrappingMachine {
                     emailtext = emailtext.substring(1);
                     emailtext = emailtext.substring(0, emailtext.length() - 2);
 
-                    // Printer.println("Email Text - " + emailtext);
-
                     emailtext = resp.substring(resp.indexOf("doc.write(") + 10,
                             resp.indexOf("doc.close()") - 4);
 
-                    emailtext = emailtext.replaceAll("u003C", "<");
-                    emailtext = emailtext.replaceAll("u003E", ">");
-                    // emailtext = emailtext.replaceAll("\\\\<", "<");
-                    // emailtext = emailtext.replaceAll("\\\\>", ">");
-                    // emailtext = emailtext.replaceAll("\\n", "");
-                    emailtext = emailtext.replaceAll("\\\\", "");
                     emailtext = emailtext.substring(1);
                     emailtext = emailtext.substring(0, emailtext.length() - 2);
-                    // emailtext = emailtext.replaceAll("<br>", "|||<br>");
-                    // emailtext = emailtext.replaceAll("</br>", "|||</br>");
-                    emailtext = emailtext.replaceAll(">n", ">");
-                    emailtext = emailtext.replaceAll("n  ", "");
 
-                    // Printer.println("Now it is - " + emailtext);
+                    emailtext = emailtext.replaceAll("\\\\u003C", "<");
+                    emailtext = emailtext.replaceAll("\\\\u003E", ">");
 
                 } else
                     emailtext = "This webmail contains pdf/webpage content.\nText for this format of the webmail is currrently unavailable.";
@@ -391,24 +378,20 @@ public class ScrappingMachine {
                 emailtext = emailtext.substring(emailtext.indexOf(">") + 1,
                         emailtext.indexOf("</td>"));
             }
-            // String textFromHtml = Jsoup.parse(emailtext).text();
-            // String textFromHtml = emailtext;
 
-            String textFromHtml = Jsoup.parse(
-                    emailtext.replaceAll("(?i)<br[^>]*>", "br2n")).text();
-            textFromHtml = textFromHtml.replaceAll("br2n", "\n");
+            char emailchars[] = emailtext.toCharArray();
 
-            // textFromHtml.replaceAll("<br>", "");
-            // textFromHtml.replaceAll("</br>", "");
+            for (int i = 0; i < emailchars.length - 1; i++)
+                if (emailchars[i] == '\\' && emailchars[i + 1] == 'n') {
+                    emailchars[i] = '\0';
+                    emailchars[i + 1] = '\0';
+                }
 
-            // textFromHtml.replaceAll("|||", "");
+            emailtext = String.copyValueOf(emailchars);
 
-            // Printer.println(textFromHtml);
+            Printer.println("emailtext = " + emailtext);
 
-            textFromHtml = convertText(textFromHtml);
-
-            Printer.println("email = " + textFromHtml);
-            email.content = textFromHtml;
+            email.content = emailtext;
             email.readunread = "Read Message";
 
             Elements msghdrvalues = userAgent.doc
@@ -435,7 +418,6 @@ public class ScrappingMachine {
         } catch (Exception e) {
             Printer.println("Error in fetchemailcontent" + e.getMessage());
         }
-
     }
 
     public void getValues_forDelete(ArrayList<EmailMessage> emails_tobedeleted) {
@@ -463,8 +445,7 @@ public class ScrappingMachine {
             }
 
             userAgent.visit(homepage_link); // for a refresh so that im sure
-            // were deleting the correct
-            // emails
+            // were deleting the correct emails
 
             Printer.println("Reached here mate");
 
@@ -538,7 +519,7 @@ public class ScrappingMachine {
                     break;
                 }
             }
-            Printer.println("sneding values to delete function");
+            Printer.println("sending values to delete function");
             deleteMails(values_checkboxes, emails_tobedeleted_clone);
 
         } catch (Exception e) {

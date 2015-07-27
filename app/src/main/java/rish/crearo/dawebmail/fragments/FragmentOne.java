@@ -317,18 +317,21 @@ public class FragmentOne extends Fragment {
 
             // inboxadapter.notifyDataSetChanged();
             mAdapter.notifyDataSetChanged();
-            if (ScrappingMachine.totalnew == 0)
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "No new webmail.", Toast.LENGTH_SHORT).show();
-            else if (ScrappingMachine.totalnew == 1)
-                Toast.makeText(getActivity().getApplicationContext(),
-                        ScrappingMachine.totalnew + " new webmail!",
-                        Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(getActivity().getApplicationContext(),
-                        ScrappingMachine.totalnew + " new webmails!",
-                        Toast.LENGTH_SHORT).show();
-
+            try {
+                if (ScrappingMachine.totalnew == 0)
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            "No new webmail.", Toast.LENGTH_SHORT).show();
+                else if (ScrappingMachine.totalnew == 1)
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            ScrappingMachine.totalnew + " new webmail!",
+                            Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            ScrappingMachine.totalnew + " new webmails!",
+                            Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             progdialog.dismiss();
             swipeContainer.setRefreshing(false);
 

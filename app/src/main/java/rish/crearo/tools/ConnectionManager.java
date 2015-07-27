@@ -9,26 +9,36 @@ import android.net.ConnectivityManager;
 public class ConnectionManager {
 
     public static Boolean isConnectedByWifi(Context context) {
-        if (((ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE))
-                .getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
-            // Constants.connectedby = Constants.WIFI;
-            Printer.println("is connected by wifi");
-            return true;
-        } else {
-            return false;
+        try {
+            if (((ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE))
+                    .getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
+                // Constants.connectedby = Constants.WIFI;
+                Printer.println("is connected by wifi");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return false;
     }
 
     public static Boolean isConnectedByMobileData(Context context) {
-        if (((ConnectivityManager) context.getApplicationContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE))
-                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
-            // Constants.connectedby = Constants.MOBILE_DATA;
-            Printer.println("is connected by mobile data");
-            return true;
-        } else {
-            return false;
+        try {
+            if (((ConnectivityManager) context.getApplicationContext()
+                    .getSystemService(Context.CONNECTIVITY_SERVICE))
+                    .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
+                // Constants.connectedby = Constants.MOBILE_DATA;
+                Printer.println("is connected by mobile data");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return false;
     }
 }

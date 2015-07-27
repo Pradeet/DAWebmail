@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,11 +37,13 @@ import rish.crearo.utils.Constants;
 public class ViewEmail extends Fragment {
 
     EmailMessage currentemail;
-    TextView tvsender, tvsubject, tvcontent, tvsenderbottom, tvdatebottom;
+    TextView tvsender, tvsubject, tvsenderbottom, tvdatebottom;
     ImageView att1, att2, att3;
     LinearLayout attll1, attll2, attll3;
     TextView tvatt;
     String username, pwd;
+    WebView webView_viewContent;
+
 
     public ViewEmail(String un, String pw, EmailMessage currentEmail) {
         this.currentemail = currentEmail;
@@ -59,7 +62,6 @@ public class ViewEmail extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_view_email, container, false);
 
         tvsender = (TextView) rootView.findViewById(R.id.viewmail_sender);
-        tvcontent = (TextView) rootView.findViewById(R.id.viewmail_content);
         tvsubject = (TextView) rootView.findViewById(R.id.viewmail_subject);
         tvsenderbottom = (TextView) rootView.findViewById(R.id.viewmail_senderbottom);
         tvdatebottom = (TextView) rootView.findViewById(R.id.viewmail_datebottom);
@@ -72,13 +74,16 @@ public class ViewEmail extends Fragment {
         attll3 = (LinearLayout) rootView.findViewById(R.id.viewemail_attll3);
         tvatt = (TextView) rootView.findViewById(R.id.viewemail_attatchment1_tv);
 
+        webView_viewContent = (WebView) rootView.findViewById(R.id.viewmail_webview);
+        webView_viewContent.setBackgroundColor(Color.parseColor("#E7E7E7"));
+
         attll1.setBackgroundColor(Color.parseColor("#EEEEEE"));
         attll2.setBackgroundColor(Color.parseColor("#EEEEEE"));
         attll3.setBackgroundColor(Color.parseColor("#EEEEEE"));
 
-        attll1.setVisibility(View.INVISIBLE);
-        attll2.setVisibility(View.INVISIBLE);
-        attll3.setVisibility(View.INVISIBLE);
+        attll1.setVisibility(View.GONE);
+        attll2.setVisibility(View.GONE);
+        attll3.setVisibility(View.GONE);
 
         showEmailAttachments();
 
@@ -106,9 +111,6 @@ public class ViewEmail extends Fragment {
                 newFrag.show(getFragmentManager(), "att3");
             }
         });
-
-        // ActionBar actionBar = getActivity().getActionBar();
-        // actionBar.setTitle("" + currentemail.fromname);
 
         progdialog = new ProgressDialog(getActivity());
 
@@ -146,7 +148,7 @@ public class ViewEmail extends Fragment {
 
         if (currentemail.content.equals("isempty")) {
             // load content only if logged in.
-            tvcontent.setText("\n\nConnect to the Internet to download content.");
+            setWebviewContent("<html><head></head><body>Connect to the Internet to download content</body></html>");
             tvdatebottom.setText("" + currentemail.date);
             tvsender.setText("" + currentemail.fromname);
             tvsenderbottom.setText("");
@@ -172,56 +174,13 @@ public class ViewEmail extends Fragment {
             else
                 tvsubject.setText(currentemail.subject);
 
-            if (currentemail.content.equals("isempty"))
-                tvcontent.setText("Connect to internet to download content.");
-            else {
-                // -- ATTEMPTED TO SET LINK --
-                // String contentinHTML = currentemail.content;
-                // int index = contentinHTML.indexOf("</style>");
-                // Log.d("testing", index + "");
-                // if (index != -1)
-                // contentinHTML = contentinHTML.substring(0, index)
-                // + contentinHTML.substring(index + 8);
-                // Log.d("testing", index + "");
-                // Log.d("testing", "This is final HTML text\n" +
-                // contentinHTML);
-                // tvcontent.setText(Html.fromHtml(contentinHTML));
-                // -- FAILED ATTEMPT --
-                tvcontent.setText(currentemail.content);
+            if (currentemail.content.equals("isempty")) {
+                setWebviewContent("<html><head></head><body>Connect to the Internet to download content</body></html>");
+            } else {
+                setWebviewContent(currentemail.content);
             }
             tvsenderbottom.setText(currentemail.fromname);
             tvdatebottom.setText(currentemail.dateentire);
-
-            tvcontent.setClickable(true);
-            tvcontent.setMovementMethod(LinkMovementMethod.getInstance());
-            // String content = tvcontent.getText().toString();
-            // int indexoflink = content.indexOf("http");
-            // // while (indexoflink != -1) {
-            // if (indexoflink != -1) {
-            // int stopindex = content.substring(indexoflink).indexOf(" ")
-            // + indexoflink;
-            // if (stopindex == -1)
-            // stopindex = content.substring(indexoflink).indexOf("\n")
-            // + indexoflink;
-            // if (stopindex == -1)
-            // stopindex = content.substring(indexoflink).length() - 1;
-            // Printer.println("\n\n+" + indexoflink + " " + stopindex);
-            // String httpLink = "<br>Click on this <a href=\""
-            // + content.substring(indexoflink, stopindex)
-            // + "\"> link </a><br>";
-            // Printer.println("httplink - " + httpLink);
-            //
-            // content = content.substring(0, indexoflink)
-            // + httpLink
-            // + content
-            // .substring(stopindex + 1, content.length() - 1);
-            //
-            // // Printer.println("Content - " + content);
-            // // indexoflink = content.substring(content.indexOf("</a>"))
-            // // .indexOf("http");
-            // // Printer.println("Now content - " + content);
-            // tvcontent.setText(Html.fromHtml(content));
-            // }
         }
 
         return rootView;
@@ -245,7 +204,7 @@ public class ViewEmail extends Fragment {
         public void onPostExecute(String result) {
 
             tvsender.setText(currentemail.fromaddress);
-            tvcontent.setText(currentemail.content);
+            setWebviewContent(currentemail.content);
             tvsubject.setText(currentemail.subject);
             tvsenderbottom.setText(currentemail.fromname);
             tvdatebottom.setText(currentemail.dateentire);
@@ -349,20 +308,20 @@ public class ViewEmail extends Fragment {
 
     public void showEmailAttachments() {
         if (currentemail.attlink1.equals("isempty")) {
-            attll1.setVisibility(View.INVISIBLE);
-            attll2.setVisibility(View.INVISIBLE);
-            attll3.setVisibility(View.INVISIBLE);
+            attll1.setVisibility(View.GONE);
+            attll2.setVisibility(View.GONE);
+            attll3.setVisibility(View.GONE);
         } else if (currentemail.attlink2.equals("isempty")) {
             attll1.setVisibility(View.VISIBLE);
             attll1.setBackgroundColor(Color.parseColor("#E7E7E7"));
-            attll2.setVisibility(View.INVISIBLE);
-            attll3.setVisibility(View.INVISIBLE);
+            attll2.setVisibility(View.GONE);
+            attll3.setVisibility(View.GONE);
         } else if (currentemail.attlink3.equals("isempty")) {
             attll1.setVisibility(View.VISIBLE);
             attll2.setVisibility(View.VISIBLE);
             attll1.setBackgroundColor(Color.parseColor("#E7E7E7"));
             attll2.setBackgroundColor(Color.parseColor("#E7E7E7"));
-            attll3.setVisibility(View.INVISIBLE);
+            attll3.setVisibility(View.GONE);
         } else {
             attll1.setVisibility(View.VISIBLE);
             attll2.setVisibility(View.VISIBLE);
@@ -371,5 +330,14 @@ public class ViewEmail extends Fragment {
             attll2.setBackgroundColor(Color.parseColor("#E7E7E7"));
             attll3.setBackgroundColor(Color.parseColor("#E7E7E7"));
         }
+    }
+
+    public void setWebviewContent(String html) {
+        String mime = "text/html";
+        String encoding = "utf-8";
+
+        webView_viewContent.getSettings().setJavaScriptEnabled(true);
+        webView_viewContent.loadDataWithBaseURL(null, html, mime, encoding, null);
+
     }
 }

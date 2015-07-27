@@ -15,13 +15,13 @@ public class LoginDetails implements Serializable {
 
     Context context;
 
-    public String Login_studentID;
-    public String Login_Connection;
-    public String Login_TimeStamp;
-    public String Login_connectionDetails;
-    public String Login_loginType;
-    public String Login_TimeTaken;
-    public String Login_Success;
+    public String Login_studentID = "STUDENT ID";
+    public String Login_Connection = "No Connection";
+    public String Login_TimeStamp = "Time";
+    public String Login_connectionDetails = "No Connection";
+    public String Login_loginType = "Manual";
+    public String Login_TimeTaken = "-";
+    public String Login_Success = "false";
 
     public LoginDetails() {
         Login_studentID = "";
@@ -51,12 +51,16 @@ public class LoginDetails implements Serializable {
 
     private String getConnectionType() {
         String conn = "Not connected";
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-            conn = "3G";
-        } else if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-            conn = "Wifi";
+        try {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                conn = "3G";
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                conn = "Wifi";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return conn;
     }
