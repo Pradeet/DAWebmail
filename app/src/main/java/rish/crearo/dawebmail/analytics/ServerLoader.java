@@ -2,15 +2,18 @@ package rish.crearo.dawebmail.analytics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Arrays;
 
 import rish.crearo.utils.Constants;
 
@@ -20,9 +23,9 @@ public class ServerLoader {
     private final static String LOCATION_PREF_KEY = "LOCATION";
     private final static String PHONE_PREF_KEY = "PHONE";
 
-    private Queue<LocationDetails> LocationQueue;
-    private Queue<LoginDetails> LoginQueue;
-    private Queue<PhoneDetails> PhoneQueue;
+    private ArrayList<LocationDetails> LocationQueue;
+    private ArrayList<LoginDetails> LoginQueue;
+    private ArrayList<PhoneDetails> PhoneQueue;
 
     private Context context;
 
@@ -33,52 +36,102 @@ public class ServerLoader {
         PhoneQueue = getPhonePrefs();
     }
 
-    private Queue<PhoneDetails> getPhonePrefs() {
+    private ArrayList<PhoneDetails> getPhonePrefs() {
         SharedPreferences prefs = context.getSharedPreferences(PHONE_PREF_KEY, Context.MODE_PRIVATE);
-        Queue<PhoneDetails> PhoneQueue;
+        ArrayList<PhoneDetails> PhoneQueue = new ArrayList<>();
 
         if (prefs.contains(PHONE_PREF_KEY)) {
             String jsonFavorites = prefs.getString(PHONE_PREF_KEY, null);
-            Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<PhoneDetails>>() {
-            }.getType();
-            PhoneQueue = (LinkedList<PhoneDetails>) gson.fromJson(jsonFavorites, listType);
-        } else {
-            PhoneQueue = new LinkedList<>();
+
+            try {
+                JSONArray jsonArray = new JSONArray(jsonFavorites);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    PhoneDetails phoneDetails = new PhoneDetails();
+                    phoneDetails.Phone_AppList = jsonObject.getString("");
+                    phoneDetails.Phone_Model = jsonObject.getString("");
+                    phoneDetails.Phone_AndroidVersion = jsonObject.getString("");
+                    phoneDetails.Phone_Brand = jsonObject.getString("");
+                    phoneDetails.Phone_ScreenSize = jsonObject.getString("");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            Gson gson = new Gson();
+//            Type listType = new TypeToken<ArrayList<PhoneDetails>>() {
+//            }.getType();
+//            PhoneQueue = (ArrayList<PhoneDetails>) gson.fromJson(jsonFavorites, listType);
         }
 
         return PhoneQueue;
     }
 
-    private Queue<LoginDetails> getLoginPrefs() {
+    private ArrayList<LoginDetails> getLoginPrefs() {
         SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREF_KEY, Context.MODE_PRIVATE);
-        Queue<LoginDetails> LoginQueue;
+        ArrayList<LoginDetails> LoginQueue = new ArrayList<>();
 
         if (prefs.contains(LOGIN_PREF_KEY)) {
             String jsonFavorites = prefs.getString(LOGIN_PREF_KEY, null);
-            Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<LoginDetails>>() {
-            }.getType();
-            LoginQueue = (LinkedList<LoginDetails>) gson.fromJson(jsonFavorites, listType);
-        } else {
-            LoginQueue = new LinkedList<>();
+
+            try {
+                JSONArray jsonArray = new JSONArray(jsonFavorites);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    LoginDetails loginDetails = new LoginDetails();
+                    loginDetails.Login_TimeStamp = object.getString("Login_TimeStamp");
+                    loginDetails.Login_Connection = object.getString("Login_Connection");
+                    loginDetails.Login_loginType = object.getString("Login_loginType");
+                    loginDetails.Login_connectionDetails = object.getString("Login_connectionDetails");
+                    loginDetails.Login_studentID = object.getString("Login_studentID");
+                    loginDetails.Login_Success = object.getString("Login_Success");
+                    loginDetails.Login_TimeTaken = object.getString("Login_TimeTaken");
+                    LoginQueue.add(loginDetails);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            Gson gson = new Gson();
+//            Type listType = new TypeToken<ArrayList<LoginDetails>>() {
+//            }.getType();
+//            LoginQueue = (ArrayList<LoginDetails>) gson.fromJson(jsonFavorites, listType);
         }
 
         return LoginQueue;
     }
 
-    private Queue<LocationDetails> getLocationPrefs() {
+    private ArrayList<LocationDetails> getLocationPrefs() {
         SharedPreferences prefs = context.getSharedPreferences(LOCATION_PREF_KEY, Context.MODE_PRIVATE);
-        Queue<LocationDetails> LocationQueue;
+        ArrayList<LocationDetails> LocationQueue = new ArrayList<>();
 
         if (prefs.contains(LOCATION_PREF_KEY)) {
             String jsonFavorites = prefs.getString(LOCATION_PREF_KEY, null);
-            Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<LocationDetails>>() {
-            }.getType();
-            LocationQueue = (LinkedList<LocationDetails>) gson.fromJson(jsonFavorites, listType);
-        } else {
-            LocationQueue = new LinkedList<>();
+            try {
+                JSONArray jsonArray = new JSONArray(jsonFavorites);
+                for (int i = 0; i < jsonArray.length(); i++){
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    Log.d("TAG", object.get("Location_IPAddress") + "");
+                    LocationDetails details = new LocationDetails();
+                    details.Location_IPAddress = object.getString("Location_IPAddress");
+                    details.Location_Subnet = object.getString("Location_Subnet");
+                    details.Location_studentID = object.getString("Location_studentID");
+                    details.Location_WifiName = object.getString("Location_WifiName");
+                    details.Location_TimeStamp = object.getString("Location_TimeStamp");
+                    LocationQueue.add(details);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//            Gson gson = new Gson();
+//            Type listType = new TypeToken<ArrayList<LocationDetails>>() {
+//            }.getType();
+////            locationArray = gson.fromJson(jsonFavorites, LocationDetails[].class);
+////            LocationQueue = new ArrayList<LocationDetails>(Arrays.asList(locationArray));
+//            System.out.println("jsonfav : " + jsonFavorites);
+//            System.out.println("ListType:    " + listType.toString());
+//            System.out.println( "hallelujah : " + gson.fromJson(jsonFavorites, listType));
+//            LocationQueue = (ArrayList<LocationDetails>) (gson.fromJson(jsonFavorites, listType));
         }
 
         return LocationQueue;
@@ -90,7 +143,7 @@ public class ServerLoader {
         setLoginPrefs(LoginQueue);
     }
 
-    private void setLoginPrefs(Queue<LoginDetails> loginQueue) {
+    private void setLoginPrefs(ArrayList<LoginDetails> loginQueue) {
         SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREF_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
 
@@ -107,7 +160,7 @@ public class ServerLoader {
         setLocationPrefs(LocationQueue);
     }
 
-    private void setLocationPrefs(Queue<LocationDetails> locationQueue) {
+    private void setLocationPrefs(ArrayList<LocationDetails> locationQueue) {
         SharedPreferences prefs = context.getSharedPreferences(LOCATION_PREF_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
 
@@ -124,7 +177,7 @@ public class ServerLoader {
         setPhonePrefs(PhoneQueue);
     }
 
-    private void setPhonePrefs(Queue<PhoneDetails> phoneQueue) {
+    private void setPhonePrefs(ArrayList<PhoneDetails> phoneQueue) {
         SharedPreferences prefs = context.getSharedPreferences(PHONE_PREF_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
 

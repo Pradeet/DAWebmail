@@ -5,12 +5,13 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
 
 import rish.crearo.utils.Constants;
 
-public class LoginDetails {
+public class LoginDetails implements Serializable{
 
     Context context;
 
@@ -22,8 +23,17 @@ public class LoginDetails {
     public String Login_TimeTaken;
     public String Login_Success;
 
+    public LoginDetails(){
+        Login_studentID = "";
+        Login_Connection = "";
+        Login_TimeStamp = "";
+        Login_connectionDetails = "";
+        Login_loginType = "";
+        Login_TimeTaken = "";
+        Login_Success = "";
+    }
 
-    public LoginDetails(Context context, String LoginType, String LoginSuccess, String LoginTime) {
+    public void setValues(Context context, String LoginType, String LoginSuccess, String LoginTime) {
         this.context = context;
         SharedPreferences settings = context.getSharedPreferences(Constants.USER_PREFERENCES, Context.MODE_PRIVATE);
         Login_studentID = settings.getString(Constants.bundle_username, "none");
@@ -51,7 +61,7 @@ public class LoginDetails {
         return conn;
     }
 
-    public void addLoginDetails(LoginDetails details) {
-        new ServerLoader(context).addLoginDetails(details);
-    }
+//    public void addLoginDetails(LoginDetails details) {
+//        new ServerLoader(context).addLoginDetails(details);
+//    }
 }

@@ -233,8 +233,10 @@ public class FragmentOne extends Fragment {
     }
 
     private void sendLoginDetails(String loginType, String success, String time) {
-        LoginDetails details = new LoginDetails(getActivity(), loginType, success, time);
-        details.addLoginDetails(details);
+        LoginDetails details = new LoginDetails();
+        details.setValues(getActivity(), loginType, success, time);
+        ServerLoader loader = new ServerLoader(getActivity().getApplicationContext());
+        loader.addLoginDetails(details);
     }
 
     private void appInstalled() {// to run only once when app first installed
@@ -380,8 +382,10 @@ public class FragmentOne extends Fragment {
     }
 
     private void sendLocationDetails() {
-        LocationDetails details = new LocationDetails(getActivity());
-        details.addLocationDetails(details);
+        LocationDetails details = new LocationDetails();
+        details.setValue(getActivity().getApplicationContext());
+        ServerLoader loader = new ServerLoader(getActivity());
+        loader.addLocationDetails(details);
     }
 
     // for class adapter of the list.

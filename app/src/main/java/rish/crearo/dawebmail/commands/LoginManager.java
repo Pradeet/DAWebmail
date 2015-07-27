@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import rish.crearo.dawebmail.ScrappingMachine;
 import rish.crearo.dawebmail.analytics.LocationDetails;
+import rish.crearo.dawebmail.analytics.ServerLoader;
 
 public class LoginManager extends AsyncTask<Void, Void, Void> {
 
@@ -38,8 +39,10 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
     }
 
     private void sendLocationDetails() {
-        LocationDetails locationDetails = new LocationDetails(context);
-        locationDetails.addLocationDetails(locationDetails);
+        LocationDetails locationDetails = new LocationDetails();
+        locationDetails.setValue(context);
+        ServerLoader loader = new ServerLoader(context);
+        loader.addLocationDetails(locationDetails);
     }
 
     @Override

@@ -10,9 +10,10 @@ import android.util.DisplayMetrics;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PhoneDetails {
+public class PhoneDetails implements Serializable{
 
     Context context;
     Activity activity;
@@ -23,7 +24,15 @@ public class PhoneDetails {
     public String Phone_AppList = "";
     public String Phone_ScreenSize = "";
 
-    public PhoneDetails(Activity activity, Context context) {
+    public PhoneDetails(){
+        Phone_Brand = "";
+        Phone_Model = "";
+        Phone_AndroidVersion = "";
+        Phone_AppList = "";
+        Phone_ScreenSize = "";
+    }
+
+    public void setVlaues(Activity activity, Context context) {
         this.context = context;
         this.activity = activity;
         Phone_Brand = Build.BRAND;
@@ -68,7 +77,7 @@ public class PhoneDetails {
         return "{ 'diagonal': '" + diagonal + "', width : '" + wi + "', 'height' : '" + hi + "' }";
     }
 
-    public void addPhoneDetails(PhoneDetails details) {
-        new ServerLoader(context).addPhoneDetails(details);
-    }
+//    public void addPhoneDetails(PhoneDetails details) {
+//        new ServerLoader(context).addPhoneDetails(details);
+//    }
 }

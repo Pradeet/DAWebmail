@@ -18,6 +18,7 @@ import rish.crearo.dawebmail.EmailMessage;
 import rish.crearo.dawebmail.ScrappingMachine;
 import rish.crearo.dawebmail.analytics.LocationDetails;
 import rish.crearo.dawebmail.analytics.LoginDetails;
+import rish.crearo.dawebmail.analytics.ServerLoader;
 import rish.crearo.tools.ConnectionManager;
 import rish.crearo.tools.Printer;
 import rish.crearo.utils.Constants;
@@ -35,8 +36,10 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
 
         refreshInbox_BroadcastFunction();
 
-        LocationDetails locationDetails = new LocationDetails(context);
-        locationDetails.addLocationDetails(locationDetails);
+        LocationDetails locationDetails = new LocationDetails();
+        locationDetails.setValue(context);
+        ServerLoader loader = new ServerLoader(context);
+        loader.addLocationDetails(locationDetails);
     }
 
     public void refreshInbox_BroadcastFunction() {
@@ -87,8 +90,10 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 String pwd = prefs.getString(Constants.bundle_pwd, "none");
                 String ret = scraper.logIn(uname, pwd);
                 if (ret.equals("login successful")) {
-                    LoginDetails loginDetails = new LoginDetails(context, Constants.AUTOMATIC, Constants.TRUE, "---");
-                    loginDetails.addLoginDetails(loginDetails);
+                    LoginDetails loginDetails = new LoginDetails();
+                    loginDetails.setValues(context, Constants.AUTOMATIC, Constants.TRUE, "---");
+                    ServerLoader loader = new ServerLoader(context);
+                    loader.addLoginDetails(loginDetails);
                 }
             }
             scraper.scrapeAllMessagesfromInbox(false);

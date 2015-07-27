@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import rish.crearo.R;
 import rish.crearo.dawebmail.analytics.LoginDetails;
+import rish.crearo.dawebmail.analytics.ServerLoader;
 import rish.crearo.dawebmail.commands.LoginListener;
 import rish.crearo.dawebmail.commands.LoginManager;
 import rish.crearo.tools.Printer;
@@ -126,14 +127,18 @@ public class ViewEmail extends Fragment {
                     progdialog.dismiss();
                     Constants.isLoggedin = true;
                     new async_ViewEmail().execute("");
-                    LoginDetails loginDetails = new LoginDetails(getActivity(), Constants.MANUAL, Constants.TRUE, timeTaken);
-                    loginDetails.addLoginDetails(loginDetails);
+                    LoginDetails loginDetails = new LoginDetails();
+                    loginDetails.setValues(getActivity(), Constants.MANUAL, Constants.TRUE, timeTaken);
+                    ServerLoader loader = new ServerLoader(getActivity());
+                    loader.addLoginDetails(loginDetails);
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = false;
                     progdialog.dismiss();
-                    LoginDetails loginDetails = new LoginDetails(getActivity(), Constants.MANUAL, Constants.FALSE, timeTaken);
-                    loginDetails.addLoginDetails(loginDetails);
+                    LoginDetails loginDetails = new LoginDetails();
+                    loginDetails.setValues(getActivity(), Constants.MANUAL, Constants.FALSE, timeTaken);
+                    ServerLoader loader = new ServerLoader(getActivity());
+                    loader.addLoginDetails(loginDetails);
                 }
                 getActivity().invalidateOptionsMenu();
             }

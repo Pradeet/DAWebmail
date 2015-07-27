@@ -173,7 +173,8 @@ public class LoginActivity extends Activity {
     private void sendPhoneDetails() {
 
         if (getPrefs(Constants.prefPENDINGBIT_PHONE)) {
-            PhoneDetails phoneDetails = new PhoneDetails(activity, getApplicationContext());
+            PhoneDetails phoneDetails = new PhoneDetails();
+            phoneDetails.setVlaues(activity, getApplicationContext());
             //details.addPhoneDetails(details);
             VolleyCommands volleyCommands = new VolleyCommands(getApplicationContext());
             volleyCommands.POSTPhone(phoneDetails);

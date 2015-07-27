@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -98,7 +99,7 @@ public class VolleyCommands {
         AppController.getInstance().addToRequestQueue(req);
     }
 
-    public void POSTLogin(Queue<LoginDetails> loginQueue) {
+    public void POSTLogin(ArrayList<LoginDetails> loginQueue) {
         final String URL = Constants.BASEURL + Constants.API_VERSION + "/login";
         final ProgressDialog pDialog = new ProgressDialog(context);
         JSONArray jsonArray = new JSONArray();
@@ -109,7 +110,7 @@ public class VolleyCommands {
 
         HashMap<String, String> params = new HashMap<String, String>();
         for (int i = 0; i < loginQueue.size(); i++) {
-            LoginDetails details = loginQueue.poll();
+            LoginDetails details = loginQueue.get(0);
             params.put("l_studentID", details.Login_studentID);
             params.put("l_timestamp", "" + details.Login_TimeStamp);
             params.put("l_type", "" + details.Login_loginType);
@@ -118,6 +119,7 @@ public class VolleyCommands {
             jsonArray.put(new JSONObject(params));
             params.clear();
         }
+        loginQueue.clear();
         makeRequest(pDialog, URL, jsonArray);
     }
 
@@ -168,7 +170,7 @@ public class VolleyCommands {
         makeRequest(pDialog, URL, jsonArray);
     }
 
-    public void POSTLocation(Queue<LocationDetails> locationQueue) {
+    public void POSTLocation(ArrayList<LocationDetails> locationQueue) {
         final String URL = Constants.BASEURL + Constants.API_VERSION + "/location";
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading...");
@@ -179,7 +181,7 @@ public class VolleyCommands {
 
         HashMap<String, String> params = new HashMap<String, String>();
         for (int i = 0; i < locationQueue.size(); i++) {
-            LocationDetails locationDetails = locationQueue.poll();
+            LocationDetails locationDetails = locationQueue.get(0);
             params.put("c_studentID", locationDetails.Location_studentID);
             params.put("c_timestamp", "" + locationDetails.Location_TimeStamp);
             params.put("c_wifiname", "" + locationDetails.Location_WifiName);
@@ -188,6 +190,7 @@ public class VolleyCommands {
             jsonArray.put(new JSONObject(params));
             params.clear();
         }
+        locationQueue.clear();
         makeRequest(pDialog, URL, jsonArray);
     }
 

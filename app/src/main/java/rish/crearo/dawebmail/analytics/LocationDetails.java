@@ -5,17 +5,15 @@ import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
 
 import rish.crearo.utils.Constants;
 
-/**
- * Created by rish on 24/7/15.
- */
-public class LocationDetails {
+public class LocationDetails implements Serializable{
 
-    Context context;
+    public Context context;
 
     public String Location_studentID;
     public String Location_TimeStamp;
@@ -23,7 +21,16 @@ public class LocationDetails {
     public String Location_IPAddress;
     public String Location_Subnet;
 
-    public LocationDetails(Context context) {
+    public LocationDetails(){
+        context = null;
+        Location_Subnet = "";
+        Location_IPAddress = "";
+        Location_WifiName = "";
+        Location_TimeStamp = "";
+        Location_studentID = "";
+    }
+
+    public void setValue(Context context) {
         this.context = context;
         SharedPreferences settings = context.getSharedPreferences(Constants.USER_PREFERENCES, Context.MODE_PRIVATE);
         Location_studentID = settings.getString(Constants.bundle_username, "none");
@@ -48,7 +55,7 @@ public class LocationDetails {
         return ip;
     }
 
-    public void addLocationDetails(LocationDetails details) {
-        new ServerLoader(context).addLocationDetails(details);
-    }
+//    public void addLocationDetails(LocationDetails details) {
+//        new ServerLoader(context).addLocationDetails(details);
+//    }
 }
