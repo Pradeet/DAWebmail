@@ -56,7 +56,7 @@ public class VolleyCommands {
     }
 
     public void POSTStudent() {
-        final String URL = Constants.BASEURL + Constants.API_VERSION + "/student";
+        final String URL = Constants.BASEURL + Constants.API_VERSION + "/register";
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading...");
 //        pDialog.show();
