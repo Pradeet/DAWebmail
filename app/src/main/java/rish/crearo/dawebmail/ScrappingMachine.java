@@ -111,10 +111,8 @@ public class ScrappingMachine {
             }
         // done refreshing
         Calendar calendar = Calendar.getInstance();
-        String time = calendar.get(Calendar.HOUR) + ":"
-                + calendar.get(Calendar.MINUTE);
-        String date = calendar.get(Calendar.DAY_OF_MONTH) + " / "
-                + (calendar.get(Calendar.MONTH) + 1);
+        String time = calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE);
+        String date = calendar.get(Calendar.DAY_OF_MONTH) + " / " + (calendar.get(Calendar.MONTH) + 1);
         SavedStatistics lastrefstat = new SavedStatistics(time + " | " + date);
         lastrefstat.save();
 
@@ -140,23 +138,36 @@ public class ScrappingMachine {
             Printer.println("Entered anchoreacchmsg");
 
             try {
-                Element fromtag = anchoreachmsg.findEach("<td>").getElement(2);
-                Element datetag = anchoreachmsg.findEach("<td>").getElement(3);
-                Element subtag = anchoreachmsg.findFirst("<span>");
-                String contentlink = anchoreachmsg.findFirst("<a href>").getAt(
-                        "href");
-                contentlink = convertLink(contentlink);
-                String rur = anchoreachmsg.findFirst("<img>").getAt("title")
-                        .trim();
+                Element fromtag = null;
+                Element datetag = null;
+                Element subtag = null;
+                String contentlink = "";
+                String rur = "";
+                String fromname = "";
+                if (anchoreachmsg.findEach("<td>").size() == 5){
+                    fromtag = anchoreachmsg.findEach("<td>").getElement(2);
+                    datetag = anchoreachmsg.findEach("<td>").getElement(3);
+                    subtag = anchoreachmsg.findFirst("<span>");
+                    contentlink = anchoreachmsg.findFirst("<a href>").getAt("href");
+                    contentlink = convertLink(contentlink);
+                    rur = anchoreachmsg.findFirst("<img>").getAt("title").trim();
+                    fromname = "" + fromtag.getText().trim();
+                } else {
+                    fromtag = anchoreachmsg.findEach("<td>").getElement(1);
+                    datetag = anchoreachmsg.findEach("<td>").getElement(2);
+                    subtag = anchoreachmsg.findFirst("<span>");
+                    contentlink = anchoreachmsg.findFirst("<a href>").getAt("href");
+                    contentlink = convertLink(contentlink);
+                    rur = anchoreachmsg.findFirst("<img>").getAt("title").trim();
+                    fromname = "" + fromtag.getText().trim();
+                    fromname = fromname.substring(0, fromname.length() - 12);
+                }
 
-                String fromname = "" + fromtag.getText().trim();
                 // if (fromname.contains("@daiict.ac"))
                 // fromname.replace("@daiict.ac.in", "");
                 String sub = "" + subtag.getText().trim();
                 sub = convertText(sub);
-                String d = ""
-                        + datetag.getText().trim().replace("&nbsp;", "")
-                        .replace("\n", "");
+                String d = "" + datetag.getText().trim().replace("&nbsp;", "").replace("\n", "");
                 String hasatt = "isempty";
                 if (anchoreachmsg.innerHTML().contains("title='Attachment'")) {
                     hasatt = "notempty";
@@ -188,8 +199,7 @@ public class ScrappingMachine {
                     EmailMessage lastemail_in_db = EmailMessage.listAll(
                             EmailMessage.class).get(
                             (int) (SugarRecord.count(EmailMessage.class, null, null) - 1));
-                    if (fromname.equals(lastemail_in_db.fromname)
-                            && sub.equals(lastemail_in_db.subject)) {
+                    if (fromname.equals(lastemail_in_db.fromname) && sub.equals(lastemail_in_db.subject)) {
                         Printer.println("Found same email!");
                         cont = false;
                         break;
@@ -238,8 +248,7 @@ public class ScrappingMachine {
             Printer.println("Found title - " + div_yesnext);
 
             if (div_yesnext.equals("true")) {
-                String urltonext = userAgent.doc
-                        .findFirst("<a id='NEXT_PAGE'>").getAt("href");
+                String urltonext = userAgent.doc.findFirst("<a id='NEXT_PAGE'>").getAt("href");
                 userAgent.visit(convertLink(urltonext));
                 return true;
             } else {
