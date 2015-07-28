@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
+    android:background="#E7E7E7"
     tools:context="rish.crearo.dawebmail.ViewEmail">
 
     <LinearLayout
@@ -50,21 +50,35 @@
                 android:id="@+id/viewmail_sender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 android:background="#E7E7E7"
                 android:padding="10dp"
                 android:text="FROM"
                 android:textSize="15dp" />
 
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@android:color/darker_gray"/>
+
             <TextView
                 android:id="@+id/viewmail_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 android:background="#E7E7E7"
                 android:padding="10dp"
                 android:text="SUBJECT"
                 android:textSize="15dp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@android:color/darker_gray"/>
 
             <WebView
                 android:id="@+id/viewmail_webview"
@@ -72,14 +86,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:padding="10dp"
-                tools:ignore="WebViewLayout"></WebView>
+                tools:ignore="WebViewLayout"/>
 
             <LinearLayout
                 android:id="@+id/viewemail_attlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
                 android:layout_margin="10dp"
                 android:orientation="vertical"
                 android:padding="5dp">

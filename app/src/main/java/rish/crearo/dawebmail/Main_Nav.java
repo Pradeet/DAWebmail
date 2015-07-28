@@ -154,10 +154,10 @@ public class Main_Nav extends FragmentActivity {
 
         drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_user_edited,
                 "" + username);
-        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_mail, "Inbox");
-        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_send,
+        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_mail_32, "Inbox");
+        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_send_32,
                 "SMARTbox");
-        drawerItem[3] = new ObjectDrawerItem(R.drawable.settings_new,
+        drawerItem[3] = new ObjectDrawerItem(R.drawable.settings_new_32,
                 "Settings");
 
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,

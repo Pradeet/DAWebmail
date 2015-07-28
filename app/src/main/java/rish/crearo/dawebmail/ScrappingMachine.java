@@ -51,8 +51,7 @@ public class ScrappingMachine {
             form.setPassword("password", pwd);
             form.submit("Log In");
 
-            userAgent
-                    .visit("https://webmail.daiict.ac.in/zimbra/h/search?mesg=welcome&initial=true&app=");
+            userAgent.visit("https://webmail.daiict.ac.in/zimbra/h/search?mesg=welcome&initial=true&app=");
 
             Printer.println("location: " + userAgent.getLocation());
             homepage_link = userAgent.getLocation();
@@ -375,8 +374,7 @@ public class ScrappingMachine {
                     emailtext = "This webmail contains pdf/webpage content.\nText for this format of the webmail is currrently unavailable.";
             } else {
                 emailtext = resp.substring(resp.indexOf("iframeBody"));
-                emailtext = emailtext.substring(emailtext.indexOf(">") + 1,
-                        emailtext.indexOf("</td>"));
+                emailtext = emailtext.substring(emailtext.indexOf(">") + 1, emailtext.indexOf("</td>"));
             }
 
             char emailchars[] = emailtext.toCharArray();

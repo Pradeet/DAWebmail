@@ -21,13 +21,11 @@ public class AlarmManagerService {
         Constants.isconnected_internet = false;
         AlarmManager am = (AlarmManager) mContext
                 .getSystemService(Context.ALARM_SERVICE);
-        PendingIntent intent = PendingIntent.getService(mContext, 0,
-                new Intent(mContext, BackgroundService.class), 0);
+        PendingIntent intent = PendingIntent.getService(mContext, 0, new Intent(mContext, BackgroundService.class), 0);
 
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
                 + (1000 * 5), 1000 * checkInterval, intent);
 
-        Printer.println("called service with checkInterval = "
-                + checkInterval);
+        Printer.println("called service with checkInterval = " + checkInterval);
     }
 }

@@ -1,27 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:padding="10dp" >
+    android:padding="10dp"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/navdraw_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_mail"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:paddingRight="10dp" />
+        android:layout_marginLeft="6dp" />
 
     <TextView
         android:id="@+id/navdraw_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/navdraw_image"
-        android:paddingRight="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="center_vertical"
         android:text="Folder name here."
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textSize="16sp"
         android:textColor="#ffffff" />
 
-</RelativeLayout>
+</LinearLayout>

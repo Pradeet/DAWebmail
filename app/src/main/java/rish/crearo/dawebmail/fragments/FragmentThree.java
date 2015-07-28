@@ -70,8 +70,7 @@ public class FragmentThree extends Fragment {
 
         switch_mobile = (Switch) rootView
                 .findViewById(R.id.settings_networkcell_switch);
-        switch_wifi = (Switch) rootView
-                .findViewById(R.id.settings_networkwifi_switch);
+        switch_wifi = (Switch) rootView.findViewById(R.id.settings_networkwifi_switch);
 
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(),
                 "fonts/GeosansLight.ttf");
