@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="rish.sigmobile"
+    package="com.sigmobile"
     android:installLocation="preferExternal"
     android:versionCode="7"
-    android:versionName="3.0">
+    android:versionName="3.1">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-        android:name="rish.sigmobile.tools.AppController"
+        android:name="com.sigmobile.tools.AppController"
         android:allowBackup="true"
         android:icon="@drawable/final_main"
         android:label="@string/app_name"
@@ -33,17 +33,17 @@
             android:value="true" />
 
         <service
-            android:name="rish.sigmobile.services.BackgroundService"
+            android:name="com.sigmobile.services.BackgroundService"
             android:enabled="true"
             android:exported="true" />
 
         <service
-            android:name="rish.sigmobile.services.BackgroundTest"
+            android:name="com.sigmobile.services.BackgroundTest"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name="rish.sigmobile.services.NetworkChangeBroadcastReceiver"
+            android:name="com.sigmobile.services.NetworkChangeBroadcastReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="NetworkChangeBroadcastReceiver">
@@ -53,25 +53,25 @@
         </receiver>
 
         <receiver
-            android:name="rish.sigmobile.services.BackgroundReceiver"
+            android:name="com.sigmobile.services.BackgroundReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="BackgroundReceiver" />
 
         <activity
-            android:name="rish.sigmobile.dawebmail.AboutFrag"
+            android:name="com.sigmobile.dawebmail.AboutFrag"
             android:label="@string/title_activity_about_frag"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name="rish.sigmobile.dawebmail.ComposeEmail"
+            android:name="com.sigmobile.dawebmail.ComposeEmail"
             android:label="@string/title_activity_compose_email"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name="rish.sigmobile.dawebmail.LoginActivity"
+            android:name="com.sigmobile.dawebmail.LoginActivity"
             android:label="DAWebmail"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -81,20 +81,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="rish.sigmobile.dawebmail.Main_Nav"
+            android:name="com.sigmobile.dawebmail.Main_Nav"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
         <activity
-            android:name="rish.sigmobile.dawebmail.Me"
+            android:name="com.sigmobile.dawebmail.Me"
             android:label="@string/title_activity_me"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name="rish.sigmobile.tools.SearchActivity"
+            android:name="com.sigmobile.tools.SearchActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

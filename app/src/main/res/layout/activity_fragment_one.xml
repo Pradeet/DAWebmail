@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/inbox_background"
-    tools:context="rish.sigmobile.webmail.MainActivity" >
+    tools:context="com.sigmobile.webmail.MainActivity" >
 
     <Button
         android:id="@+id/floatingbutton_del"

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E7E7E7"
-    tools:context="rish.sigmobile.dawebmail.ViewEmail">
+    tools:context="com.sigmobile.dawebmail.ViewEmail">
 
     <LinearLayout
         android:id="@+id/viewemail_datelayout"

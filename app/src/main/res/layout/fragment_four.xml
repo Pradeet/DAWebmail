@@ -1,0 +1,134 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="#3E80B4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3E80B4"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/feedback_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#777777"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="GIVE US YOUR FEEDBACK"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/feeback_text4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="10dp"
+            android:padding="3dp"
+            android:text="Your Views"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/feedback_etbox"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/border_white"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Let us know what you feel about the app .. anonymously!"
+            android:inputType="textMultiLine"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:scrollbars="vertical"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#DDDDDD" />
+
+
+        <TextView
+            android:id="@+id/feeback_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="How long does it take to load data - on WiFi, 3G?"
+            android:textColor="#FFFFFF" />
+
+        <Spinner
+            android:id="@+id/feedback_spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/feeback_text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Do you receive crash reports often?"
+            android:textColor="#FFFFFF" />
+
+        <Spinner
+            android:id="@+id/feedback_spinner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/feeback_text5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="10dp"
+            android:padding="3dp"
+            android:text="Your suggestions"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/feedback_etbox2"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/border_white"
+            android:gravity="center"
+            android:hint="Have a suggestion in mind? Let us know :)"
+            android:padding="5dp"
+            android:scrollbars="vertical"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#DDDDDD" />
+
+        <TextView
+            android:id="@+id/feeback_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:text="Remember, you're anonymous!"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/feedback_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Send Feedback!"
+            android:textColor="#FFFFFF" />
+
+
+    </LinearLayout>
+</ScrollView>

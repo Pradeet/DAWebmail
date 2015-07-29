@@ -31,7 +31,7 @@
                 android:gravity="center_vertical"
                 android:text="From" />
 
-            <rish.sigmobile.tools.FontFitTextView
+            <com.sigmobile.tools.FontFitTextView
                 android:id="@+id/tv_date"
                 android:layout_width="50sp"
                 android:layout_height="fill_parent"

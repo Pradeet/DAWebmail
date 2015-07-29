@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ACACAC"
-    tools:context="rish.sigmobile.dawebmail.ComposeEmail" >
+    tools:context="com.sigmobile.dawebmail.ComposeEmail" >
 
     <ScrollView
         android:layout_width="match_parent"
