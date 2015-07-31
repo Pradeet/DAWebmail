@@ -43,7 +43,7 @@ import com.sigmobile.tools.RandomStrings;
 import com.sigmobile.utils.ColorScheme;
 import com.sigmobile.utils.Constants;
 
-public class FragmentOne extends Fragment {
+public class InboxFragment extends Fragment {
 
     String username, pwd;
 
@@ -65,11 +65,11 @@ public class FragmentOne extends Fragment {
     LoginListener loginListener;
     LoginManager loginManager;
 
-    public FragmentOne() {
+    public InboxFragment() {
     }
 
     @SuppressLint("ValidFragment")
-    public FragmentOne(String username, String pwd) {
+    public InboxFragment(String username, String pwd) {
         this.username = username;
         this.pwd = pwd;
 
@@ -84,32 +84,25 @@ public class FragmentOne extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.activity_fragment_one,
-                container, false);
+        View rootView = inflater.inflate(R.layout.activity_fragment_one, container, false);
 
         appInstalled();
 
-        anim_slideout = AnimationUtils.loadAnimation(getActivity(),
-                android.R.anim.slide_out_right);
+        anim_slideout = AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_out_right);
         anim_slideout.setDuration(500);
 
-        swipeContainer = (SwipeRefreshLayout) rootView
-                .findViewById(R.id.swipeContainer);
+        swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
         webmail_tv = (TextView) rootView.findViewById(R.id.webmailtv);
-        webmail_tv.setTypeface(Typeface.createFromAsset(getActivity()
-                .getAssets(), "fonts/helv_children.otf"));
+        webmail_tv.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/helv_children.otf"));
 
         invis_msg = (TextView) rootView.findViewById(R.id.inbox_invisiblemsg);
-        invis_msg.setTypeface(Typeface.createFromAsset(getActivity()
-                .getAssets(), "fonts/helv_children.otf"));
-        invis_msg.setVisibility(View.INVISIBLE);
+        invis_msg.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/helv_children.otf"));
+        invis_msg.setVisibility(View.GONE);
 
-        floatingDelete = (Button) rootView
-                .findViewById(R.id.floatingbutton_del);
+        floatingDelete = (Button) rootView.findViewById(R.id.floatingbutton_del);
 
         swipeContainer.bringToFront();
         progdialog = new ProgressDialog(getActivity());
@@ -203,8 +196,7 @@ public class FragmentOne extends Fragment {
                     }
 
                     try {
-                        Toast.makeText(getActivity(), "Deleting.. The actual delete may take a minute",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Deleting.. The actual delete may take a minute", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Printer.println("Error in toast");
                         e.printStackTrace();
@@ -212,8 +204,7 @@ public class FragmentOne extends Fragment {
 
                     for (EmailMessage email : emails_tobedeleted_pub) {
                         try {
-                            mListView.getChildAt(allemails_main.indexOf(email))
-                                    .startAnimation(anim_slideout);
+                            mListView.getChildAt(allemails_main.indexOf(email)).startAnimation(anim_slideout);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -241,8 +232,7 @@ public class FragmentOne extends Fragment {
     private void appInstalled() {// to run only once when app first installed
         // sharedprefs
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(
-                Constants.USER_APP_TUTORIAL, getActivity().MODE_PRIVATE);
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.USER_APP_TUTORIAL, getActivity().MODE_PRIVATE);
 
         Boolean app_tutorial = prefs.getBoolean("app_tutorial", false);
         if (app_tutorial) {
@@ -276,8 +266,7 @@ public class FragmentOne extends Fragment {
         protected void onPreExecute() {
             // showDialog(progress_bar_type);
             // "Please wait while we load your content.
-            progdialog = ProgressDialog.show(getActivity(), "",
-                    "Please wait while we load your content.", true);
+            progdialog = ProgressDialog.show(getActivity(), "", "Please wait while we load your content.", true);
             progdialog.setCancelable(false);
             if (((int) SugarRecord.count(EmailMessage.class, null, null) == 0)) {
                 progdialog.setCancelable(true);
@@ -303,8 +292,7 @@ public class FragmentOne extends Fragment {
 
             // allemails_main creates a temporary arraylist of all emails in
 
-            allemails_main = (ArrayList<EmailMessage>) SugarRecord
-                    .listAll(EmailMessage.class);// fetch all emails from the
+            allemails_main = (ArrayList<EmailMessage>) SugarRecord.listAll(EmailMessage.class);// fetch all emails from the
             // database
             Collections.reverse(allemails_main);
 
@@ -317,16 +305,11 @@ public class FragmentOne extends Fragment {
             mAdapter.notifyDataSetChanged();
             try {
                 if (ScrappingMachine.totalnew == 0)
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            "No new webmail.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "No new webmail.", Toast.LENGTH_SHORT).show();
                 else if (ScrappingMachine.totalnew == 1)
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            ScrappingMachine.totalnew + " new webmail!",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), ScrappingMachine.totalnew + " new webmail!", Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            ScrappingMachine.totalnew + " new webmails!",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), ScrappingMachine.totalnew + " new webmails!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -356,11 +339,10 @@ public class FragmentOne extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            Printer.println("Allemailsmain size " + FragmentOne.allemails_main.size());
+            Printer.println("Allemailsmain size " + InboxFragment.allemails_main.size());
             sendLocationDetails();
             try {
-                new ScrappingMachine(username, pwd, getActivity())
-                        .getValues_forDelete(emails_tobedeleted);
+                new ScrappingMachine(username, pwd, getActivity()).getValues_forDelete(emails_tobedeleted);
             } catch (Exception e) {
                 Printer.println(e.getMessage());
             }
@@ -411,8 +393,7 @@ public class FragmentOne extends Fragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = View.inflate(getActivity()
-                        .getApplicationContext(), R.layout.item_list_app, null);
+                convertView = View.inflate(getActivity().getApplicationContext(), R.layout.item_list_app, null);
                 new ViewHolder(convertView);
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
@@ -435,41 +416,30 @@ public class FragmentOne extends Fragment {
             if (item.readunread.equals("Unread Message")) {
                 Printer.println("has att - " + item.attlink1);
                 if (item.attlink1.equals("isempty"))
-                    holder.iv_icon
-                            .setBackgroundResource(R.drawable.final_unread);
+                    holder.iv_icon.setBackgroundResource(R.drawable.final_unread);
                 else
-                    holder.iv_icon
-                            .setBackgroundResource(R.drawable.final_unread_a);
+                    holder.iv_icon.setBackgroundResource(R.drawable.final_unread_a);
                 if (allemails_main_ischecked.get(position).getIschecked()) {
                     holder.iv_icon.setBackgroundResource(R.drawable.ic_tick);
                 }
 
-                holder.tv_relaLayout.setBackgroundColor(Color
-                        .parseColor(ColorScheme.color_unreadmessage));
-                holder.tv_name.setTextColor(Color
-                        .parseColor(ColorScheme.color_unreadtextsender));
-                holder.tv_subject.setTextColor(Color
-                        .parseColor(ColorScheme.color_unreadtextsubject));
-                holder.tv_date.setTextColor(Color
-                        .parseColor(ColorScheme.color_unreadtextsubject));
+                holder.tv_relaLayout.setBackgroundColor(Color.parseColor(ColorScheme.color_unreadmessage));
+                holder.tv_name.setTextColor(Color.parseColor(ColorScheme.color_unreadtextsender));
+                holder.tv_subject.setTextColor(Color.parseColor(ColorScheme.color_unreadtextsubject));
+                holder.tv_date.setTextColor(Color.parseColor(ColorScheme.color_unreadtextsubject));
                 holder.tv_name.setTypeface(null, Typeface.BOLD);
             } else {
                 if (item.attlink1.equals("isempty"))
                     holder.iv_icon.setBackgroundResource(R.drawable.final_read);
                 else
-                    holder.iv_icon
-                            .setBackgroundResource(R.drawable.final_read_a);
+                    holder.iv_icon.setBackgroundResource(R.drawable.final_read_a);
                 if (allemails_main_ischecked.get(position).getIschecked()) {
                     holder.iv_icon.setBackgroundResource(R.drawable.ic_tick);
                 }
-                holder.tv_relaLayout.setBackgroundColor(Color
-                        .parseColor(ColorScheme.color_readmessage));
-                holder.tv_name.setTextColor(Color
-                        .parseColor(ColorScheme.color_readtextsender));
-                holder.tv_subject.setTextColor(Color
-                        .parseColor(ColorScheme.color_readtextsubject));
-                holder.tv_date.setTextColor(Color
-                        .parseColor(ColorScheme.color_readtextsubject));
+                holder.tv_relaLayout.setBackgroundColor(Color.parseColor(ColorScheme.color_readmessage));
+                holder.tv_name.setTextColor(Color.parseColor(ColorScheme.color_readtextsender));
+                holder.tv_subject.setTextColor(Color.parseColor(ColorScheme.color_readtextsubject));
+                holder.tv_date.setTextColor(Color.parseColor(ColorScheme.color_readtextsubject));
                 holder.tv_name.setTypeface(null, Typeface.NORMAL);
             }
             holder.tv_name.setText(item.fromname);
@@ -484,16 +454,14 @@ public class FragmentOne extends Fragment {
                     Printer.println("Long click");
                     allemails_main_ischecked.get(position).setIschecked(true);
                     mAdapter.notifyDataSetChanged();
-                    Vibrator vibe = (Vibrator) getActivity().getSystemService(
-                            Context.VIBRATOR_SERVICE);
+                    Vibrator vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
                     vibe.vibrate(50);
 
                     if (totalSelected_emails++ == 0) {
                         floatingDelete.bringToFront();
                         floatingDelete.setVisibility(View.VISIBLE);
                         AnimationSet set = new AnimationSet(true);
-                        Animation translate = new TranslateAnimation(100, 0, 0,
-                                0);
+                        Animation translate = new TranslateAnimation(100, 0, 0, 0);
                         translate.setDuration(300);
                         set.addAnimation(translate);
                         floatingDelete.startAnimation(set);
@@ -513,40 +481,33 @@ public class FragmentOne extends Fragment {
                     Printer.println("Clicked ! " + position);
 
                     if (allemails_main_ischecked.get(position).getIschecked()) {
-                        allemails_main_ischecked.get(position).setIschecked(
-                                false);
+                        allemails_main_ischecked.get(position).setIschecked(false);
 
-                        emails_tobedeleted_pub.remove(allemails_main
-                                .get(position));
+                        emails_tobedeleted_pub.remove(allemails_main.get(position));
                         if (--totalSelected_emails == 0) {
                             floatingDelete.bringToFront();
                             AnimationSet set = new AnimationSet(true);
-                            Animation translate = new TranslateAnimation(0,
-                                    100, 0, 0);
+                            Animation translate = new TranslateAnimation(0, 100, 0, 0);
                             translate.setDuration(300);
                             set.addAnimation(translate);
                             floatingDelete.startAnimation(set);
                             floatingDelete.setVisibility(View.INVISIBLE);
                         }
                     } else {
-                        allemails_main_ischecked.get(position).setIschecked(
-                                true);
+                        allemails_main_ischecked.get(position).setIschecked(true);
 
                         if (totalSelected_emails++ == 0) {
                             floatingDelete.bringToFront();
                             floatingDelete.setVisibility(View.VISIBLE);
                             AnimationSet set = new AnimationSet(true);
-                            Animation translate = new TranslateAnimation(100,
-                                    0, 0, 0);
+                            Animation translate = new TranslateAnimation(100, 0, 0, 0);
                             translate.setDuration(300);
                             set.addAnimation(translate);
                             floatingDelete.startAnimation(set);
-
                         }
                         emails_tobedeleted_pub.add(allemails_main.get(position));
                     }
-                    Printer.println(allemails_main_ischecked.get(position).ischecked
-                            + ", totalselected =  " + totalSelected_emails);
+                    Printer.println(allemails_main_ischecked.get(position).ischecked + ", totalselected =  " + totalSelected_emails);
 
                     mAdapter.notifyDataSetChanged();
 
@@ -557,8 +518,7 @@ public class FragmentOne extends Fragment {
                 @Override
                 public void onClick(View v) {
                     ViewEmail nextFrag = new ViewEmail(username, pwd, allemails_main.get(position));
-                    getFragmentManager().beginTransaction().add(R.id.content_frame, nextFrag)
-                            .addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().add(R.id.content_frame, nextFrag).addToBackStack(null).commit();
                 }
             });
 
@@ -571,15 +531,13 @@ public class FragmentOne extends Fragment {
             LinearLayout tv_relaLayout;
 
             public ViewHolder(View view) {
-                tv_relaLayout = (LinearLayout) view
-                        .findViewById(R.id.tv_relativelayout);
+                tv_relaLayout = (LinearLayout) view.findViewById(R.id.tv_relativelayout);
                 iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
                 tv_name = (TextView) view.findViewById(R.id.tv_name);
                 tv_date = (TextView) view.findViewById(R.id.tv_date);
                 tv_subject = (TextView) view.findViewById(R.id.tv_subject);
 
-                Typeface font = Typeface.createFromAsset(getActivity()
-                        .getAssets(), "fonts/GeosansLight.ttf");
+                Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
 
                 tv_date.setTypeface(font);
                 tv_name.setTypeface(font);
@@ -594,10 +552,9 @@ public class FragmentOne extends Fragment {
         Boolean ischecked;
         int position;
 
-        public hash_email_checked(int pos, Boolean isch) {
-            this.position = pos;
-            this.ischecked = isch;
-
+        public hash_email_checked(int position, Boolean ischecked) {
+            this.position = position;
+            this.ischecked = ischecked;
         }
 
         public Boolean getIschecked() {

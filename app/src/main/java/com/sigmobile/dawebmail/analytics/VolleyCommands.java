@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-import com.sigmobile.dawebmail.fragments.FragmentFour;
+import com.sigmobile.dawebmail.fragments.FeedbackFragment;
 import com.sigmobile.tools.AppController;
 import com.sigmobile.utils.Constants;
 
@@ -223,7 +223,7 @@ public class VolleyCommands {
                 feedback_error = false;
                 feedback_returned = true;
                 pDialog.dismiss();
-                new FragmentFour().showFeedbackResponse(context, feedback_error);
+                new FeedbackFragment().showFeedbackResponse(context, feedback_error);
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -233,7 +233,7 @@ public class VolleyCommands {
                 feedback_returned = true;
                 error.printStackTrace();
                 pDialog.dismiss();
-                new FragmentFour().showFeedbackResponse(context, feedback_error);
+                new FeedbackFragment().showFeedbackResponse(context, feedback_error);
             }
         };
         JsonArrayRequest reqarray = new JsonArrayRequest(URL, jsonArray, jsonArrayListener, errorListener) {

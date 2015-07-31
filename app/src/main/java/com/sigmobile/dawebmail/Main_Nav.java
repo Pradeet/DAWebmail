@@ -44,10 +44,10 @@ import java.util.Collections;
 import me.drakeet.materialdialog.MaterialDialog;
 
 import com.sigmobile.R;
-import com.sigmobile.dawebmail.fragments.FragmentFour;
-import com.sigmobile.dawebmail.fragments.FragmentOne;
-import com.sigmobile.dawebmail.fragments.FragmentThree;
-import com.sigmobile.dawebmail.fragments.FragmentTwo;
+import com.sigmobile.dawebmail.fragments.FeedbackFragment;
+import com.sigmobile.dawebmail.fragments.InboxFragment;
+import com.sigmobile.dawebmail.fragments.SettingsFragment;
+import com.sigmobile.dawebmail.fragments.SmartBoxFragment;
 import com.sigmobile.dialogs.SplashDialog1;
 import com.sigmobile.services.NetworkChangeBroadcastReceiver;
 import com.sigmobile.tools.Printer;
@@ -144,17 +144,14 @@ public class Main_Nav extends FragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[5];
+        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[6];
 
-        drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_user_edited,
-                "" + username);
+        drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_user_edited,"" + username);
         drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_mail_32, "Inbox");
-        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_send_32,
-                "SMARTbox");
-        drawerItem[3] = new ObjectDrawerItem(R.drawable.settings_new_32,
-                "Settings");
-        drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_action_star,
-                "Feedback");
+        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_send_32,"SMARTbox");
+        drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_action_send_32, "Sent");
+        drawerItem[4] = new ObjectDrawerItem(R.drawable.settings_new_32,"Settings");
+        drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_action_star,"Feedback");
 
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
                 R.layout.navdraw_listitem, drawerItem);
@@ -170,7 +167,7 @@ public class Main_Nav extends FragmentActivity {
     @Override
     public void onBackPressed() {
 
-        FragmentOne.mAdapter.notifyDataSetChanged();
+        InboxFragment.mAdapter.notifyDataSetChanged();
         invalidateOptionsMenu();
 
         if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
@@ -188,7 +185,7 @@ public class Main_Nav extends FragmentActivity {
                 for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
                     fm.popBackStack();
                 }
-                FragmentOne x = new FragmentOne(username, pwd);
+                InboxFragment x = new InboxFragment(username, pwd);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, x).commit();
 
@@ -296,23 +293,23 @@ public class Main_Nav extends FragmentActivity {
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager
                         .beginTransaction()
-                        .replace(R.id.content_frame, new FragmentOne(username, pwd))
+                        .replace(R.id.content_frame, new InboxFragment(username, pwd))
                         .commit();
                 mDrawerList.setItemChecked(position, true);
                 mDrawerList.setSelection(position);
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 1:
-                fragment = new FragmentOne(username, pwd);
+                fragment = new InboxFragment(username, pwd);
                 break;
             case 2:
-                fragment = new FragmentTwo();
+                fragment = new SmartBoxFragment();
                 break;
             case 3:
-                fragment = new FragmentThree(username, pwd);
+                fragment = new SettingsFragment(username, pwd);
                 break;
             case 4:
-                fragment = new FragmentFour();
+                fragment = new FeedbackFragment();
                 break;
 
             default:
@@ -375,7 +372,7 @@ public class Main_Nav extends FragmentActivity {
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame,
-                                new FragmentThree(username, pwd)).commit();
+                                new SettingsFragment(username, pwd)).commit();
                 return true;
             case R.id.action_aboutme:
                 startActivity(new Intent(Main_Nav.this, AboutFrag.class));
@@ -522,13 +519,13 @@ public class Main_Nav extends FragmentActivity {
                 m.save();// now all e-mails are in the database
 
             // allemails_main creates a temporary arraylist of all emails in
-            FragmentOne.allemails_main = (ArrayList<EmailMessage>) SugarRecord
+            InboxFragment.allemails_main = (ArrayList<EmailMessage>) SugarRecord
                     .listAll(EmailMessage.class); // fetch all emails from the
             // database
 
-            Collections.reverse(FragmentOne.allemails_main);
+            Collections.reverse(InboxFragment.allemails_main);
             ScrappingMachine.clear_AllEmailsAL();
-            FragmentOne.mAdapter.notifyDataSetChanged();
+            InboxFragment.mAdapter.notifyDataSetChanged();
 
             Toast.makeText(Main_Nav.this, "Successfully Refreshed",
                     Toast.LENGTH_SHORT).show();

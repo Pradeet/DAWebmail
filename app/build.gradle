@@ -32,4 +32,6 @@ dependencies {
     // android volley
     compile files('libs/gson-1.1.jar')
     compile files('libs/jaunt1.0_nr.jar')
+    //action button
+    compile 'com.github.shell-software:fab:1.1.2'
 }

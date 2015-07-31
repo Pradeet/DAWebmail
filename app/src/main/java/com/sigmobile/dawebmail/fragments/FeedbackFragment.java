@@ -26,7 +26,7 @@ import com.sigmobile.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentFour extends Fragment {
+public class FeedbackFragment extends Fragment {
 
     EditText editText_1, editText_2;
     Spinner spinner1, spinner2;
@@ -35,7 +35,7 @@ public class FragmentFour extends Fragment {
 
     Button buttonsend;
 
-    public FragmentFour() {
+    public FeedbackFragment() {
 
     }
 

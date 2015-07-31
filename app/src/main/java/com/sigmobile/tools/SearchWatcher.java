@@ -5,7 +5,7 @@ import java.util.Collections;
 
 import com.sigmobile.dawebmail.EmailMessage;
 import com.sigmobile.dawebmail.Main_Nav;
-import com.sigmobile.dawebmail.fragments.FragmentOne;
+import com.sigmobile.dawebmail.fragments.InboxFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 
@@ -28,12 +28,12 @@ public class SearchWatcher implements TextWatcher {
         // Do search task here
 
         if (Main_Nav.mSearchQuery.length() >= 2) {
-            FragmentOne.allemails_main = (ArrayList<EmailMessage>) EmailMessage
+            InboxFragment.allemails_main = (ArrayList<EmailMessage>) EmailMessage
                     .listAll(EmailMessage.class);
-            Collections.reverse(FragmentOne.allemails_main);
+            Collections.reverse(InboxFragment.allemails_main);
 
-            for (int i = 0; i < FragmentOne.allemails_main.size(); i++) {
-                EmailMessage email = FragmentOne.allemails_main.get(i);
+            for (int i = 0; i < InboxFragment.allemails_main.size(); i++) {
+                EmailMessage email = InboxFragment.allemails_main.get(i);
                 if (email.getFromName().toLowerCase()
                         .contains(Main_Nav.mSearchQuery.toLowerCase())
                         || email.getFromaddress().toLowerCase()
@@ -47,16 +47,16 @@ public class SearchWatcher implements TextWatcher {
                         || email.getContent().toLowerCase()
                         .contains(Main_Nav.mSearchQuery.toLowerCase())) {
                 } else {
-                    FragmentOne.allemails_main.remove(email);
+                    InboxFragment.allemails_main.remove(email);
                     i--;
                 }
             }
-            FragmentOne.mAdapter.notifyDataSetChanged();
+            InboxFragment.mAdapter.notifyDataSetChanged();
         } else {
-            FragmentOne.allemails_main = (ArrayList<EmailMessage>) EmailMessage
+            InboxFragment.allemails_main = (ArrayList<EmailMessage>) EmailMessage
                     .listAll(EmailMessage.class);
-            Collections.reverse(FragmentOne.allemails_main);
-            FragmentOne.mAdapter.notifyDataSetChanged();
+            Collections.reverse(InboxFragment.allemails_main);
+            InboxFragment.mAdapter.notifyDataSetChanged();
         }
     }
 
