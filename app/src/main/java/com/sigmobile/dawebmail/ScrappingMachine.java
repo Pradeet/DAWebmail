@@ -476,22 +476,14 @@ public class ScrappingMachine {
                         Printer.println("sub - " + subtag.getText().trim());
 
                         for (int i = 0; i < emails_tobedeleted.size(); i++) {
-                            if (fromtag
-                                    .getText()
-                                    .toString()
-                                    .trim()
-                                    .equals(emails_tobedeleted.get(i).fromname
-                                            .trim())
-                                    && subtag
-                                    .getText()
-                                    .toString()
-                                    .trim()
+                            if (fromtag.getText().toString().trim()
+                                    .equals(emails_tobedeleted.get(i).fromname.trim())
+                                    && subtag.getText().toString().trim()
                                     .equals(emails_tobedeleted.get(i).subject
                                             .trim())) {
-                                System.out
-                                        .println("Found!\nEmail to be deleted "
-                                                + emails_tobedeleted.get(i).fromname
-                                                + " " + globalvalue);
+                                System.out.println("Found!\nEmail to be deleted "
+                                        + emails_tobedeleted.get(i).fromname
+                                        + " " + globalvalue);
                                 values_checkboxes.add(globalvalue);
                                 emails_tobedeleted.remove(i);
                                 i--;

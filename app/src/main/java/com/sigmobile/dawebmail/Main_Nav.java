@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.orm.SugarRecord;
 import com.sigmobile.R;
+import com.sigmobile.dawebmail.analytics.ServerLoader;
 import com.sigmobile.dawebmail.fragments.FragmentFour;
 import com.sigmobile.dawebmail.fragments.FragmentOne;
 import com.sigmobile.dawebmail.fragments.FragmentThree;
@@ -486,11 +487,14 @@ public class Main_Nav extends FragmentActivity {
 
     public class async_MasterRefresh extends AsyncTask<String, Void, String> {
 
+        long timeStarted = 0, timeFinished = 0;
+
         @Override
         protected void onPreExecute() {
             progdialog = ProgressDialog.show(Main_Nav.this, "",
                     "Master Refresh In Progress.", true);
             progdialog.setCancelable(false);
+            timeStarted = System.currentTimeMillis();
         }
 
         @Override
@@ -513,6 +517,7 @@ public class Main_Nav extends FragmentActivity {
 
         @Override
         public void onPostExecute(String result) {
+            timeFinished = System.currentTimeMillis();
             invalidateOptionsMenu();
             Collections.reverse(ScrappingMachine.allemails);
             for (EmailMessage m : ScrappingMachine.allemails)
@@ -527,8 +532,10 @@ public class Main_Nav extends FragmentActivity {
             ScrappingMachine.clear_AllEmailsAL();
             FragmentOne.mAdapter.notifyDataSetChanged();
 
-            Toast.makeText(Main_Nav.this, "Successfully Refreshed",
-                    Toast.LENGTH_SHORT).show();
+            long timeTaken = timeFinished - timeStarted;
+            new ServerLoader(getApplicationContext()).addActionDetails(username, Constants.ACTION_MASTERREFRESH, "" + timeTaken, Constants.TRUE);
+
+            Toast.makeText(Main_Nav.this, "Successfully Refreshed", Toast.LENGTH_SHORT).show();
             progdialog.dismiss();
         }
     }

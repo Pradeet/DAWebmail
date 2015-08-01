@@ -23,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import me.drakeet.materialdialog.MaterialDialog;
+
 import com.sigmobile.R;
+import com.sigmobile.dawebmail.analytics.ServerLoader;
 import com.sigmobile.dawebmail.commands.LoginListener;
 import com.sigmobile.dawebmail.commands.LoginManager;
 import com.sigmobile.tools.Printer;
@@ -121,21 +123,14 @@ public class ViewEmail extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
                     progdialog.dismiss();
                     Constants.isLoggedin = true;
+                    new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_VIEWEMAIL, timeTaken, Constants.TRUE);
                     new async_ViewEmail().execute("");
 
-//                    LoginDetails loginDetails = new LoginDetails();
-//                    loginDetails.setValues(getActivity(), Constants.MANUAL, Constants.TRUE, timeTaken);
-//                    ServerLoader loader = new ServerLoader(getActivity());
-//                    loader.addLoginDetails(loginDetails);
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = false;
                     progdialog.dismiss();
-
-//                    LoginDetails loginDetails = new LoginDetails();
-//                    loginDetails.setValues(getActivity(), Constants.MANUAL, Constants.FALSE, timeTaken);
-//                    ServerLoader loader = new ServerLoader(getActivity());
-//                    loader.addLoginDetails(loginDetails);
+                    new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_VIEWEMAIL, timeTaken, Constants.FALSE);
                 }
                 getActivity().invalidateOptionsMenu();
             }
@@ -182,6 +177,9 @@ public class ViewEmail extends Fragment {
     }
 
     public class async_ViewEmail extends AsyncTask<String, Void, String> {
+
+        long timeStarted = 0, timeFinished = 0;
+
         @Override
         protected String doInBackground(String... params) {
             ScrappingMachine scrapper = new ScrappingMachine(username, pwd, getActivity());
@@ -193,18 +191,20 @@ public class ViewEmail extends Fragment {
         protected void onPreExecute() {
             progdialog = ProgressDialog.show(getActivity(), "", "Fetching Content.", true);
             progdialog.setCancelable(false);
+            timeStarted = System.currentTimeMillis();
         }
 
         @Override
         public void onPostExecute(String result) {
-
+            timeFinished = System.currentTimeMillis();
+            long timeTaken = timeFinished - timeStarted;
+            new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_VIEWEMAIL, "" + timeTaken, Constants.TRUE);
             tvsender.setText(currentemail.fromaddress);
             setWebviewContent(currentemail.content);
             tvsubject.setText(currentemail.subject);
             tvsenderbottom.setText(currentemail.fromname);
             tvdatebottom.setText(currentemail.dateentire);
             showEmailAttachments();
-
             progdialog.dismiss();
         }
     }
@@ -233,8 +233,8 @@ public class ViewEmail extends Fragment {
             downloadManager.enqueue(request);
 
             // open downloads direct.
+            new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_DOWNLOADATT, "0", Constants.TRUE);
             startActivity(new Intent().setAction(DownloadManager.ACTION_VIEW_DOWNLOADS));
-
         }
     }
 

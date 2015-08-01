@@ -28,20 +28,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orm.SugarRecord;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
 import com.sigmobile.R;
 import com.sigmobile.dawebmail.EmailMessage;
 import com.sigmobile.dawebmail.ScrappingMachine;
 import com.sigmobile.dawebmail.ViewEmail;
+import com.sigmobile.dawebmail.analytics.ServerLoader;
 import com.sigmobile.dawebmail.commands.LoginListener;
 import com.sigmobile.dawebmail.commands.LoginManager;
 import com.sigmobile.tools.Printer;
 import com.sigmobile.tools.RandomStrings;
 import com.sigmobile.utils.ColorScheme;
 import com.sigmobile.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class FragmentOne extends Fragment {
 
@@ -126,11 +126,11 @@ public class FragmentOne extends Fragment {
         onAppOpened();
 
         //sending stuff to server
-//        if (getPrefs(Constants.prefPENDINGBIT_LOCATION) || getPrefs(Constants.prefPENDINGBIT_LOGIN)) {
-//            Printer.println("ServerLoading, sending jsons to server");
-//            ServerLoader sender = new ServerLoader(getActivity());
-//            sender.sendToServer();
-//        }
+        if (getPrefs(Constants.prefPENDINGBIT_ACTION)) {
+            Printer.println("ServerLoading, sending jsons to server");
+            ServerLoader sender = new ServerLoader(getActivity());
+            sender.sendToServer();
+        }
 
         if (((int) SugarRecord.count(EmailMessage.class, null, null) == 0)) {
             new async_refreshInbox().execute("");
@@ -152,13 +152,12 @@ public class FragmentOne extends Fragment {
                     getActivity().invalidateOptionsMenu();
                     swipeContainer.setRefreshing(false);
                     progdialog.dismiss();
+                    new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_LOGIN, timeTaken, Constants.TRUE);
                     new async_refreshInbox().execute("");
-
-                    sendLoginDetails(Constants.MANUAL, Constants.TRUE, timeTaken);
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccessful", Toast.LENGTH_SHORT).show();
                     Constants.isLoggedin = false;
-                    sendLoginDetails(Constants.MANUAL, Constants.FALSE, timeTaken);
+                    new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_LOGIN, timeTaken, Constants.FALSE);
                 }
 
                 getActivity().invalidateOptionsMenu();
@@ -219,7 +218,6 @@ public class FragmentOne extends Fragment {
                         }
                         allemails_main.remove(email);
                     }
-
                     mAdapter.notifyDataSetChanged();
 
                     new async_delete(emails_tobedeleted_pub).execute("");
@@ -231,12 +229,6 @@ public class FragmentOne extends Fragment {
         return rootView;
     }
 
-    private void sendLoginDetails(String loginType, String success, String time) {
-//        LoginDetails details = new LoginDetails();
-//        details.setValues(getActivity(), loginType, success, time);
-//        ServerLoader loader = new ServerLoader(getActivity().getApplicationContext());
-//        loader.addLoginDetails(details);
-    }
 
     private void appInstalled() {// to run only once when app first installed
         // sharedprefs
@@ -265,6 +257,10 @@ public class FragmentOne extends Fragment {
     }
 
     public class async_refreshInbox extends AsyncTask<String, Void, String> {
+
+        long timeStarted = 0;
+        long timeFinished = 0;
+
         @Override
         protected String doInBackground(String... params) {
             ScrappingMachine scrapper = new ScrappingMachine(username, pwd, getActivity());
@@ -278,6 +274,7 @@ public class FragmentOne extends Fragment {
             // "Please wait while we load your content.
             progdialog = ProgressDialog.show(getActivity(), "",
                     "Please wait while we load your content.", true);
+            timeStarted = System.currentTimeMillis();
             progdialog.setCancelable(false);
             if (((int) SugarRecord.count(EmailMessage.class, null, null) == 0)) {
                 progdialog.setCancelable(true);
@@ -290,7 +287,9 @@ public class FragmentOne extends Fragment {
         public void onPostExecute(String result) {
             // get all e-mails from the temp array list made in Scraping Machine
             // and save the data here, in the main thread.
-
+            timeFinished = System.currentTimeMillis();
+            long timeTaken = timeFinished - timeStarted;
+            new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_REFRESH + ":" + ScrappingMachine.totalnew, "" + timeTaken, Constants.TRUE);
             invis_msg.setVisibility(View.INVISIBLE);
 
             RandomStrings.setRandomText();
@@ -342,6 +341,8 @@ public class FragmentOne extends Fragment {
 
     public class async_delete extends AsyncTask<String, Void, String> {
         ArrayList<EmailMessage> emails_tobedeleted = new ArrayList<>();
+        long timeStarted = 0;
+        long timeFinished = 0;
 
         public async_delete(ArrayList<EmailMessage> emails_tobedeleted) {
             this.emails_tobedeleted = emails_tobedeleted;
@@ -350,6 +351,7 @@ public class FragmentOne extends Fragment {
         @Override
         protected void onPreExecute() {
             Printer.println("Starting delete");
+            timeStarted = System.currentTimeMillis();
             super.onPreExecute();
         }
 
@@ -357,7 +359,6 @@ public class FragmentOne extends Fragment {
         protected String doInBackground(String... params) {
 
             Printer.println("Allemailsmain size " + FragmentOne.allemails_main.size());
-            sendLocationDetails();
             try {
                 new ScrappingMachine(username, pwd, getActivity())
                         .getValues_forDelete(emails_tobedeleted);
@@ -369,25 +370,20 @@ public class FragmentOne extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
+            timeFinished = System.currentTimeMillis();
             Printer.println("Stopping delete");
+            long timeTaken = timeFinished - timeStarted;
+            new ServerLoader(getActivity()).addActionDetails(username, Constants.ACTION_DELETE, "" + timeTaken, Constants.TRUE);
+
             try {
                 Toast.makeText(getActivity(), "Deleted Successfully", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Printer.println("error in deleting");
                 e.printStackTrace();
             }
-
             mAdapter.notifyDataSetChanged();
             super.onPostExecute(result);
         }
-
-    }
-
-    private void sendLocationDetails() {
-//        LocationDetails details = new LocationDetails();
-//        details.setValue(getActivity().getApplicationContext());
-//        ServerLoader loader = new ServerLoader(getActivity());
-//        loader.addLocationDetails(details);
     }
 
     // for class adapter of the list.

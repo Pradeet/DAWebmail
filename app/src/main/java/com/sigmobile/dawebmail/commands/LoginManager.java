@@ -34,15 +34,7 @@ public class LoginManager extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         ScrappingMachine scrapper = new ScrappingMachine(username, pwd, context);
         checkifloggedin = scrapper.logIn(username, pwd);
-        sendLocationDetails();
         return null;
-    }
-
-    private void sendLocationDetails() {
-        LocationDetails locationDetails = new LocationDetails();
-        locationDetails.setValue(context);
-        ServerLoader loader = new ServerLoader(context);
-        loader.addLocationDetails(locationDetails);
     }
 
     @Override

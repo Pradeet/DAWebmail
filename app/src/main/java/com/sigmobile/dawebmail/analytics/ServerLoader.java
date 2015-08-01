@@ -2,143 +2,104 @@ package com.sigmobile.dawebmail.analytics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 
 import com.google.gson.Gson;
+import com.sigmobile.tools.ConnectionManager;
+import com.sigmobile.utils.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import com.sigmobile.utils.Constants;
+import java.util.Date;
 
 public class ServerLoader {
 
-    private final static String LOGIN_PREF_KEY = "LOGIN";
-    private final static String LOCATION_PREF_KEY = "LOCATION";
-    private final static String PHONE_PREF_KEY = "PHONE";
+    private final static String ACTION_PREF_KEY = "ACTION";
 
-    private ArrayList<LocationDetails> LocationQueue;
-    private ArrayList<LoginDetails> LoginQueue;
-    private ArrayList<PhoneDetails> PhoneQueue;
+    private ArrayList<ActionDetails> ActionQueue;
 
     private Context context;
 
     public ServerLoader(Context context) {
         this.context = context;
-        LocationQueue = getLocationPrefs();
-        LoginQueue = getLoginPrefs();
-        PhoneQueue = getPhonePrefs();
+        ActionQueue = getActionPrefs();
     }
 
-    private ArrayList<PhoneDetails> getPhonePrefs() {
-        SharedPreferences prefs = context.getSharedPreferences(PHONE_PREF_KEY, Context.MODE_PRIVATE);
-        ArrayList<PhoneDetails> PhoneQueue = new ArrayList<>();
+    private ArrayList<ActionDetails> getActionPrefs() {
+        SharedPreferences prefs = context.getSharedPreferences(ACTION_PREF_KEY, Context.MODE_PRIVATE);
+        ArrayList<ActionDetails> ActionQueue = new ArrayList<>();
 
-        if (prefs.contains(PHONE_PREF_KEY)) {
-            String jsonFavorites = prefs.getString(PHONE_PREF_KEY, null);
-
+        if (prefs.contains(ACTION_PREF_KEY)) {
+            String jsonFavorites = prefs.getString(ACTION_PREF_KEY, null);
             try {
                 JSONArray jsonArray = new JSONArray(jsonFavorites);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    PhoneDetails phoneDetails = new PhoneDetails();
-                    phoneDetails.Phone_AppList = jsonObject.getString("");
-                    phoneDetails.Phone_Model = jsonObject.getString("");
-                    phoneDetails.Phone_AndroidVersion = jsonObject.getString("");
-                    phoneDetails.Phone_Brand = jsonObject.getString("");
-                    phoneDetails.Phone_ScreenSize = jsonObject.getString("");
+                    ActionDetails actionDetails = new ActionDetails(jsonObject.getString("action_StudentID"), jsonObject.getString("action_Action"), jsonObject.getString("action_Connection"), jsonObject.getString("action_ConnectionDetails"), jsonObject.getString("action_TimeStamp"), jsonObject.getString("action_TimeTaken"), jsonObject.getString("action_Success"));
+                    ActionQueue.add(actionDetails);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-//            Gson gson = new Gson();
-//            Type listType = new TypeToken<ArrayList<PhoneDetails>>() {
-//            }.getType();
-//            PhoneQueue = (ArrayList<PhoneDetails>) gson.fromJson(jsonFavorites, listType);
         }
 
-        return PhoneQueue;
+        return ActionQueue;
     }
 
-    private ArrayList<LoginDetails> getLoginPrefs() {
-        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREF_KEY, Context.MODE_PRIVATE);
-        ArrayList<LoginDetails> LoginQueue = new ArrayList<>();
+    private void setActionPrefs(ArrayList<ActionDetails> actionPrefs) {
+        SharedPreferences prefs = context.getSharedPreferences(ACTION_PREF_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
 
-        if (prefs.contains(LOGIN_PREF_KEY)) {
-            String jsonFavorites = prefs.getString(LOGIN_PREF_KEY, null);
+        Gson gson = new Gson();
+        String json = gson.toJson(actionPrefs);
 
-            try {
-                JSONArray jsonArray = new JSONArray(jsonFavorites);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
-                    LoginDetails loginDetails = new LoginDetails();
-                    loginDetails.Login_TimeStamp = object.getString("Login_TimeStamp");
-                    loginDetails.Login_Connection = object.getString("Login_Connection");
-                    loginDetails.Login_loginType = object.getString("Login_loginType");
-                    loginDetails.Login_connectionDetails = object.getString("Login_connectionDetails");
-                    loginDetails.Login_studentID = object.getString("Login_studentID");
-                    loginDetails.Login_Success = object.getString("Login_Success");
-                    loginDetails.Login_TimeTaken = object.getString("Login_TimeTaken");
-                    LoginQueue.add(loginDetails);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        edit.putString(ACTION_PREF_KEY, json);
+        edit.commit();
+    }
 
-//            Gson gson = new Gson();
-//            Type listType = new TypeToken<ArrayList<LoginDetails>>() {
-//            }.getType();
-//            LoginQueue = (ArrayList<LoginDetails>) gson.fromJson(jsonFavorites, listType);
+    public void clearActionPrefs() {
+        SharedPreferences prefs = context.getSharedPreferences(ACTION_PREF_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+
+        ArrayList<ActionDetails> empty = new ArrayList<>();
+        Gson gson = new Gson();
+        String json = gson.toJson(empty);
+
+        edit.putString(ACTION_PREF_KEY, json);
+        edit.commit();
+    }
+
+    public void addActionDetails(String username, String action, String timeTaken, String success) {
+        ActionDetails actionDetails = null;
+        String timedate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+        if (ConnectionManager.isConnectedByMobileData(context)) {
+            actionDetails = new ActionDetails(username, action, Constants.MOBILE_DATA, ConnectionManager.getNetworkClass(context), timedate, timeTaken, success);
+        } else if (ConnectionManager.isConnectedByWifi(context)) {
+            WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+            String wifiname = wifiInfo.getSSID();
+            actionDetails = new ActionDetails(username, action, Constants.WIFI, wifiname, timedate, timeTaken, success);
+        } else {
+            actionDetails = new ActionDetails(username, action, "NOT CONNECTED", "-", timedate, timeTaken, "FAIL");
         }
 
-        return LoginQueue;
+        System.out.println("Adding action detail - " + actionDetails.action_Action);
+        ActionQueue = getActionPrefs();
+        ActionQueue.add(actionDetails);
+        setActionPrefs(ActionQueue);
+        setPrefs(Constants.prefPENDINGBIT_ACTION, true);
     }
 
-    private ArrayList<LocationDetails> getLocationPrefs() {
-        SharedPreferences prefs = context.getSharedPreferences(LOCATION_PREF_KEY, Context.MODE_PRIVATE);
-        ArrayList<LocationDetails> LocationQueue = new ArrayList<>();
-
-        if (prefs.contains(LOCATION_PREF_KEY)) {
-            String jsonFavorites = prefs.getString(LOCATION_PREF_KEY, null);
-            try {
-                JSONArray jsonArray = new JSONArray(jsonFavorites);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
-                    Log.d("TAG", object.get("Location_IPAddress") + "");
-                    LocationDetails details = new LocationDetails();
-                    details.Location_IPAddress = object.getString("Location_IPAddress");
-                    details.Location_Subnet = object.getString("Location_Subnet");
-                    details.Location_studentID = object.getString("Location_studentID");
-                    details.Location_WifiName = object.getString("Location_WifiName");
-                    details.Location_TimeStamp = object.getString("Location_TimeStamp");
-                    LocationQueue.add(details);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-//            Gson gson = new Gson();
-//            Type listType = new TypeToken<ArrayList<LocationDetails>>() {
-//            }.getType();
-////            locationArray = gson.fromJson(jsonFavorites, LocationDetails[].class);
-////            LocationQueue = new ArrayList<LocationDetails>(Arrays.asList(locationArray));
-//            System.out.println("jsonfav : " + jsonFavorites);
-//            System.out.println("ListType:    " + listType.toString());
-//            System.out.println( "hallelujah : " + gson.fromJson(jsonFavorites, listType));
-//            LocationQueue = (ArrayList<LocationDetails>) (gson.fromJson(jsonFavorites, listType));
-        }
-
-        return LocationQueue;
-    }
-
-    public void addLoginDetails(LoginDetails details) {
-        LoginQueue = getLoginPrefs();
-        LoginQueue.add(details);
-        setLoginPrefs(LoginQueue);
-        setPrefs(Constants.prefPENDINGBIT_LOGIN, true);
+    public void sendToServer() {
+        ActionQueue = getActionPrefs();
+        VolleyCommands volleyCommands = new VolleyCommands(context);
+        if (getPrefs(Constants.prefPENDINGBIT_ACTION))
+            volleyCommands.POSTAction(ActionQueue);
     }
 
     private void setPrefs(String prefWhich, boolean value) {
@@ -147,64 +108,6 @@ public class ServerLoader {
 
         edit.putBoolean(prefWhich, value);
         edit.commit();
-    }
-
-    private void setLoginPrefs(ArrayList<LoginDetails> loginQueue) {
-        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREF_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-
-        Gson gson = new Gson();
-        String json = gson.toJson(loginQueue);
-
-        edit.putString(LOGIN_PREF_KEY, json);
-        edit.commit();
-    }
-
-    public void addLocationDetails(LocationDetails details) {
-        LocationQueue = getLocationPrefs();
-        LocationQueue.add(details);
-        setLocationPrefs(LocationQueue);
-        setPrefs(Constants.prefPENDINGBIT_LOCATION, true);
-    }
-
-    private void setLocationPrefs(ArrayList<LocationDetails> locationQueue) {
-        SharedPreferences prefs = context.getSharedPreferences(LOCATION_PREF_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-
-        Gson gson = new Gson();
-        String json = gson.toJson(locationQueue);
-
-        edit.putString(LOCATION_PREF_KEY, json);
-        edit.commit();
-    }
-
-    public void addPhoneDetails(PhoneDetails details) {
-        PhoneQueue = getPhonePrefs();
-        PhoneQueue.add(details);
-        setPhonePrefs(PhoneQueue);
-    }
-
-    private void setPhonePrefs(ArrayList<PhoneDetails> phoneQueue) {
-        SharedPreferences prefs = context.getSharedPreferences(PHONE_PREF_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-
-        Gson gson = new Gson();
-        String json = gson.toJson(phoneQueue);
-
-        edit.putString(PHONE_PREF_KEY, json);
-        edit.commit();
-    }
-
-    public void sendToServer() {
-        VolleyCommands volleyCommands = new VolleyCommands(context);
-        if (getPrefs(Constants.prefPENDINGBIT_LOCATION))
-            volleyCommands.POSTLocation(LocationQueue);
-        if (getPrefs(Constants.prefPENDINGBIT_LOGIN))
-            volleyCommands.POSTLogin(LoginQueue);
-//        if (getPrefs(Constants.prefPENDINGBIT_PHONE))
-//            volleyCommands.POSTPhone(PhoneQueue);
-//        if (getPrefs(Constants.prefPENDINGBIT_REGISTER))
-//            volleyCommands.POSTStudent();
     }
 
     private boolean getPrefs(String prefWhich) {

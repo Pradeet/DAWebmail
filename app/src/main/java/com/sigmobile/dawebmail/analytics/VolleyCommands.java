@@ -11,6 +11,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.sigmobile.dawebmail.fragments.FragmentFour;
+import com.sigmobile.tools.AppController;
+import com.sigmobile.utils.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,11 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
-
-import com.sigmobile.dawebmail.fragments.FragmentFour;
-import com.sigmobile.tools.AppController;
-import com.sigmobile.utils.Constants;
 
 public class VolleyCommands {
     Context context;
@@ -100,55 +98,6 @@ public class VolleyCommands {
         AppController.getInstance().addToRequestQueue(req);
     }
 
-    public void POSTLogin(ArrayList<LoginDetails> loginQueue) {
-        final String URL = Constants.BASEURL + Constants.API_VERSION + "/login";
-        final ProgressDialog pDialog = new ProgressDialog(context);
-        JSONArray jsonArray = new JSONArray();
-
-        pDialog.setMessage("Loading...");
-//        pDialog.show();
-        pDialog.setCancelable(false);
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        for (int i = 0; i < loginQueue.size(); i++) {
-            LoginDetails details = loginQueue.get(0);
-            params.put("l_studentID", details.Login_studentID);
-            params.put("l_timestamp", "" + details.Login_TimeStamp);
-            params.put("l_type", "" + details.Login_loginType);
-            params.put("l_connection", "" + details.Login_Connection);
-            params.put("l_connectiondetails", details.Login_connectionDetails);
-            jsonArray.put(new JSONObject(params));
-            params.clear();
-        }
-        loginQueue.clear();
-        makeRequest(pDialog, URL, jsonArray);
-    }
-
-    public void POSTPhone(Queue<PhoneDetails> phoneQueue) {
-        final String URL = Constants.BASEURL + Constants.API_VERSION + "/phone";
-        final ProgressDialog pDialog = new ProgressDialog(context);
-        pDialog.setMessage("Loading...");
-//        pDialog.show();
-        pDialog.setCancelable(false);
-
-        JSONArray jsonArray = new JSONArray();
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        for (int i = 0; i < phoneQueue.size(); i++) {
-            PhoneDetails phoneDetails = phoneQueue.poll();
-
-            params.put("p_studentID", username);
-            params.put("p_brand", "" + phoneDetails.Phone_Brand);
-            params.put("p_product", "" + phoneDetails.Phone_AndroidVersion);
-            params.put("p_model", "" + phoneDetails.Phone_Model);
-            params.put("p_applist", "" + phoneDetails.Phone_AppList);
-            params.put("p_screensize", phoneDetails.Phone_ScreenSize);
-            jsonArray.put(new JSONObject(params));
-            params.clear();
-        }
-        makeRequest(pDialog, URL, jsonArray);
-    }
-
     public void POSTPhone(PhoneDetails phoneDetails) {
         final String URL = Constants.BASEURL + Constants.API_VERSION + "/phone";
         final ProgressDialog pDialog = new ProgressDialog(context);
@@ -171,32 +120,7 @@ public class VolleyCommands {
         makeRequest(pDialog, URL, jsonArray);
     }
 
-    public void POSTLocation(ArrayList<LocationDetails> locationQueue) {
-        final String URL = Constants.BASEURL + Constants.API_VERSION + "/location";
-        final ProgressDialog pDialog = new ProgressDialog(context);
-        pDialog.setMessage("Loading...");
-//        pDialog.show();
-        pDialog.setCancelable(false);
-
-        JSONArray jsonArray = new JSONArray();
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        for (int i = 0; i < locationQueue.size(); i++) {
-            LocationDetails locationDetails = locationQueue.get(0);
-            params.put("c_studentID", locationDetails.Location_studentID);
-            params.put("c_timestamp", "" + locationDetails.Location_TimeStamp);
-            params.put("c_wifiname", "" + locationDetails.Location_WifiName);
-            params.put("c_ipaddress", "" + locationDetails.Location_IPAddress);
-            params.put("c_subnet", "" + locationDetails.Location_Subnet);
-            jsonArray.put(new JSONObject(params));
-            params.clear();
-        }
-        locationQueue.clear();
-        makeRequest(pDialog, URL, jsonArray);
-    }
-
     boolean feedback_error = true;
-    boolean feedback_returned = false;
 
     public void POSTFeedback(final Context context, final FeedbackDetails feedback) {
         final String URL = Constants.BASEURL + Constants.API_VERSION + "/feedback";
@@ -219,7 +143,6 @@ public class VolleyCommands {
             public void onResponse(JSONArray response) {
                 System.out.println(response);
                 feedback_error = false;
-                feedback_returned = true;
                 pDialog.dismiss();
                 new FragmentFour().showFeedbackResponse(context, feedback_error);
             }
@@ -228,7 +151,6 @@ public class VolleyCommands {
             @Override
             public void onErrorResponse(VolleyError error) {
                 feedback_error = true;
-                feedback_returned = true;
                 error.printStackTrace();
                 pDialog.dismiss();
                 new FragmentFour().showFeedbackResponse(context, feedback_error);
@@ -247,23 +169,45 @@ public class VolleyCommands {
         AppController.getInstance().addToRequestQueue(reqarray);
     }
 
+    public void POSTAction(ArrayList<ActionDetails> actionQueue) {
+        final String URL = Constants.BASEURL + Constants.API_VERSION + "/action";
+        final ProgressDialog pDialog = new ProgressDialog(context);
+        JSONArray jsonArray = new JSONArray();
+
+        pDialog.setMessage("Loading...");
+//        pDialog.show();
+        pDialog.setCancelable(false);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        for (int i = 0; i < actionQueue.size(); i++) {
+            ActionDetails details = actionQueue.get(i);
+            params.put("a_studentID", details.action_StudentID);
+            params.put("a_action", details.action_Action);
+            params.put("a_connection", "" + details.action_Connection);
+            params.put("a_connectionDetails", "" + details.action_ConnectionDetails);
+            params.put("a_timeStamp", "" + details.action_TimeStamp);
+            params.put("a_timeTaken", details.action_TimeTaken);
+            params.put("a_success", details.action_Success);
+            jsonArray.put(new JSONObject(params));
+            params.clear();
+        }
+        actionQueue.clear();
+        makeRequest(pDialog, URL, jsonArray);
+    }
+
+
     public void makeRequest(final ProgressDialog pDialog, final String URL, JSONArray jsonArray) {
         Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println(response);
                 pDialog.dismiss();
-                //set pending to flase once sent successfully
-                if (URL.contains("location")) {
-                    setPrefs(Constants.prefPENDINGBIT_LOCATION, false);
+                //set pending to flask once sent successfully
+                if (URL.contains("action")) {
+                    setPrefs(Constants.prefPENDINGBIT_ACTION, false);
+                    //clear the arraylist
+                    new ServerLoader(context).clearActionPrefs();
                 }
-                if (URL.contains("login")) {
-                    setPrefs(Constants.prefPENDINGBIT_LOGIN, false);
-                }
-                if (URL.contains("phone")) {
-                    setPrefs(Constants.prefPENDINGBIT_PHONE, false);
-                }
-                // register is an object request and hence is done independently.
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -294,7 +238,6 @@ public class VolleyCommands {
         edit.putBoolean(prefWhich, value);
         edit.commit();
     }
-
 
     //UNUSED
     /*

@@ -164,7 +164,6 @@ public class LoginActivity extends Activity {
         if (getPrefs(Constants.prefPENDINGBIT_PHONE)) {
             PhoneDetails phoneDetails = new PhoneDetails();
             phoneDetails.setVlaues(activity, getApplicationContext());
-            //details.addPhoneDetails(details);
             VolleyCommands volleyCommands = new VolleyCommands(getApplicationContext());
             volleyCommands.POSTPhone(phoneDetails);
         }
