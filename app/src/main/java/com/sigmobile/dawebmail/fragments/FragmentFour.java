@@ -122,6 +122,7 @@ public class FragmentFour extends Fragment {
             Toast.makeText(context, "No Success man", Toast.LENGTH_LONG).show();
     }
 
+    // some chanhe made
 //    public void setSpinner1() {
 //        List<String> list = new ArrayList<String>();
 //        list.add("The same speed on both - decently fast");
