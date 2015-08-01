@@ -37,12 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orm.SugarRecord;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-import me.drakeet.materialdialog.MaterialDialog;
-
 import com.sigmobile.R;
 import com.sigmobile.dawebmail.fragments.FragmentFour;
 import com.sigmobile.dawebmail.fragments.FragmentOne;
@@ -55,9 +49,14 @@ import com.sigmobile.tools.SearchWatcher;
 import com.sigmobile.utils.ColorScheme;
 import com.sigmobile.utils.Constants;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import me.drakeet.materialdialog.MaterialDialog;
+
 public class Main_Nav extends FragmentActivity {
 
-    private String[] mNavigationDrawerItemTitles;
+    ObjectDrawerItem[] drawerItem;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private CharSequence mDrawerTitle;
@@ -112,8 +111,18 @@ public class Main_Nav extends FragmentActivity {
                 new ColorDrawable(getResources().getColor(
                         android.R.color.transparent)));
 
-        mNavigationDrawerItemTitles = getResources().getStringArray(
-                R.array.navigation_drawer_items_array);
+        drawerItem = new ObjectDrawerItem[5];
+
+        drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_user_edited,
+                "" + username);
+        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_mail_32, "Inbox");
+        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_send_32,
+                "SMARTbox");
+        drawerItem[3] = new ObjectDrawerItem(R.drawable.settings_new_32,
+                "Settings");
+        drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_action_star,
+                "Feedback");
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -143,18 +152,6 @@ public class Main_Nav extends FragmentActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[5];
-
-        drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_user_edited,
-                "" + username);
-        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_mail_32, "Inbox");
-        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_send_32,
-                "SMARTbox");
-        drawerItem[3] = new ObjectDrawerItem(R.drawable.settings_new_32,
-                "Settings");
-        drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_action_star,
-                "Feedback");
 
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
                 R.layout.navdraw_listitem, drawerItem);
@@ -330,9 +327,9 @@ public class Main_Nav extends FragmentActivity {
             fragmentManager.popBackStack();
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
-            getActionBar().setTitle(mNavigationDrawerItemTitles[position]);
+            getActionBar().setTitle(drawerItem[position].name);
             mDrawerLayout.closeDrawer(mDrawerList);
-            mDrawerTitle = mNavigationDrawerItemTitles[position];
+            mDrawerTitle = drawerItem[position].name;
         } else {
             Log.e("MainActivity", "Error in creating fragment");
         }

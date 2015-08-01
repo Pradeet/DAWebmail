@@ -198,7 +198,7 @@ public class VolleyCommands {
     boolean feedback_error = true;
     boolean feedback_returned = false;
 
-    public void POSTFeedback(final Context context, final Feedback feedback) {
+    public void POSTFeedback(final Context context, final FeedbackDetails feedback) {
         final String URL = Constants.BASEURL + Constants.API_VERSION + "/feedback";
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Sending Feedback");
@@ -210,9 +210,7 @@ public class VolleyCommands {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("f_studentID", feedback.studentID);
         params.put("f_feedback", "" + feedback.feedback);
-        params.put("f_timetoload", "" + feedback.timeToLoad);
-        params.put("f_crashreport", "" + feedback.crashreport);
-        params.put("f_suggestion", "" + feedback.suggestion);
+        params.put("f_timestamp", "" + feedback.timeStamp);
 
         jsonArray.put(new JSONObject(params));
 

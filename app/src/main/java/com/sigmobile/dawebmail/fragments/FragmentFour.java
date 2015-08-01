@@ -1,39 +1,38 @@
 package com.sigmobile.dawebmail.fragments;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sigmobile.R;
-import com.sigmobile.dawebmail.analytics.Feedback;
+import com.sigmobile.dawebmail.analytics.FeedbackDetails;
 import com.sigmobile.dawebmail.analytics.VolleyCommands;
 import com.sigmobile.utils.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class FragmentFour extends Fragment {
 
-    EditText editText_1, editText_2;
-    Spinner spinner1, spinner2;
+    EditText editText_1;
 
-    TextView title, text1, text2, text3, text4, text5;
+    TextView title, text1, text2;
 
-    Button buttonsend;
+    Button buttonsend, rateus;
 
     public FragmentFour() {
 
@@ -45,23 +44,13 @@ public class FragmentFour extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_four, container, false);
 
         editText_1 = (EditText) rootView.findViewById(R.id.feedback_etbox);
-        editText_2 = (EditText) rootView.findViewById(R.id.feedback_etbox2);
-
-        spinner1 = (Spinner) rootView.findViewById(R.id.feedback_spinner1);
-        spinner2 = (Spinner) rootView.findViewById(R.id.feedback_spinner2);
 
         title = (TextView) rootView.findViewById(R.id.feedback_title);
         text1 = (TextView) rootView.findViewById(R.id.feeback_text1);
         text2 = (TextView) rootView.findViewById(R.id.feeback_text2);
-        text3 = (TextView) rootView.findViewById(R.id.feeback_text3);
-        text4 = (TextView) rootView.findViewById(R.id.feeback_text4);
-        text5 = (TextView) rootView.findViewById(R.id.feeback_text5);
 
         buttonsend = (Button) rootView.findViewById(R.id.feedback_send);
-
-        setSpinner1();
-        setSpinner2();
-
+        rateus = (Button) rootView.findViewById(R.id.feedback_ratingbar);
 
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(),
                 "fonts/Comix Loud.ttf");
@@ -71,32 +60,13 @@ public class FragmentFour extends Fragment {
         title.setTypeface(font);
         text1.setTypeface(font2);
         text2.setTypeface(font2);
-        text3.setTypeface(font2);
-        text4.setTypeface(font2);
-        text5.setTypeface(font2);
 
         editText_1.setTypeface(font2);
-        editText_2.setTypeface(font2);
 
         editText_1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (v.getId() == R.id.feedback_etbox) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                        case MotionEvent.ACTION_UP:
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-                }
-                return false;
-            }
-        });
-
-        editText_2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (v.getId() == R.id.feedback_etbox2) {
                     v.getParent().requestDisallowInterceptTouchEvent(true);
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_UP:
@@ -114,21 +84,35 @@ public class FragmentFour extends Fragment {
             @Override
             public void onClick(View view) {
                 String et1 = editText_1.getText().toString();
-                String et2 = editText_2.getText().toString();
-
-                String crashreport = spinner1.getSelectedItem().toString();
-                String timereport = spinner2.getSelectedItem().toString();
-
                 SharedPreferences settings = getActivity().getSharedPreferences(Constants.USER_PREFERENCES, Context.MODE_PRIVATE);
-
-
-                Feedback feedback = new Feedback(settings.getString(Constants.bundle_username, "none"), et1, timereport, crashreport, et2);
+                String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                FeedbackDetails feedback = new FeedbackDetails(settings.getString(Constants.bundle_username, "none"), et1, currentDateTimeString);
                 new VolleyCommands(getActivity()).POSTFeedback(getActivity(), feedback);
             }
         });
-
+        rateus.setTypeface(font);
+        rateus.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    launchMarket();
+                }
+                return true;
+            }
+        });
 
         return rootView;
+    }
+
+    private void launchMarket() {
+        Uri uri = Uri.parse("market://details?id=" + getActivity().getPackageName());
+        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        myAppLinkToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(myAppLinkToMarket);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getActivity(), " unable to rate :(", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void showFeedbackResponse(Context context, boolean error) {
@@ -138,25 +122,25 @@ public class FragmentFour extends Fragment {
             Toast.makeText(context, "No Success man", Toast.LENGTH_LONG).show();
     }
 
-    public void setSpinner1() {
-        List<String> list = new ArrayList<String>();
-        list.add("The same speed on both - decently fast");
-        list.add("Not so long on wifi, 3G, forever.");
-        list.add("The same speed on both - very slow");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.element_spinner, list);
-        dataAdapter.setDropDownViewResource(R.layout.element_spinner);
-        spinner1.setAdapter(dataAdapter);
-    }
-
-    public void setSpinner2() {
-        List<String> list = new ArrayList<String>();
-        list.add("Barely ever");
-        list.add("Frequent");
-        list.add("All the time");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.element_spinner, list);
-        dataAdapter.setDropDownViewResource(R.layout.element_spinner);
-        spinner2.setAdapter(dataAdapter);
-    }
+//    public void setSpinner1() {
+//        List<String> list = new ArrayList<String>();
+//        list.add("The same speed on both - decently fast");
+//        list.add("Not so long on wifi, 3G, forever.");
+//        list.add("The same speed on both - very slow");
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+//                R.layout.element_spinner, list);
+//        dataAdapter.setDropDownViewResource(R.layout.element_spinner);
+//        spinner1.setAdapter(dataAdapter);
+//    }
+//
+//    public void setSpinner2() {
+//        List<String> list = new ArrayList<String>();
+//        list.add("Barely ever");
+//        list.add("Frequent");
+//        list.add("All the time");
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+//                R.layout.element_spinner, list);
+//        dataAdapter.setDropDownViewResource(R.layout.element_spinner);
+//        spinner2.setAdapter(dataAdapter);
+//    }
 }

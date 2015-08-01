@@ -26,13 +26,8 @@ public class Constants {
 
     public static Boolean isLoggedin = false;
 
-    public static String bundle_username = "_username";
-    public static String bundle_pwd = "_pwd";
-
-//    public static boolean PENDINGBIT_PHONE= true;
-//    public static boolean PENDINGBIT_LOCATION= true;
-//    public static boolean PENDINGBIT_LOGIN= true;
-//    public static boolean PENDINGBIT_REGISTER= true;
+    public static String bundle_username = "__username";
+    public static String bundle_pwd = "__pwd";
 
     public static String prefPENDINGBIT_PHONE = "PENDINGBIT_PHONE";
     public static String prefPENDINGBIT_LOCATION = "PENDINGBIT_LOCATION";
@@ -51,5 +46,9 @@ public class Constants {
     public static final String MANUAL = "manual";
     public static final String AUTOMATIC = "automatic";
 
-
+    public static final String ACTION_LOGIN = "login";
+    public static final String ACTION_VIEWEMAIL = "view email";
+    public static final String ACTION_REFRESH = "refresh";
+    public static final String ACTION_MASTERREFRESH = "master refresh";
+    public static final String ACTION_DELETE = "delete";
 }
