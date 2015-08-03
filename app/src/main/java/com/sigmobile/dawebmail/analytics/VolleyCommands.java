@@ -11,7 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.sigmobile.dawebmail.fragments.FragmentFour;
+import com.sigmobile.dawebmail.fragments.FeedbackFragment;
 import com.sigmobile.tools.AppController;
 import com.sigmobile.utils.Constants;
 
@@ -144,7 +144,7 @@ public class VolleyCommands {
                 System.out.println(response);
                 feedback_error = false;
                 pDialog.dismiss();
-                new FragmentFour().showFeedbackResponse(context, feedback_error);
+                new FeedbackFragment().showFeedbackResponse(context, feedback_error);
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -153,7 +153,7 @@ public class VolleyCommands {
                 feedback_error = true;
                 error.printStackTrace();
                 pDialog.dismiss();
-                new FragmentFour().showFeedbackResponse(context, feedback_error);
+                new FeedbackFragment().showFeedbackResponse(context, feedback_error);
             }
         };
         JsonArrayRequest reqarray = new JsonArrayRequest(URL, jsonArray, jsonArrayListener, errorListener) {

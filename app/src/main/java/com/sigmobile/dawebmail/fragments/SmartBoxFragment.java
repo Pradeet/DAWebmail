@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class FragmentTwo extends Fragment {
+public class SmartBoxFragment extends Fragment {
 
-    public FragmentTwo() {
+    public SmartBoxFragment() {
     }
 
     private View rootView;

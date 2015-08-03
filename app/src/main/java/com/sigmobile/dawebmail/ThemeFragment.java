@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.sigmobile.R;
 import com.sigmobile.colorpicker.ColorPickerDialog;
 import com.sigmobile.colorpicker.ColorPickerDialog.OnColorSelectedListener;
-import com.sigmobile.dawebmail.fragments.FragmentOne;
+import com.sigmobile.dawebmail.fragments.InboxFragment;
 import com.sigmobile.tools.Printer;
 import com.sigmobile.utils.ColorScheme;
 
@@ -107,7 +107,7 @@ public class ThemeFragment extends Fragment {
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
-                                            new FragmentOne(username, pwd))
+                                            new InboxFragment(username, pwd))
                                     .commit();
                             break;
                         case 1:
@@ -116,7 +116,7 @@ public class ThemeFragment extends Fragment {
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
-                                            new FragmentOne(username, pwd))
+                                            new InboxFragment(username, pwd))
                                     .commit();
                             break;
                         case 2:
@@ -125,7 +125,7 @@ public class ThemeFragment extends Fragment {
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
-                                            new FragmentOne(username, pwd))
+                                            new InboxFragment(username, pwd))
                                     .commit();
                             break;
                         case 3:
@@ -134,7 +134,7 @@ public class ThemeFragment extends Fragment {
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.content_frame,
-                                            new FragmentOne(username, pwd))
+                                            new InboxFragment(username, pwd))
                                     .commit();
                             break;
 

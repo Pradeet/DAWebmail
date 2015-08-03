@@ -157,8 +157,8 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
         Notification.Builder builder = new Notification.Builder(context)
                 .setContentTitle("DAWebmails")
                 .setContentText("Open to view webmails!")
-                .setSmallIcon(R.drawable.final_notification_small)
-                .addAction(R.drawable.final_notification_small, "Open DAWebmail", pi);
+                .setSmallIcon(R.drawable.final_main)                        // should change the images.s
+                .addAction(R.drawable.final_main, "Open DAWebmail", pi);
 
         Notification.InboxStyle notification1 = new Notification.InboxStyle(builder);
 

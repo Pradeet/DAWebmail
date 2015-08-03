@@ -22,16 +22,16 @@ import com.sigmobile.dawebmail.ThemeFragment;
 import com.sigmobile.tools.Printer;
 import com.sigmobile.utils.Constants;
 
-public class FragmentThree extends Fragment {
+public class SettingsFragment extends Fragment {
 
     String username, pwd;
 
-    public FragmentThree() {
+    public SettingsFragment() {
 
     }
 
     @SuppressLint("ValidFragment")
-    public FragmentThree(String un, String pw) {
+    public SettingsFragment(String un, String pw) {
         username = un;
         pwd = pw;
     }

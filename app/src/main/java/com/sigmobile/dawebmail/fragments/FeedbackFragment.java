@@ -26,7 +26,7 @@ import com.sigmobile.utils.Constants;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class FragmentFour extends Fragment {
+public class FeedbackFragment extends Fragment {
 
     EditText editText_1;
 
@@ -34,7 +34,7 @@ public class FragmentFour extends Fragment {
 
     Button buttonsend, rateus;
 
-    public FragmentFour() {
+    public FeedbackFragment() {
 
     }
 
