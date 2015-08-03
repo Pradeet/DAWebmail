@@ -97,9 +97,7 @@ public class ScrappingMachine {
             }
             userAgent.visit("" + homepage_link);
         } catch (Exception e) {
-            System.out
-                    .println("Error visiting homepage, method - scrapeAllMessagesfromInbox = "
-                            + e.getMessage());
+            System.out.println("Error visiting homepage, method - scrapeAllMessagesfromInbox = " + e.getMessage());
         }
         Printer.println("Starting to scrap from scrapeallmsgs");
         Printer.println("Firstrun is - " + firstrun);
@@ -585,5 +583,9 @@ public class ScrappingMachine {
             doc += doc.substring(0, index) + "<" + doc.substring(index + 6);
         }
         return doc;
+    }
+
+    public void scrapeAllMessagesfromSentbox() {
+
     }
 }

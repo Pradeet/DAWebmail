@@ -46,21 +46,23 @@ import java.util.Collections;
 public class InboxFragment extends Fragment {
 
     String username, pwd;
-
-    ProgressDialog progdialog;
-    public static ArrayList<EmailMessage> allemails_main;
-    public ArrayList<EmailMessage> emails_tobedeleted_pub;
-
-    public static ArrayList<hash_email_checked> allemails_main_ischecked;
     boolean firstrun = true;
+    int totalSelected_emails = 0;
+
+    public ProgressDialog progdialog;
     private SwipeRefreshLayout swipeContainer;
-    AsyncTask<String, Void, String> mAsyncLogin;
-    TextView webmail_tv, pull_tv, invis_msg;
-    public static AppAdapter mAdapter;
+    public TextView webmail_tv, pull_tv, invis_msg;
     private ListView mListView;
     public Button floatingDelete;
-    int totalSelected_emails = 0;
+
+    public static AppAdapter mAdapter;
     Animation anim_slideout;
+
+    public static ArrayList<EmailMessage> allemails_main;
+    public ArrayList<EmailMessage> emails_tobedeleted_pub;
+    public static ArrayList<hash_email_checked> allemails_main_ischecked;
+
+    AsyncTask<String, Void, String> mAsyncLogin;
 
     LoginListener loginListener;
     LoginManager loginManager;

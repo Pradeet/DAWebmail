@@ -5,6 +5,24 @@
     android:background="@drawable/inbox_background"
     tools:context="com.sigmobile.webmail.MainActivity">
 
+    <com.software.shell.fab.ActionButton
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/DeleteSwipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ListView
+            android:id="@+id/DeleteListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -4,7 +4,6 @@ import com.orm.SugarRecord;
 
 public class EmailMessage extends SugarRecord {
 
-    // so i didnt think enough. Haha. Will have to add more fields to this table
     public String fromname = "";
     public String fromaddress = ""; // new
     public String subject = "";
